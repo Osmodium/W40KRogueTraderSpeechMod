@@ -109,6 +109,7 @@
     <Compile Include="Patches\MessageModal_Patch.cs" />
     <Compile Include="Patches\MainMenuPCView_Patch.cs" />
     <Compile Include="Patches\NewGamePhaseStoryBaseView_Patch.cs" />
+    <Compile Include="Patches\BaseBarkVM_Patch.cs" />
     <Compile Include="Patches\TermsOfUsePCView_Patch.cs" />
     <Compile Include="Patches\TutorialWindowView_Patch.cs" />
     <Compile Include="Unity\AppleVoiceUnity.cs" />

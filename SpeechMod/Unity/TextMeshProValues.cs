@@ -7,4 +7,5 @@ public class TextMeshProValues : MonoBehaviour
 {
     public FontStyles FontStyles { get; set; }
     public Color Color { get; set; }
+    public bool ExtraPadding { get; set; }
 }

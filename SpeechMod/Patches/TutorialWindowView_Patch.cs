@@ -16,12 +16,13 @@ public class TutorialWindowView_Patch_Small
         Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Body/ScrollView/Viewport/Content/TutorialText");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Header/Title");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Body/ScrollView/Viewport/Content/TutorialText");
     }
 }
 
-//[HarmonyPatch(typeof(TutorialModalWindowPCView), "BindViewImplementation")]
-[HarmonyPatch(typeof(TutorialModalWindowPCView), "OnNext")]
+[HarmonyPatch(typeof(TutorialModalWindowPCView), "BindViewImplementation")]
+//[HarmonyPatch(typeof(TutorialModalWindowPCView), "OnNext")]
 public class TutorialWindowView_Patch_Big
 {
     public static void Postfix()
@@ -33,6 +34,7 @@ public class TutorialWindowView_Patch_Big
         Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Header/TitleGroup/Title");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText");
     }
 }

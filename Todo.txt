@@ -1,0 +1,42 @@
+40KRT: 🔲 -> ✅
+
+✅ EULA screen text
+/MainMenuPCView(Clone)/UICanvas/TermsOfUsePCView/Body/Device/ContentGroup/Screen_view/ItemView/MainContent/Scroll View/Viewport/Content/
+
+✅ Message in start screen
+/MainMenuPCView(Clone)/UICanvas/WelcomeWindowPCView/Background/ScrollContainer/ServiceWindowStandardScrollView/Viewport/Content/text
+
+✅ MessageBox
+/CommonPCView(Clone)/CommonCanvas/MessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
+
+✅ Campaign/DLC description when starting a new game
+/MainMenuPCView(Clone)/UICanvas/NewGamePCView/Device/Background (1)/Background/ContentGroup/NewGameTabGameModePCView/PaperGroup/Paper/Content/Description/ServiceWindowStandartScrollVew/Viewport/Content/Text (TMP)
+
+✅ Custom Character Creation
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenPregenPhaseDetailedView/DeviceParent/Tablet/Screen_view/ItemView/InfoSection/ScrollView/ViewPort/Content/BodyContainer/TooltipBrickTextView(Clone)/Text
+
+🔲 Viewport over archetypes
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/CharGenDescription/LevelupDescriptionView/Viewport
+Disable Raycast on Image-component
+
+✅ Tutorial Hint Window
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Body/ScrollView/Viewport/Content/TutorialText
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Header/TitleGroup/Title
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Header/Title
+Can't see underline on text, maybe use insertion of "mark" or play button?
+<mark=#FF800055 padding="10, 10, 0, 0">
+
+🔲 Look into dialog:
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/
+
+🔲 Look into playback of dialog answers:
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
+Has a "Text" gameobject with TMP component
+
+🔲 Look into popups?
+
+🔲 Look into more ToolTip Bricks
+
+🔲 Look into button activated barks
+(OvertipMapObjectInteractionPCView)

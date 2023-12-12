@@ -110,8 +110,9 @@ public static class UIHelper
         else
             skipEventAssignment = true;
 
-        defaultValues.FontStyles = textMeshPro.fontStyle;
+        defaultValues!.FontStyles = textMeshPro.fontStyle;
         defaultValues.Color = textMeshPro.color;
+        defaultValues.ExtraPadding = textMeshPro.extraPadding;
 
         if (skipEventAssignment)
         {
@@ -120,6 +121,10 @@ public static class UIHelper
 #endif
             return;
         }
+
+        // Ensure that it registers as a raycast target
+        // NOTE! Might mess up texts that are incorporated into a menu.
+        textMeshPro.raycastTarget = true;
 
         textMeshPro.OnPointerEnterAsObservable().Subscribe(
             _ =>
@@ -131,6 +136,7 @@ public static class UIHelper
                         if (Main.Settings.FontStyles[i])
                             textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
                     }
+                    textMeshPro.extraPadding = false;
                 }
 
                 if (Main.Settings.ColorOnHover)
@@ -143,20 +149,17 @@ public static class UIHelper
             {
                 textMeshPro.fontStyle = defaultValues.FontStyles;
                 textMeshPro.color = defaultValues.Color;
+                textMeshPro.extraPadding = defaultValues.ExtraPadding;
             }
         );
 
         textMeshPro.OnPointerClickAsObservable().Subscribe(
             clickEvent =>
             {
-                if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
-                    Main.Speech.Speak(textMeshPro.text);
+                if (clickEvent?.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                    Main.Speech?.Speak(textMeshPro.text);
             }
         );
-
-        // Ensure that it registers as a raycast target
-        // NOTE! Might mess up texts that are incorporated into a menu.
-        textMeshPro.raycastTarget = true;
     }
 
     //------------Top-------------------
