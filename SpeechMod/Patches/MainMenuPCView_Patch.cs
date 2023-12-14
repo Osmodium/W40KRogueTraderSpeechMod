@@ -17,6 +17,6 @@ public class MainMenuPCView_Patch
         Debug.Log($"{nameof(MainMenuPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("ServiceWindowStandardScrollView/Viewport/Content/text");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/MainMenuPCView(Clone)/UICanvas/WelcomeWindowPCView/Background/ScrollContainer/ServiceWindowStandardScrollView/Viewport/Content/text");
     }
 }

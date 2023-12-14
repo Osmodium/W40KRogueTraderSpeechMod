@@ -1,5 +1,4 @@
-﻿using Owlcat.Runtime.UniRx;
-using System;
+﻿using System;
 using System.Collections;
 using TMPro;
 using UniRx;
@@ -60,7 +59,10 @@ public static class UIHelper
         }
 
         var path = transform.GetGameObjectPath();
+
+#if DEBUG
         Debug.Log($"Attempting to get TextMeshProUGUI in children on '{path}'...");
+#endif
 
         var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
         if (allTexts?.Length == 0)
@@ -69,7 +71,10 @@ public static class UIHelper
             return;
         }
 
+#if DEBUG
         Debug.Log($"Found {allTexts?.Length} TextMeshProUGUIs on '{path}'!");
+#endif
+
         allTexts.HookupTextToSpeech();
     }
 
@@ -358,41 +363,6 @@ public static class UIHelper
 
         return null;
     }
-
-    //public static Transform TryFindInMainCanvas(string n)
-    //{
-    //    return MainCanvas.Instance?.transform.TryFind(n);
-    //}
-
-    //public static Transform GetUICanvas()
-    //{
-    //    return MainCanvas.Instance?.transform;
-    //}
-
-    //public static Transform GetUICanvas()
-    //{
-    //    return UIUtility.IsGlobalMap()
-    //        ? Game.Instance.UI.GlobalMapUI.transform
-    //        : Game.Instance.UI.Canvas.transform;
-    //}
-
-    //public static Transform TryFindInStaticCanvas(string n)
-    //{
-    //    return TryFindInStaticCanvas(n, n);
-    //}
-
-    //public static Transform TryFindInStaticCanvas(string canvasName, string globalMapName)
-    //{
-    //    RootUIContext.Instance.IsMainMenu
-    //    return UIUtility.IsGlobalMap()
-    //        ? Game.Instance.UI.GlobalMapUI.transform.TryFind(globalMapName)
-    //        : Game.Instance.UI.Canvas.transform.TryFind(canvasName);
-    //}
-
-    //public static Transform TryFindInFadeCanvas(string n)
-    //{
-    //    return Game.Instance.UI.FadeCanvas.transform.TryFind(n);
-    //}
 
     public static string GetGameObjectPath(this GameObject gameObject)
     {

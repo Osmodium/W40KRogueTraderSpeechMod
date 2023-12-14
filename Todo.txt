@@ -26,6 +26,7 @@ Disable Raycast on Image-component
 /CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Header/Title
 Can't see underline on text, maybe use insertion of "mark" or play button?
 <mark=#FF800055 padding="10, 10, 0, 0">
+The issue was 'extraPadding' was enabled on the text for some reason. Might be due to icons in the text at some point.
 
 🔲 Look into dialog:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/

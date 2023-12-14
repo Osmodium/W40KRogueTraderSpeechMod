@@ -2,6 +2,7 @@
 using Kingmaker.UI.MVVM.View.Tutorial.PC;
 using SpeechMod.Unity;
 using UnityEngine;
+
 namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(TutorialHintWindowPCView), "SetContent")]

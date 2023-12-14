@@ -17,6 +17,6 @@ public class MessageModal_Patch
         Debug.Log($"{nameof(MessageBoxPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("MessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/MessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message");
     }
 }

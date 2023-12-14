@@ -24,58 +24,95 @@ static class TooltipEngine_Patch
         switch (__result)
         {
             case TooltipBrickTextView:
-                HookBrickAsType<TooltipBrickTextView>(__result);
-                break;
             case TooltipBrickIconValueStatView:
-                HookBrickAsType<TooltipBrickIconValueStatView>(__result);
-                break;
             case TooltipBrickTextValueView:
-                HookBrickAsType<TooltipBrickTextValueView>(__result);
-                break;
             case TooltipBrickEntityHeaderView:
-                HookBrickAsType<TooltipBrickEntityHeaderView>(__result);
-                break;
             case TooltipBrickIconStatValueView:
-                HookBrickAsType<TooltipBrickIconStatValueView>(__result);
-                break;
             case TooltipBrickFeatureHeaderView:
-                HookBrickAsType<TooltipBrickFeatureHeaderView>(__result);
-                break;
             case TooltipBrickTitleView:
-                HookBrickAsType<TooltipBrickTitleView>(__result);
-                break;
             case TooltipBrickFeatureView:
-                HookBrickAsType<TooltipBrickFeatureView>(__result);
-                break;
             case TooltipBrickTwoColumnsStatView:
-                HookBrickAsType<TooltipBrickTwoColumnsStatView>(__result);
-                break;
             case TooltipBrickIconPatternView:
-                HookBrickAsType<TooltipBrickIconPatternView>(__result);
+                HookBrickAsType(__result);
                 break;
             default:
                 return;
         }
+
+        //switch (__result)
+        //{
+        //    case TooltipBrickTextView:
+        //        HookBrickAsType<TooltipBrickTextView>(__result);
+        //        break;
+        //    case TooltipBrickIconValueStatView:
+        //        HookBrickAsType<TooltipBrickIconValueStatView>(__result);
+        //        break;
+        //    case TooltipBrickTextValueView:
+        //        HookBrickAsType<TooltipBrickTextValueView>(__result);
+        //        break;
+        //    case TooltipBrickEntityHeaderView:
+        //        HookBrickAsType<TooltipBrickEntityHeaderView>(__result);
+        //        break;
+        //    case TooltipBrickIconStatValueView:
+        //        HookBrickAsType<TooltipBrickIconStatValueView>(__result);
+        //        break;
+        //    case TooltipBrickFeatureHeaderView:
+        //        HookBrickAsType<TooltipBrickFeatureHeaderView>(__result);
+        //        break;
+        //    case TooltipBrickTitleView:
+        //        HookBrickAsType<TooltipBrickTitleView>(__result);
+        //        break;
+        //    case TooltipBrickFeatureView:
+        //        HookBrickAsType<TooltipBrickFeatureView>(__result);
+        //        break;
+        //    case TooltipBrickTwoColumnsStatView:
+        //        HookBrickAsType<TooltipBrickTwoColumnsStatView>(__result);
+        //        break;
+        //    case TooltipBrickIconPatternView:
+        //        HookBrickAsType<TooltipBrickIconPatternView>(__result);
+        //        break;
+        //    default:
+        //        return;
+        //}
     }
 
-    private static void HookBrickAsType<T>(MonoBehaviour brick) where T : MonoBehaviour
+    private static void HookBrickAsType(MonoBehaviour brick)
     {
 
 #if DEBUG
         Debug.Log(brick!.transform.GetGameObjectPath());
 #endif
 
-        var brickView = brick as T;
-        if (IsInvalid(brickView?.transform?.parent))
-            return;
+        //if (IsInvalid(brick?.transform?.parent))
+        //    return;
 
-        var allTexts = brickView?.GetComponentsInChildren<TextMeshProUGUI>();
+        if (brick?.transform?.parent == null)
+        {
+            return;
+        }
+
+        var allTexts = brick.transform.parent.GetComponentsInChildren<TextMeshProUGUI>(true);
         allTexts.HookupTextToSpeech();
     }
 
+    //    private static void HookBrickAsType<T>(MonoBehaviour brick) where T : MonoBehaviour
+    //    {
+
+    //#if DEBUG
+    //        Debug.Log(brick!.transform.GetGameObjectPath());
+    //#endif
+
+    //        var brickView = brick as T;
+    //        if (IsInvalid(brickView?.transform?.parent))
+    //            return;
+
+    //        var allTexts = brickView?.GetComponentsInChildren<TextMeshProUGUI>();
+    //        allTexts.HookupTextToSpeech();
+    //    }
+
     // TODO: Better way of telling if inside hover tooltip.
-    private static bool IsInvalid(Transform parent)
+    private static bool IsInvalid(Transform transform)
     {
-        return parent is null;
+        return transform is null;
     }
 }
