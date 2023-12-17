@@ -12,6 +12,9 @@ public class BaseBarkVM_Patch
         if (!Main.Enabled)
             return;
 
+        if (!Main.Settings!.PlaybackBarks)
+            return;
+
 #if DEBUG
         Debug.Log($"{nameof(BaseBarkVM)}_ShowBark_Postfix");
 #endif
@@ -19,6 +22,7 @@ public class BaseBarkVM_Patch
         if (string.IsNullOrWhiteSpace(text))
             return;
 
+        // TODO: Add gender specific voices
         Main.Speech?.Speak(text);
     }
 }

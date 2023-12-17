@@ -37,7 +37,11 @@ Has a "Text" gameobject with TMP component
 
 🔲 Look into popups?
 
-🔲 Look into more ToolTip Bricks
+✅ Look into more ToolTip Bricks
 
-🔲 Look into button activated barks
+✅ Look into button activated barks
 (OvertipMapObjectInteractionPCView)
+
+🔲 Look into SubtitleView
+SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
+uses barks, so might incur some double playback sometimes.

@@ -58,6 +58,12 @@ public static class MenuGUI
             GUI.enabled = true;
         }
 
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Playback barks", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.PlaybackBarks = GUILayout.Toggle(Main.Settings.PlaybackBarks, "Enabled");
+        GUILayout.EndHorizontal();
+
         GUILayout.EndVertical();
 
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
