@@ -8,6 +8,9 @@ namespace SpeechMod.Patches;
 [HarmonyPatch(typeof(TutorialHintWindowPCView), "SetContent")]
 public class TutorialWindowView_Patch_Small
 {
+    private const string TUTORIAL_SMALL_TITLE_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Header/Title";
+    private const string TUTORIAL_SMALL_TEXT_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Body/ScrollView/Viewport/Content/TutorialText";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
@@ -17,8 +20,8 @@ public class TutorialWindowView_Patch_Small
         Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Header/Title");
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowpPCView/Window/Content/Body/ScrollView/Viewport/Content/TutorialText");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TITLE_PATH);
+        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TEXT_PATH);
     }
 }
 
@@ -26,16 +29,19 @@ public class TutorialWindowView_Patch_Small
 //[HarmonyPatch(typeof(TutorialModalWindowPCView), "OnNext")]
 public class TutorialWindowView_Patch_Big
 {
+    private const string TUTORIAL_BIG_TITLE_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Header/TitleGroup/Title";
+    private const string TUTORIAL_BIG_TEXT_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
+        Debug.Log($"{nameof(TutorialModalWindowPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Header/TitleGroup/Title");
-        UIHelper.HookUpTextToSpeechOnTransformWithPath("/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText");
+        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TITLE_PATH);
+        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TEXT_PATH);
     }
 }

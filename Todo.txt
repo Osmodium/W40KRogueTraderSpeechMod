@@ -15,7 +15,7 @@
 ✅ Custom Character Creation
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenPregenPhaseDetailedView/DeviceParent/Tablet/Screen_view/ItemView/InfoSection/ScrollView/ViewPort/Content/BodyContainer/TooltipBrickTextView(Clone)/Text
 
-🔲 Viewport over archetypes
+🔲 Viewport over archetypes when creaing character
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/CharGenDescription/LevelupDescriptionView/Viewport
 Disable Raycast on Image-component
 
@@ -30,12 +30,13 @@ The issue was 'extraPadding' was enabled on the text for some reason. Might be d
 
 🔲 Look into dialog:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/
+Dialog part to look into (Female): While you are considering your answer, Edelthrad, I wish to speak with someone else.
 
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
 
-🔲 Look into popups?
+🔲 Look into popups/notifications?
 
 ✅ Look into more ToolTip Bricks
 
@@ -45,3 +46,7 @@ Has a "Text" gameobject with TMP component
 🔲 Look into SubtitleView
 SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 uses barks, so might incur some double playback sometimes.
+
+🔲 Playback view with stop/pause functionality?
+
+🔲 Update readme!

@@ -4,6 +4,7 @@ using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpeechMod.Unity;
 
@@ -127,8 +128,11 @@ public static class UIHelper
             return;
         }
 
-        // Ensure that it registers as a raycast target
-        // NOTE! Might mess up texts that are incorporated into a menu.
+        if (IsParentClickable(textMeshProTransform))
+        {
+            return;
+        }
+
         textMeshPro.raycastTarget = true;
 
         textMeshPro.OnPointerEnterAsObservable().Subscribe(
@@ -139,13 +143,17 @@ public static class UIHelper
                     for (int i = 0; i < Main.Settings.FontStyles!.Length; i++)
                     {
                         if (Main.Settings.FontStyles[i])
+                        {
                             textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
+                        }
                     }
                     textMeshPro.extraPadding = false;
                 }
 
                 if (Main.Settings.ColorOnHover)
+                {
                     textMeshPro.color = m_HoverColor;
+                }
             }
         );
 
@@ -162,9 +170,35 @@ public static class UIHelper
             clickEvent =>
             {
                 if (clickEvent?.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                {
                     Main.Speech?.Speak(textMeshPro.text);
+                }
             }
         );
+    }
+
+    public static bool IsParentClickable(Transform transform)
+    {
+        var parent = transform?.parent;
+        while (parent != null && parent != transform.root)
+        {
+            var trigger = parent.GetComponent<ObservablePointerClickTrigger>();
+            if (trigger != null)
+            {
+                return true;
+            }
+            parent = parent.parent;
+        }
+
+        return false;
+    }
+
+    public static void SetRaycastTarget(this Graphic graphic, bool enable)
+    {
+        if (graphic == null)
+            return;
+
+        graphic.raycastTarget = enable;
     }
 
     //------------Top-------------------
