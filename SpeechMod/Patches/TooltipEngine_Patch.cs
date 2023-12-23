@@ -44,6 +44,8 @@ public static class Tooltip_Patch
         if (string.IsNullOrWhiteSpace(transform.name))
             return false;
 
-        return !transform.name.Trim().Equals("bracket", StringComparison.InvariantCultureIgnoreCase);
+        return !(transform.name.Trim().Equals("bracket", StringComparison.InvariantCultureIgnoreCase)
+            || transform.name.Trim().Equals("Acronim", StringComparison.InvariantCultureIgnoreCase)
+            || transform.name.Trim().Equals("decortext", StringComparison.InvariantCultureIgnoreCase));
     }
 }

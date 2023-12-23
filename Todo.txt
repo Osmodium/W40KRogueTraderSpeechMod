@@ -28,9 +28,11 @@ Can't see underline on text, maybe use insertion of "mark" or play button?
 <mark=#FF800055 padding="10, 10, 0, 0">
 The issue was 'extraPadding' was enabled on the text for some reason. Might be due to icons in the text at some point.
 
-🔲 Look into dialog:
+✅ Look into dialog:
+Dialog autoplay and gendered voices.
+
+🔲 Look into replay dialog:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/
-Dialog part to look into (Female): While you are considering your answer, Edelthrad, I wish to speak with someone else.
 
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
@@ -50,3 +52,17 @@ uses barks, so might incur some double playback sometimes.
 🔲 Playback view with stop/pause functionality?
 
 🔲 Update readme!
+
+🔲 Character creation archetype talens no feature text and header
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/TooltipBrickTitleView/Title-H0/Title-H0
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureSelectionPCView/FeaturesContainer/Viewport/NoFeaturesText
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureDescriptionPCView/ChargenDescriptionView/Header/TooltipBrickFeatureHeaderView(Clone)/TextBlock/Title-H1
+
+🔲 Modal dialog when ending character creation
+MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
+CharGenChangeNameMessageBoxPCView
+
+🔲 Banned transform names
+bracket
+Acronim
+decortext

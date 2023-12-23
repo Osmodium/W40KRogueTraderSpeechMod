@@ -60,8 +60,8 @@ public class WindowsSpeech : ISpeech
 
     private string FormatGenderSpecificVoices(string text)
     {
-        text = text.Replace("<color=#616060>", $"</voice>{CombinedNarratorVoiceStart}");
-        text = text.Replace("</color>", $"</voice>{CombinedDialogVoiceStart}");
+        text = text.Replace("<i><color=#544709>", $"</voice>{CombinedNarratorVoiceStart}");
+        text = text.Replace("</color></i>", $"</voice>{CombinedDialogVoiceStart}");
 
         if (text.StartsWith("</voice>"))
             text = text.Remove(0, 8);

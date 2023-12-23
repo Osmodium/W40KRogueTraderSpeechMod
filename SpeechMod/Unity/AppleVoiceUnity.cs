@@ -63,9 +63,9 @@ public class AppleVoiceUnity : MonoBehaviour
         text = text.Replace("\\n", "  ");
         text = text.Replace("\n", " ");
         text = text.Replace(";", "");
-        while (text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase) != -1)
+        while (text.IndexOf("<color=#544709>", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
-            int position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
+            int position = text.IndexOf("<color=#544709>", StringComparison.InvariantCultureIgnoreCase);
             if (position != 0)
             {
                 string argumentsPart = text.Substring(0, position);
