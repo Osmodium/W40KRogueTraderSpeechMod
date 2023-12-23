@@ -15,7 +15,7 @@
 ✅ Custom Character Creation
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenPregenPhaseDetailedView/DeviceParent/Tablet/Screen_view/ItemView/InfoSection/ScrollView/ViewPort/Content/BodyContainer/TooltipBrickTextView(Clone)/Text
 
-🔲 Viewport over archetypes when creaing character
+✅ Viewport over archetypes when creaing character
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/CharGenDescription/LevelupDescriptionView/Viewport
 Disable Raycast on Image-component
 
@@ -45,13 +45,11 @@ Has a "Text" gameobject with TMP component
 ✅ Look into button activated barks
 (OvertipMapObjectInteractionPCView)
 
-🔲 Look into SubtitleView
+🔲 Look into SubtitleView (when cutscenes are playing)
 SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 uses barks, so might incur some double playback sometimes.
 
 🔲 Playback view with stop/pause functionality?
-
-🔲 Update readme!
 
 🔲 Character creation archetype talens no feature text and header
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/TooltipBrickTitleView/Title-H0/Title-H0
@@ -62,7 +60,9 @@ uses barks, so might incur some double playback sometimes.
 MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
 CharGenChangeNameMessageBoxPCView
 
-🔲 Banned transform names
+🔲 Filter transform names in negative list:
 bracket
 Acronim
 decortext
+
+🔲 Update readme!
