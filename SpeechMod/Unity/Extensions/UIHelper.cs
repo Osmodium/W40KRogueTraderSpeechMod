@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace SpeechMod.Unity.Extensions;
 
-public static class Extensions
+public static class UIHelper
 {
     public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
     {

@@ -5,13 +5,13 @@ namespace SpeechMod.Unity.Extensions;
 public static class Transforms
 {
     //------------Top-------------------
-    public static void RectAlignTopLeft(this GameObject uiObject)
+    public static void RectAlignTopLeft(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0, 1);
         var anchorMax = new Vector2(0, 1);
         var pivot = new Vector2(0, 1);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
     public static void RectAlignTopMiddle(this GameObject uiObject)
@@ -88,7 +88,7 @@ public static class Transforms
         SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
     }
 
-    private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
+    private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2? anchoredPosition = null)
     {
         RectTransform uitransform = uiObject.GetComponent<RectTransform>();
 
@@ -98,6 +98,9 @@ public static class Transforms
         uitransform.anchorMin = anchorMin;
         uitransform.anchorMax = anchorMax;
         uitransform.pivot = pivot;
+
+        if (anchoredPosition.HasValue)
+            uitransform.anchoredPosition = anchoredPosition.Value;
     }
 
     public static void SetDefaultScale(this RectTransform trans)

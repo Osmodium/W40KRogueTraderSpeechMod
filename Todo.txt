@@ -56,16 +56,24 @@ LoadingScreenPCView
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
 CharGenChangeNameMessageBoxPCView
 
-🔲 Look into replay dialog:
-/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/
+✅ Look into replay dialog:
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/Text
 
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
 
+Buttons:
+"Right Button"
+    /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PagesGroup/RightButton
+"Play Button"
+    /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PlayButton
+
 🔲 Look into SubtitleView (when cutscenes are playing)
 SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 uses barks, so might incur some double playback sometimes.
+
+🔲 Look into journal/rumors/contracts
 
 🔲 Playback view with stop/pause functionality
 

@@ -17,7 +17,7 @@ public static class Hooks
 
     public static void HookUpTextToSpeechOnTransformWithPath(string path, bool force = false)
     {
-        var transform = Extensions.TryFind(path);
+        var transform = UIHelper.TryFind(path);
         if (transform == null)
         {
             Debug.LogWarning($"GameObject on '{path}' was not found!");

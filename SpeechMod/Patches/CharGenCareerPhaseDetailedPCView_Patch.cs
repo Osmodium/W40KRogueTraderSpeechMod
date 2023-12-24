@@ -25,7 +25,7 @@ public class CharGenCareerPhaseDetailedPCView_Patch
         Debug.Log($"{nameof(CharGenCareerPhaseDetailedPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        Extensions.TryFind(CHARGEN_DESCRIPTION_PATH)?
+        UIHelper.TryFind(CHARGEN_DESCRIPTION_PATH)?
             .GetComponent<Image>()?
             .SetRaycastTarget(false);
 

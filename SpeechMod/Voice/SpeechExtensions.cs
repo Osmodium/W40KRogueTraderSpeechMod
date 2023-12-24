@@ -22,7 +22,7 @@ public static class SpeechExtensions
                 "Owlcat Games",
                 "Warhammer 40000 Rogue Trader",
                 "UnityModManager",
-                "WH40KSpeechMod",
+                "W40KSpeechMod",
                 "PhoneticDictionary.json");
             string json = File.ReadAllText(file, Encoding.UTF8);
             m_PhoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);

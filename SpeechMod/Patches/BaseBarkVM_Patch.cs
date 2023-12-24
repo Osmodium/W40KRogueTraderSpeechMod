@@ -24,7 +24,6 @@ public class BaseBarkVM_Patch
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        // TODO: Add gender specific voices
         Main.Speech?.Speak(text);
     }
 }

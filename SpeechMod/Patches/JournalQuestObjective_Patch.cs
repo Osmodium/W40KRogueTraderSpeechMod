@@ -1,97 +1,125 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.Journal;
+using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 
-// TODO
-
-[HarmonyPatch(typeof(JournalQuestObjectivePCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(BaseJournalItemPCView), "UpdateView")]
 public static class JournalQuestObjective_Patch
 {
     private static readonly string m_ButtonName = "JQSpeechButton";
 
-    private const string BODY_GROUP_PATH = "ServiceWindowsPCView/Background/Windows/JournalPCView/JournalQuestView/BodyGroup";
+    private const string BODY_GROUP_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup";
+    private const string CHAPTER_HEADER_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text";
 
     public static void Postfix()
     {
+        // TODO!
+        return;
         if (!Main.Enabled)
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(JournalQuestObjectivePCView)}_BindViewImplementation_Postfix");
+        Debug.Log($"{nameof(BaseJournalItemPCView)}_UpdateView_Postfix");
 #endif
 
-        var bodyGroup = Extensions.TryFind(BODY_GROUP_PATH);
+        HookChapterHeader();
+        HookBodyGroup();
+    }
+
+    private static void HookChapterHeader()
+    {
+        Hooks.HookUpTextToSpeechOnTransformWithPath(CHAPTER_HEADER_PATH, true);
+    }
+
+    private static void HookBodyGroup()
+    {
+        var bodyGroup = UIHelper.TryFind(BODY_GROUP_PATH);
         if (bodyGroup == null)
         {
-            Debug.Log("Couldn't find BodyGroup...");
+            Debug.LogWarning("Couldn't find BodyGroup...");
             return;
         }
 
-        var allTexts = bodyGroup.gameObject.GetComponentsInChildren<TextMeshProUGUI>(true);
+        var allTexts = bodyGroup.GetComponentsInChildren<TextMeshProUGUI>(true);
         if (allTexts == null || allTexts.Length == 0)
         {
-            Debug.Log("Couldn't any TextMeshProUGUI...");
+            Debug.LogWarning("Couldn't any TextMeshProUGUI...");
             return;
         }
 
         bool isFirst = true;
         foreach (var textMeshPro in allTexts)
         {
-            var tmpTransform = textMeshPro.transform;
-            if (!ShouldAddButton(tmpTransform))
-                continue;
+            var tmpTransform = textMeshPro?.transform;
+            Debug.LogWarning($"Found {tmpTransform?.name}...");
+            //if (!ShouldAddButton(tmpTransform))
+                //continue;
 
             var button = tmpTransform?.TryFind(m_ButtonName)?.gameObject;
 
             if (button != null)
             {
-#if DEBUG
-                Debug.Log("Button already added, relocating and activating...");
-#endif
-                button.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                tmpTransform.gameObject.RectAlignTopLeft();
-                button.RectAlignTopLeft();
-                SetNewPosition(tmpTransform, button.transform, ref isFirst);
-                button.SetActive(true);
+                ResetButton(button, tmpTransform, ref isFirst);
                 continue;
             }
 
-#if DEBUG
-            Debug.Log("Adding playbutton...");
-#endif
-            //button = ButtonFactory.CreatePlayButton(tmpTransform.transform, () =>
-            //{
-            //    Main.Speech.Speak(textMeshPro.text);
-            //});
-            //button.name = m_ButtonName;
-            //button.transform.localRotation = Quaternion.Euler(0, 0, 90);
-            //tmpTransform.gameObject.RectAlignTopLeft();
-            //button.RectAlignTopLeft();
-            //SetNewPosition(tmpTransform, button.transform, ref isFirst);
-            //button.SetActive(true);
+            AddButton(tmpTransform, textMeshPro, ref isFirst);
         }
 
         // Move the line back behind our buttons.
-        var allImages = bodyGroup.GetComponentsInChildren<Image>();
-        foreach (var image in allImages)
+        //var allImages = bodyGroup.GetComponentsInChildren<Image>();
+        //foreach (var image in allImages)
+        //{
+        //    if (image.gameObject.name.Equals("LeftVerticalBorderImage"))
+        //        image.transform.SetAsFirstSibling();
+        //}
+    }
+
+    private static void ResetButton(GameObject button, Transform transform, ref bool isFirst)
+    {
+
+#if DEBUG
+        Debug.Log("Button already added, relocating and activating...");
+#endif
+
+        button.transform.localRotation = Quaternion.Euler(0, 0, 270);
+        //transform.gameObject.RectAlignTopLeft();
+        //button.RectAlignTopLeft();
+        //SetNewPosition(transform, button.transform, ref isFirst);
+        button.SetActive(true);
+    }
+
+    private static void AddButton(Transform transform, TextMeshProUGUI textMeshPro, ref bool isFirst)
+    {
+
+#if DEBUG
+        Debug.Log($"Adding playbutton to {transform.name}...");
+#endif
+
+        var button = ButtonFactory.CreatePlayButton(transform, () =>
         {
-            if (image.gameObject.name.Equals("LeftVerticalBorderImage"))
-                image.transform.SetAsFirstSibling();
-        }
+            Main.Speech.Speak(textMeshPro.text);
+        });
+        button.name = m_ButtonName;
+        button.transform.localRotation = Quaternion.Euler(0, 0, 270);
+        //transform.gameObject.RectAlignTopLeft();
+        //button.RectAlignTopLeft();
+        //SetNewPosition(transform, button.transform, ref isFirst);
+        button.SetActive(true);
     }
 
     private static bool ShouldAddButton(Transform transform)
     {
         switch (transform.name)
         {
-            case "LastChapterLabel":
-            case "DescriptionLabel":
-            case "Label":
+            case "CompletionItem":
+            case "DescriptionItem":
+            case "TextLabel":
+            case "Text":
                 return true;
             default:
                 return false;
@@ -102,13 +130,13 @@ public static class JournalQuestObjective_Patch
     {
         switch (tmpTransform.name)
         {
-            case "LastChapterLabel":
+            case "CompletionItem":
                 transform.localPosition = new Vector3(-72, -35, 0);
                 break;
-            case "TitleLabel":
+            case "Text":
                 transform.localPosition = new Vector3(0, -42, 0);
                 break;
-            case "DescriptionLabel":
+            case "DescriptionItem":
                 if (isFirst)
                 {
                     isFirst = false;
@@ -117,10 +145,10 @@ public static class JournalQuestObjective_Patch
                 }
                 transform.localPosition = new Vector3(-35, -24, 0);
                 break;
-            case "Label":
-                var ipi = tmpTransform.parent.TryFind("InProgressImage").gameObject;
-                transform.localPosition = new Vector3(-82, ipi.transform.InverseTransformPoint(ipi.transform.position).y - 26, 0);
-                break;
+            //case "TextLabel":
+            //    var ipi = tmpTransform.parent.TryFind("InProgressImage").gameObject;
+            //    transform.localPosition = new Vector3(-82, ipi.transform.InverseTransformPoint(ipi.transform.position).y - 26, 0);
+            //    break;
             default:
                 transform.localPosition = Vector3.zero;
                 break;
