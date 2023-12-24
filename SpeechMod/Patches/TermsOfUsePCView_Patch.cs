@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.TermOfUse;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 
@@ -20,7 +22,7 @@ public class TermsOfUsePCView_Patch
         Debug.Log($"{nameof(TermsOfUsePCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TERMS_OF_USE_TITLE_PATH);
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TERMS_OF_USE_LICENCE_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TERMS_OF_USE_TITLE_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TERMS_OF_USE_LICENCE_PATH);
     }
 }

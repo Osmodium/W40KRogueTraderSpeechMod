@@ -31,6 +31,31 @@ The issue was 'extraPadding' was enabled on the text for some reason. Might be d
 ✅ Look into dialog:
 Dialog autoplay and gendered voices.
 
+✅ Look into more ToolTip Bricks
+
+✅ Look into button activated barks
+(OvertipMapObjectInteractionPCView)
+
+✅ Character creation archetype talents no feature text and header
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/TooltipBrickTitleView/Title-H0/Title-H0
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureSelectionPCView/FeaturesContainer/Viewport/NoFeaturesText
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureDescriptionPCView/ChargenDescriptionView/Header/TooltipBrickFeatureHeaderView(Clone)/TextBlock/Title-H1
+
+✅ Ship description screen
+ShipNameAndPortraitPCView /BindViewImplementation
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/InformationLabel
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/StarShipDescription
+
+✅ Loading screen description text
+LoadingScreenPCView
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
+
+✅ Modal dialog when ending character creation
+/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
+CharGenChangeNameMessageBoxPCView
+
 🔲 Look into replay dialog:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/
 
@@ -38,31 +63,25 @@ Dialog autoplay and gendered voices.
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
 
-🔲 Look into popups/notifications?
-
-✅ Look into more ToolTip Bricks
-
-✅ Look into button activated barks
-(OvertipMapObjectInteractionPCView)
-
 🔲 Look into SubtitleView (when cutscenes are playing)
 SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 uses barks, so might incur some double playback sometimes.
 
-🔲 Playback view with stop/pause functionality?
+🔲 Playback view with stop/pause functionality
 
-🔲 Character creation archetype talens no feature text and header
-/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/TooltipBrickTitleView/Title-H0/Title-H0
-/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureSelectionPCView/FeaturesContainer/Viewport/NoFeaturesText
+🔲 Look into popups/notifications?
+
+🔲 Gender specific voices for barks
+
+🔲 Update PhoneticDictionary backup and file
+
+🔲 Update readme!
+
+🔲 TODO(maybe): override specific bricks TMPS:
+CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/HeaderContainer/TooltipBrickFeatureHeaderPaperView(Clone)/TextBlock/Title-H1
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureDescriptionPCView/ChargenDescriptionView/Header/TooltipBrickFeatureHeaderView(Clone)/TextBlock/Title-H1
 
-🔲 Modal dialog when ending character creation
-MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
-CharGenChangeNameMessageBoxPCView
-
-🔲 Filter transform names in negative list:
+--Filter transform names in negative list--
 bracket
 Acronim
 decortext
-
-🔲 Update readme!

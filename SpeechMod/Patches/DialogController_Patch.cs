@@ -3,7 +3,6 @@ using Kingmaker;
 using Kingmaker.Controllers.Dialog;
 using Kingmaker.DialogSystem.Blueprints;
 using Kingmaker.EntitySystem.Entities;
-
 #if DEBUG
 using UnityEngine;
 #endif

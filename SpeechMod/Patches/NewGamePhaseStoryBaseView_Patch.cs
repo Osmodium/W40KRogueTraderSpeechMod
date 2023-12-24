@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.NewGame.Base;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 
@@ -19,6 +21,6 @@ public class NewGamePhaseStoryBaseView_Patch
         Debug.Log($"{nameof(NewGamePhaseStoryBaseView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(NEWGAME_STORY_INTRODUCTION_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(NEWGAME_STORY_INTRODUCTION_PATH);
     }
 }

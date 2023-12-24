@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM.View.Tutorial.PC;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 
@@ -20,8 +22,8 @@ public class TutorialWindowView_Patch_Small
         Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TITLE_PATH);
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TEXT_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TITLE_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TEXT_PATH);
     }
 }
 
@@ -41,7 +43,7 @@ public class TutorialWindowView_Patch_Big
         Debug.Log($"{nameof(TutorialModalWindowPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TITLE_PATH);
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TEXT_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TITLE_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TEXT_PATH);
     }
 }

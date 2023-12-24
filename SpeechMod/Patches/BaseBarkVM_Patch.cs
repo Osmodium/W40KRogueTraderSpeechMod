@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.VM.Bark;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 

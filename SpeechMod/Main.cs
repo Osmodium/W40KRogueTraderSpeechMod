@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
@@ -47,7 +48,7 @@ public static class Main
             return false;
 
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
-        MenuGUI.UpdateColors();
+        Hooks.UpdateHoverColor();
 
         modEntry!.OnToggle = OnToggle;
         modEntry!.OnGUI = OnGui;
@@ -152,7 +153,7 @@ public static class Main
 
     private static void OnSaveGui(UnityModManager.ModEntry modEntry)
     {
-        MenuGUI.UpdateColors();
+        Hooks.UpdateHoverColor();
         Settings?.Save(modEntry);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.Journal;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +25,7 @@ public static class JournalQuestObjective_Patch
         Debug.Log($"{nameof(JournalQuestObjectivePCView)}_BindViewImplementation_Postfix");
 #endif
 
-        var bodyGroup = UIHelper.TryFind(BODY_GROUP_PATH);
+        var bodyGroup = Extensions.TryFind(BODY_GROUP_PATH);
         if (bodyGroup == null)
         {
             Debug.Log("Couldn't find BodyGroup...");

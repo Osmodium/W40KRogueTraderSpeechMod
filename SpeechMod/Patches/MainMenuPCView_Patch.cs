@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.MainMenu.PC;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 
@@ -19,6 +21,6 @@ public class MainMenuPCView_Patch
         Debug.Log($"{nameof(MainMenuPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(MAIN_MENU_WELCOME_TEXT_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(MAIN_MENU_WELCOME_TEXT_PATH);
     }
 }

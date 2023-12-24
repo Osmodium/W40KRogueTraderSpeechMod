@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM.View.CharGen.PC.Phases.Career;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
 using UnityEngine;
+#endif
 using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
@@ -23,12 +25,12 @@ public class CharGenCareerPhaseDetailedPCView_Patch
         Debug.Log($"{nameof(CharGenCareerPhaseDetailedPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        UIHelper.TryFind(CHARGEN_DESCRIPTION_PATH)?
+        Extensions.TryFind(CHARGEN_DESCRIPTION_PATH)?
             .GetComponent<Image>()?
             .SetRaycastTarget(false);
 
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_HEADER_PATH);
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_FEATURE_TEXT_PATH);
-        UIHelper.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_TEXT_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_HEADER_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_FEATURE_TEXT_PATH);
+        Hooks.HookUpTextToSpeechOnTransformWithPath(CHARGEN_ABILITY_TEXT_PATH, true);
     }
 }
