@@ -18,12 +18,12 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
     public ModHotkeySettingEntry(string key, string title, string tooltip, string DefaultKeyPairString)
         : base(key, title, tooltip)
     {
-        SettingEntity = new(SettingsController.Instance, $"{PREFIX}.newcontrols.{Key}", new(DefaultKeyPairString), false, true);
+        SettingEntity = new(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", new(DefaultKeyPairString), false, true);
     }
 
     public override UISettingsEntityBase GetUISettings() => UiSettingEntity;
 
-    public string GetBindName() => $"{PREFIX}.newcontrols.ui.{Key}";
+    public string GetBindName() => $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.ui.{Key}";
     public override void BuildUIAndLink()
     {
         UiSettingEntity = MakeKeyBind();
@@ -37,9 +37,9 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
     private UISettingsEntityKeyBinding MakeKeyBind()
     {
         var keyBindSetting = ScriptableObject.CreateInstance<UISettingsEntityKeyBinding>();
-        keyBindSetting.m_Description = ModLocalizationManager.CreateString($"{PREFIX}.feature.{Key}.description", Title);
-        keyBindSetting.m_TooltipDescription = ModLocalizationManager.CreateString($"{PREFIX}.feature.{Key}.tooltip-description", Tooltip);
-        keyBindSetting.name = $"{PREFIX}.newcontrols.ui.{Key}";
+        keyBindSetting.m_Description = ModLocalizationManager.CreateString($"{ModConfigurationManager.Instance?.SettingsPrefix}.feature.{Key}.description", Title);
+        keyBindSetting.m_TooltipDescription = ModLocalizationManager.CreateString($"{ModConfigurationManager.Instance?.SettingsPrefix}.feature.{Key}.tooltip-description", Tooltip);
+        keyBindSetting.name = $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.ui.{Key}";
         keyBindSetting.m_EncyclopediaDescription = new();
         return keyBindSetting;
     }
@@ -50,48 +50,52 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
 
         var currentValue = SettingEntity.GetValue();
 
-        if (currentValue.Binding1.Key != UnityEngine.KeyCode.None)
+        if (currentValue.Binding1.Key != KeyCode.None)
         {
             Game.Instance.Keyboard.RegisterBinding(
                 GetBindName(),
                 currentValue.Binding1,
                 currentValue.GameModesGroup,
                 currentValue.TriggerOnHold);
-            Main.log.Log($"{Title} binding 1 registered: {currentValue.Binding1}");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 1 registered: {currentValue.Binding1}");
         }
         else
         {
-            Main.log.Log($"{Title} binding 1 empty");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 1 empty");
         }
 
-        if (currentValue.Binding2.Key != UnityEngine.KeyCode.None)
+        if (currentValue.Binding2.Key != KeyCode.None)
         {
             Game.Instance.Keyboard.RegisterBinding(
                 GetBindName(),
                 currentValue.Binding2,
                 currentValue.GameModesGroup,
                 currentValue.TriggerOnHold);
-            Main.log.Log($"{Title} binding 2 registered: {currentValue.Binding2}");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 2 registered: {currentValue.Binding2}");
         }
         else
         {
-            Main.log.Log($"{Title} binding 2 empty");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 2 empty");
         }
     }
 
     protected SettingStatus TryEnableAndPatch(Type type)
     {
         TryFix();
-        if (Status != SettingStatus.NOT_APPLIED) return Status;
+        if (Status != SettingStatus.NOT_APPLIED)
+        {
+            return Status;
+        }
+
         RegisterKeybind();
         var currentValue = SettingEntity.GetValue();
-        if (currentValue.Binding1.Key != UnityEngine.KeyCode.None || currentValue.Binding2.Key != UnityEngine.KeyCode.None)
+        if (currentValue.Binding1.Key != KeyCode.None || currentValue.Binding2.Key != KeyCode.None)
         {
             return TryPatchInternal(type);
         }
         else
         {
-            Main.log.Log($"{Title} binding 1 and binding 2 empty, setting integration skipped");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 1 and binding 2 empty, setting integration skipped");
         }
         return SettingStatus.NOT_APPLIED;
     }
@@ -111,7 +115,7 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
             curValue.TriggerOnHold = defaultTrigger;
             SettingEntity.SetValueAndConfirm(curValue);
             ReSavingRequired = true;
-            Main.log.Log($"{Title} had outdated hotkey settings, migrated.");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} had outdated hotkey settings, migrated.");
         }
     }
 }

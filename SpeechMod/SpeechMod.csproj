@@ -1,148 +1,121 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DE7D77D9-DB2B-456B-B2E8-734963C7DE0D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpeechMod</RootNamespace>
-    <AssemblyName>SpeechMod</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<AssemblyName>W40KRTSpeechMod</AssemblyName>
+		<Description>Warhammer 40K: Rogue Trader - SpeechMod</Description>
+		<Version>1.0.0</Version>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>latest</LangVersion>
+		<RootNamespace>SpeechMod</RootNamespace>
     <RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\SpeechMod\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>10</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\SpeechMod\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>10</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Test\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>10</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Code">
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Code.dll</HintPath>
-    </Reference>
-    <Reference Include="Kingmaker.Blueprints.Base">
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.Blueprints.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="LocalizationShared">
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\LocalizationShared.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.UI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.UniRx, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UniRx.dll</HintPath>
-    </Reference>
-    <Reference Include="RogueTrader.GameCore">
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\RogueTrader.GameCore.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="UniRx, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UniRx.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityModManager">
-      <HintPath>$(RogueTraderData)\UnityModManager\UnityModManager.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Patches\BarkPlayer_Patch.cs" />
-    <Compile Include="Patches\CharGenCareerPhaseDetailedPCView_Patch.cs" />
-    <Compile Include="Patches\Leftovers\BookEventView_Patch.cs" />
-    <Compile Include="Patches\Leftovers\CharacterInfoVM_Patch.cs" />
-    <Compile Include="Patches\Leftovers\CombatResultView_Patch.cs" />
-    <Compile Include="Patches\DialogController_Patch.cs" />
-    <Compile Include="Patches\Dialog_Patch.cs" />
-    <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
-    <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
-    <Compile Include="Patches\Leftovers\GlobalMapEnterMessage_Patch.cs" />
-    <Compile Include="Patches\LoadingScreenBaseView_Patch.cs" />
-    <Compile Include="Patches\MessageBoxPCView_Patch.cs" />
-    <Compile Include="Patches\MainMenuPCView_Patch.cs" />
-    <Compile Include="Patches\NewGamePhaseStoryBaseView_Patch.cs" />
-    <Compile Include="Patches\ShipNameAndPortraitPCView_Patch.cs" />
-    <Compile Include="Patches\TermsOfUsePCView_Patch.cs" />
-    <Compile Include="Patches\TutorialWindowView_Patch.cs" />
-    <Compile Include="Unity\AppleVoiceUnity.cs" />
-    <Compile Include="Unity\ButtonFactory.cs" />
-    <Compile Include="Patches\SurfaceStaticPartPCView_Patch.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Unity\Extensions\Hooks.cs" />
-    <Compile Include="Unity\Extensions\Transforms.cs" />
-    <Compile Include="Unity\MenuGUI.cs" />
-    <Compile Include="Unity\Extensions\UIHelper.cs" />
-    <Compile Include="Voice\Enums.cs" />
-    <Compile Include="Voice\ISpeech.cs" />
-    <Compile Include="Voice\AppleSpeech.cs" />
-    <Compile Include="Patches\TooltipEngine_Patch.cs" />
-    <Compile Include="Unity\TextMeshProValues.cs" />
-    <Compile Include="Unity\WindowsVoiceUnity.cs" />
-    <Compile Include="Voice\SpeechExtensions.cs" />
-    <Compile Include="Voice\WindowsSpeech.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Info.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-    <None Include="PhoneticDictionary.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="0Harmony">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\0Harmony.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Code">
+			<HintPath>$(SolutionDir)lib\Code_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Kingmaker.Blueprints.Base">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.Blueprints.Base.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="LocalizationShared">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\LocalizationShared.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.UI">
+			<HintPath>$(SolutionDir)lib\Owlcat.Runtime.UI_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.UniRx">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UniRx.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="RogueTrader.GameCore">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\RogueTrader.GameCore.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UniRx">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UniRx.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityEngine.IMGUIModule">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.UI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityModManager">
+			<HintPath>$(SolutionDir)lib\UnityModManager_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Info.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+		<None Include="PhoneticDictionary.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+	</ItemGroup>
+	<ItemGroup>
+		<PubliciseInputAssemblies Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Code.dll" />
+		<PubliciseInputAssemblies Include="$(RogueTraderData)\UnityModManager\UnityModManager.dll" />
+		<PubliciseInputAssemblies Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UI.dll" />
+	</ItemGroup>
+	<!-- <Target Name="Deploy" AfterTargets="Build">
+		<ItemGroup>
+			<Files Include="$(TargetDir)\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(Files)" DestinationFiles="@(Files->'$(RogueTraderData)\UnityModManager\$(AssemblyName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target> -->
+	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Aze.Publicise.MSBuild.Task" Version="1.1.0" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
+		<PackageReference Include="PublishToWorkshop" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" Version="1.0.10" PrivateAssets="all" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ModConfiguration\ModConfiguration.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="Localization\enGB.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<Target Name="Publicise" AfterTargets="BeforeBuild;Clean" Inputs="@(PubliciseInputAssemblies)" Outputs="$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.dll;$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.hash">
+		<MakeDir Directories="$(SolutionDir)lib/" />
+		<Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
+	</Target>
+	<Target Name="PublishToSteamWorkshop" AfterTargets="Publish">
+		<PublishToWorkshop PathToManifest="$(MSBuildThisFileDirectory)\OwlcatModificationManifest.json" ImageDir="$(SolutionDir)" BuildDir="$(MSBuildProjectDirectory)\$(OutputPath)" PathToDescription="$(SolutionDir)Workshop-description.txt" GameAppId="2186680" />
+	</Target>
+	<Target Name="GenerateCustomPropsFile" BeforeTargets="BeforeBuild" Condition="$(RogueTraderInstallDir) == ''">
+		<Exec Command="findstr /C:&quot;Mono path[0]&quot; &quot;$(RogueTraderData)\Player.log&quot;" IgnoreExitCode="true" ConsoleToMSBuild="true">
+			<Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+			<Output TaskParameter="ConsoleOutput" PropertyName="MonoPathLine" />
+		</Exec>
+		<PropertyGroup>
+			<MonoPathRegex>^Mono path\[0\] = '(.*?)/WH40KRT_Data/Managed'$</MonoPathRegex>
+		</PropertyGroup>
+		<PropertyGroup>
+			<RogueTraderInstallDir>$([System.Text.RegularExpressions.Regex]::Match($(MonoPathLine), $(MonoPathRegex)).Groups[1].Value)</RogueTraderInstallDir>
+		</PropertyGroup>
+		<WriteLinesToFile File="$(SolutionDir)GamePath.props" Lines="&lt;Project xmlns='http://schemas.microsoft.com/developer/msbuild/2003'&gt; &#xD;&#xA;	&lt;PropertyGroup&gt; &#xD;&#xA;		&lt;RogueTraderInstallDir&gt;$(RogueTraderInstallDir)&lt;/RogueTraderInstallDir&gt;&#xD;&#xA;	&lt;/PropertyGroup&gt;&#xD;&#xA;&lt;/Project&gt;" Overwrite="true" Encoding="utf-8" />
+	</Target>
 </Project>

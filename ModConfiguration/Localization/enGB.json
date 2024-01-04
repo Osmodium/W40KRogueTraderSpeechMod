@@ -1,0 +1,16 @@
+{
+  "Strings": {
+    "osmodium.speechmod.feature.playback.pause": {
+      "Text": "Pause playback"
+    },
+    "osmodium.speechmod.feature.playback.stop": {
+      "Text": "Stop playback"
+    },
+    "osmodium.speechmod.feature.playback.play": {
+      "Text": "Continue playback"
+    },
+    "osmodium.speechmod.group.main": {
+      "Text": "Speech Mod"
+    }
+  }
+}

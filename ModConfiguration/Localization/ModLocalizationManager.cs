@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
-namespace EnhancModConfigurationedControls.Localization;
+namespace ModConfiguration.Localization;
 
 internal class ModLocalizationManager
 {
-    private static MyLocalizationPack enPack;
+    private static ModLocalizationPack m_EnPack;
 
     public static void Init()
     {
-        enPack = LoadPack(Locale.enGB);
+        m_EnPack = LoadPack(Locale.enGB);
 
-        ApplyLocalization(LocalizationManager.Instance.CurrentLocale);
+        ApplyLocalization(LocalizationManager.Instance!.CurrentLocale);
 
         (LocalizationManager.Instance as ILocalizationProvider).LocaleChanged += ApplyLocalization;
     }
@@ -24,7 +24,7 @@ internal class ModLocalizationManager
     {
         var currentPack = LocalizationManager.Instance.CurrentPack;
         if (currentPack == null) return;
-        foreach (var entry in enPack.Strings)
+        foreach (var entry in m_EnPack.Strings)
         {
             currentPack.PutString(entry.Key, entry.Value.Text);
         }
@@ -38,19 +38,19 @@ internal class ModLocalizationManager
             }
         }
 #if DEBUG
-        var localizationFolder = Path.Combine(Main.ModEntry.Path, "Localization");
-        var packFile = Path.Combine(localizationFolder, Locale.enGB.ToString() + ".json");
+        var localizationFolder = Path.Combine(ModConfigurationManager.Instance?.ModEntry?.Path!, "Localization");
+        var packFile = Path.Combine(localizationFolder, Locale.enGB + ".json");
         using StreamWriter file = new(packFile);
         using JsonWriter jsonReader = new JsonTextWriter(file);
         JsonSerializer serializer = new();
-        serializer.Serialize(jsonReader, enPack);
+        serializer.Serialize(jsonReader, m_EnPack);
 #endif
     }
 
-    private static MyLocalizationPack LoadPack(Locale locale)
+    private static ModLocalizationPack LoadPack(Locale locale)
     {
-        var localizationFolder = Path.Combine(Main.ModEntry.Path, "Localization");
-        var packFile = Path.Combine(localizationFolder, locale.ToString() + ".json");
+        var localizationFolder = Path.Combine(ModConfigurationManager.Instance?.ModEntry?.Path!, "Localization");
+        var packFile = Path.Combine(localizationFolder, locale + ".json");
         if (File.Exists(packFile))
         {
             try
@@ -58,45 +58,45 @@ internal class ModLocalizationManager
                 using StreamReader file = File.OpenText(packFile);
                 using JsonReader jsonReader = new JsonTextReader(file);
                 JsonSerializer serializer = new();
-                var enLocalization = serializer.Deserialize<MyLocalizationPack>(jsonReader);
+                var enLocalization = serializer.Deserialize<ModLocalizationPack>(jsonReader);
                 return enLocalization;
             }
             catch (System.Exception ex)
             {
-                Main.log.Error($"Failed to read or parse {locale} mod localization pack: {ex.Message}");
+                ModConfigurationManager.Instance?.ModEntry?.Logger?.Error($"Failed to read or parse {locale} mod localization pack: {ex.Message}");
             }
         }
         else
         {
-            Main.log.Log($"Missing localization pack for {locale}");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"Missing localization pack for {locale}");
         }
         return new() { Strings = new() };
     }
 
     public static LocalizedString CreateString(string key, string value)
     {
-        if (enPack.Strings.ContainsKey(key))
+        if (m_EnPack.Strings.ContainsKey(key))
         {
             return new LocalizedString { m_ShouldProcess = false, m_Key = key };
         }
         else
         {
-            Main.log.Log($"Missing localization string {key}");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"Missing localization string {key}");
 #if DEBUG
-            enPack.Strings[key] = new() { Text = value };
+            m_EnPack.Strings[key] = new() { Text = value };
 #endif
             return new LocalizedString { m_ShouldProcess = false, m_Key = key };
         }
     }
 }
 
-public record class MyLocalizationPack
+public record class ModLocalizationPack
 {
     [JsonProperty]
-    public Dictionary<string, MyLocalizationEntry> Strings;
+    public Dictionary<string, ModLocalizationEntry> Strings;
 }
 
-public struct MyLocalizationEntry
+public struct ModLocalizationEntry
 {
     [JsonProperty]
     public string Text;

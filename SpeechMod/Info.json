@@ -4,8 +4,8 @@
   "Author": "Osmodium",
   "ManagerVersion": "0.25.0",
   "Requirements": [],
-  "AssemblyName": "SpeechMod.dll",
+  "AssemblyName": "W40KRTSpeechMod.dll",
   "EntryMethod": "SpeechMod.Main.Load",
   "HomePage": "https://www.nexusmods.com/pathfinderwrathoftherighteous/mods/241",
-  "Version": "0.6.0"
+  "Version": "0.8.0"
 }

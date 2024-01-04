@@ -5,8 +5,6 @@ namespace ModConfiguration.Settings;
 
 public abstract class ModSettingEntry
 {
-    public const string PREFIX = "alterasc.enhancedcontrols";
-
     public readonly string Key;
     public readonly string Title;
     public readonly string Tooltip;
@@ -31,16 +29,16 @@ public abstract class ModSettingEntry
         if (Status != SettingStatus.NOT_APPLIED) return Status;
         try
         {
-            foreach (Type t in type)
+            foreach (var t in type)
             {
-                Main.HarmonyInstance.CreateClassProcessor(t).Patch();
+                ModConfigurationManager.Instance?.HarmonyInstance?.CreateClassProcessor(t)?.Patch();
             }
             Status = SettingStatus.WORKING;
-            Main.log.Log($"{Title} patch succeeded");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} patch succeeded");
         }
         catch (Exception ex)
         {
-            Main.log.Error($"{Title} patch exception: {ex.Message}");
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Error($"{Title} patch exception: {ex.Message}");
             Status = SettingStatus.ERROR;
         }
         return Status;

@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ModConfiguration;
+using ModConfiguration.Settings;
+using SpeechMod.Keybinds;
 using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
@@ -57,6 +60,10 @@ public static class Main
         var harmony = new Harmony(modEntry.Info?.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+        ModConfigurationManager.Build(harmony, modEntry, Constants.SETTINGS_PREFIX);
+        harmony.CreateClassProcessor(typeof(SettingsUIPatches)).Patch();
+        SetUpSettings();
+
         Logger?.Log(Speech?.GetStatusMessage());
 
         if (!SetAvailableVoices())
@@ -67,6 +74,11 @@ public static class Main
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initialized!");
         m_Loaded = true;
         return true;
+    }
+
+    private static void SetUpSettings()
+    {
+        ModConfigurationManager.Instance.GroupedSettings.Add("sound", new List<ModSettingEntry> {new PlaybackStop() });
     }
 
     private static bool SetAvailableVoices()
