@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Patches\BarkPlayer_Patch.cs" />
     <Compile Include="Patches\CharGenCareerPhaseDetailedPCView_Patch.cs" />
     <Compile Include="Patches\Leftovers\BookEventView_Patch.cs" />
     <Compile Include="Patches\Leftovers\CharacterInfoVM_Patch.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Patches\MessageBoxPCView_Patch.cs" />
     <Compile Include="Patches\MainMenuPCView_Patch.cs" />
     <Compile Include="Patches\NewGamePhaseStoryBaseView_Patch.cs" />
-    <Compile Include="Patches\BaseBarkVM_Patch.cs" />
     <Compile Include="Patches\ShipNameAndPortraitPCView_Patch.cs" />
     <Compile Include="Patches\TermsOfUsePCView_Patch.cs" />
     <Compile Include="Patches\TutorialWindowView_Patch.cs" />

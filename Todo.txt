@@ -46,11 +46,13 @@ ShipNameAndPortraitPCView /BindViewImplementation
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/InformationLabel
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/StarShipDescription
 
-✅ Loading screen description text
+🔲 Loading screen description text
 LoadingScreenPCView
 /CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
 /CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
 /CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+Doesn't work on subsequent loading screen showings
 
 ✅ Modal dialog when ending character creation
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
@@ -58,6 +60,10 @@ CharGenChangeNameMessageBoxPCView
 
 ✅ Look into replay dialog:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView/Viewport/Content/CuePlace/SurfaceDialogCueView/Text
+
+✅ Gender specific voices for barks
+
+✅ Settings for auto play vicinity/cutscene barks
 
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
@@ -73,17 +79,19 @@ Buttons:
 SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 uses barks, so might incur some double playback sometimes.
 
-🔲 Look into journal/rumors/contracts
+🔲 Look into keybinds for Stop/pause/play playback.
 
-🔲 Playback view with stop/pause functionality
+🔲 Look into journal/rumors/contracts
 
 🔲 Look into popups/notifications?
 
-🔲 Gender specific voices for barks
-
 🔲 Update PhoneticDictionary backup and file
 
+🔲 Playback view with stop/pause functionality
+
 🔲 Update readme!
+
+🔲 Add mod to Steam Workshop
 
 🔲 TODO(maybe): override specific bricks TMPS:
 CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/HeaderContainer/TooltipBrickFeatureHeaderPaperView(Clone)/TextBlock/Title-H1

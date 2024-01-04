@@ -65,6 +65,24 @@ public static class MenuGUI
         Main.Settings.PlaybackBarks = GUILayout.Toggle(Main.Settings.PlaybackBarks, "Enabled");
         GUILayout.EndHorizontal();
 
+        {
+            GUI.enabled = Main.Settings.PlaybackBarks;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Only playback barks if there's silence", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarkOnlyIfSilence = GUILayout.Toggle(Main.Settings.PlaybackBarkOnlyIfSilence, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Playback vicinity and cutscene triggered barks", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarksInVicinity = GUILayout.Toggle(Main.Settings.PlaybackBarksInVicinity, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUI.enabled = true;
+        }
+
         GUILayout.EndVertical();
 
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);

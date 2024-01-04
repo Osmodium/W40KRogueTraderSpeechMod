@@ -1,4 +1,5 @@
 {
   "—": " <silence msec=\"300\"/> ",
-  "...": " <silence msec=\"500\"/> "
+  "...": " <silence msec=\"500\"/> ",
+  "servitor":  "servitur"
 }

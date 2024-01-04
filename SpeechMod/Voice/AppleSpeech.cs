@@ -7,6 +7,11 @@ namespace SpeechMod.Voice;
 
 public class AppleSpeech : ISpeech
 {
+    public bool IsSpeaking()
+    {
+        return false;
+    }
+
     public void SpeakPreview(string text, VoiceType type)
     {
         if (string.IsNullOrEmpty(text))
@@ -15,20 +20,13 @@ public class AppleSpeech : ISpeech
             return;
         }
 
-        switch (type)
+        text = type switch
         {
-            case VoiceType.Narrator:
-                text = $"-v {Main.Settings.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
-                break;
-            case VoiceType.Female:
-                text = $"-v {Main.Settings.FemaleVoice} -r {Main.Settings.FemaleRate} {text.Replace("\"", "")}";
-                break;
-            case VoiceType.Male:
-                text = $"-v {Main.Settings.MaleVoice} -r {Main.Settings.MaleRate} {text.Replace("\"", "")}";
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
+            VoiceType.Narrator => $"-v {Main.Settings?.NarratorVoice} -r {Main.Settings?.NarratorRate} {text.Replace("\"", "")}",
+            VoiceType.Female => $"-v {Main.Settings?.FemaleVoice} -r {Main.Settings?.FemaleRate} {text.Replace("\"", "")}",
+            VoiceType.Male => $"-v {Main.Settings?.MaleVoice} -r {Main.Settings?.MaleRate} {text.Replace("\"", "")}",
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
 
         AppleVoiceUnity.Speak(text);
     }
@@ -49,6 +47,11 @@ public class AppleSpeech : ISpeech
 
         text = text.PrepareText();
         AppleVoiceUnity.SpeakDialog(text, delay);
+    }
+
+    public void SpeakAs(string text, VoiceType type, float delay = 0)
+    {
+        throw new NotImplementedException();
     }
 
     public void Speak(string text, float delay)

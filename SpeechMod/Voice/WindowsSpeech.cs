@@ -14,19 +14,19 @@ namespace SpeechMod.Voice;
 public class WindowsSpeech : ISpeech
 {
     private static string NarratorVoice => $"<voice required=\"Name={Main.NarratorVoice}\">";
-    private static string NarratorPitch => $"<pitch absmiddle=\"{Main.Settings.NarratorPitch}\"/>";
-    private static string NarratorRate => $"<rate absspeed=\"{Main.Settings.NarratorRate}\"/>";
-    private static string NarratorVolume => $"<volume level=\"{Main.Settings.NarratorVolume}\"/>";
+    private static string NarratorPitch => $"<pitch absmiddle=\"{Main.Settings?.NarratorPitch}\"/>";
+    private static string NarratorRate => $"<rate absspeed=\"{Main.Settings?.NarratorRate}\"/>";
+    private static string NarratorVolume => $"<volume level=\"{Main.Settings?.NarratorVolume}\"/>";
 
     private static string FemaleVoice => $"<voice required=\"Name={Main.FemaleVoice}\">";
-    private static string FemaleVolume => $"<volume level=\"{Main.Settings.FemaleVolume}\"/>";
-    private static string FemalePitch => $"<pitch absmiddle=\"{Main.Settings.FemalePitch}\"/>";
-    private static string FemaleRate => $"<rate absspeed=\"{Main.Settings.FemaleRate}\"/>";
+    private static string FemaleVolume => $"<volume level=\"{Main.Settings?.FemaleVolume}\"/>";
+    private static string FemalePitch => $"<pitch absmiddle=\"{Main.Settings?.FemalePitch}\"/>";
+    private static string FemaleRate => $"<rate absspeed=\"{Main.Settings?.FemaleRate}\"/>";
 
     private static string MaleVoice => $"<voice required=\"Name={Main.MaleVoice}\">";
-    private static string MaleVolume => $"<volume level=\"{Main.Settings.MaleVolume}\"/>";
-    private static string MalePitch => $"<pitch absmiddle=\"{Main.Settings.MalePitch}\"/>";
-    private static string MaleRate => $"<rate absspeed=\"{Main.Settings.MaleRate}\"/>";
+    private static string MaleVolume => $"<volume level=\"{Main.Settings?.MaleVolume}\"/>";
+    private static string MalePitch => $"<pitch absmiddle=\"{Main.Settings?.MalePitch}\"/>";
+    private static string MaleRate => $"<rate absspeed=\"{Main.Settings?.MaleRate}\"/>";
 
     public string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
     public string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
@@ -74,6 +74,11 @@ public class WindowsSpeech : ISpeech
         if (!text.EndsWith("</voice>"))
             text += "</voice>";
         return text;
+    }
+
+    public bool IsSpeaking()
+    {
+        return WindowsVoiceUnity.IsSpeaking;
     }
 
     public void SpeakPreview(string text, VoiceType voiceType)
@@ -157,6 +162,45 @@ public class WindowsSpeech : ISpeech
         }
 
         text = PrepareDialogText(text);
+
+        WindowsVoiceUnity.Speak(text, Length(text), delay);
+    }
+
+    public void SpeakAs(string text, VoiceType type, float delay = 0f)
+    {
+        if (string.IsNullOrEmpty(text)) {
+            Main.Logger?.Warning("No text to speak!");
+            return;
+        }
+
+        text = text.PrepareText();
+
+#if DEBUG
+        if (Assembly.GetEntryAssembly() == null)
+            UnityEngine.Debug.Log(text);
+#endif
+
+        if (!Main.Settings!.UseGenderSpecificVoices)
+        {
+            Speak(text, delay);
+            return;
+        }
+
+        switch (type)
+        {
+            case VoiceType.Narrator:
+                text = $"{CombinedNarratorVoiceStart}{text}</voice>";
+                break;
+            case VoiceType.Female:
+                text = $"{CombinedFemaleVoiceStart}{text}</voice>";
+                break;
+            case VoiceType.Male:
+                text = $"{CombinedMaleVoiceStart}{text}</voice>";
+                break;
+            default:
+                Main.Logger?.Warning($"Unknown voice type: {type}");
+                return;
+        }
 
         WindowsVoiceUnity.Speak(text, Length(text), delay);
     }

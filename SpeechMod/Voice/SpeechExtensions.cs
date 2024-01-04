@@ -47,16 +47,8 @@ public static class SpeechExtensions
         m_PhoneticDictionary = new Dictionary<string, string>
         {
             { "—", "<silence msec=\"500\"/>" },
-            { "Kenabres", "Ken-aabres" },
-            { "Iomedae", "I-o-mædæ" },
-            { "Golarion", "Goolaarion" },
-            { "Sovyrian", "Sovyyrian" },
-            { "Rovagug", "Rovaagug" },
-            { "Irabeth", "Iira-beth" },
-            { "Terendelev", "Ter-end-elev" },
-            { "Arendae", "Aren-dæ" },
-            { "tieflings", "teeflings" },
-            { "Deskari", "Dess-kaari "}
+            {"...", " <silence msec=\"500\"/> "},
+            { "servitor", "servitur" }
         };
     }
 
