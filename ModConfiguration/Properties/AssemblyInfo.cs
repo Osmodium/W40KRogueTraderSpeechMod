@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("W40KRTSpeechMod")]
+[assembly: AssemblyTitle("ModConfiguration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("W40KRTSpeechMod")]
+[assembly: AssemblyProduct("ModConfiguration")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("de7d77d9-db2b-456b-b2e8-734963c7de0d")]
+[assembly: Guid("4d66b95f-1752-445c-b868-ac1f50e44413")]
 
 // Version information for an assembly consists of the following four values:
 //
