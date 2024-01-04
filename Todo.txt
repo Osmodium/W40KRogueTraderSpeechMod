@@ -80,6 +80,7 @@ SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Li
 uses barks, so might incur some double playback sometimes.
 
 🔲 Look into keybinds for Stop/pause/play playback.
+Stop "implemented"
 
 🔲 Look into journal/rumors/contracts
 
