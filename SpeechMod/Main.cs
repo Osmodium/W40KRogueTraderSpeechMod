@@ -16,7 +16,7 @@ using UnityModManagerNet;
 namespace SpeechMod;
 
 #if DEBUG
-    [EnableReloading]
+[EnableReloading]
 #endif
 public static class Main
 {
@@ -61,8 +61,8 @@ public static class Main
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         ModConfigurationManager.Build(harmony, modEntry, Constants.SETTINGS_PREFIX);
-        harmony.CreateClassProcessor(typeof(SettingsUIPatches)).Patch();
         SetUpSettings();
+        harmony.CreateClassProcessor(typeof(SettingsUIPatches)).Patch();
 
         Logger?.Log(Speech?.GetStatusMessage());
 
@@ -78,7 +78,7 @@ public static class Main
 
     private static void SetUpSettings()
     {
-        ModConfigurationManager.Instance.GroupedSettings.Add("sound", new List<ModSettingEntry> {new PlaybackStop() });
+        ModConfigurationManager.Instance.GroupedSettings.Add("main", new List<ModSettingEntry> { new PlaybackStop() });
     }
 
     private static bool SetAvailableVoices()
@@ -91,20 +91,20 @@ public static class Main
             return false;
         }
 
-//#if DEBUG
+        //#if DEBUG
         Logger?.Log("Available voices:");
         foreach (var voice in availableVoices)
         {
             Logger?.Log(voice);
         }
-//#endif
+        //#endif
         Logger?.Log("Setting available voices list...");
 
         for (int i = 0; i < availableVoices.Length; i++)
         {
             string[] splitVoice = availableVoices[i]?.Split('#');
             if (splitVoice?.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
-                availableVoices[i] = availableVoices[i]?.Replace("#","").Trim() + "#Unknown";
+                availableVoices[i] = availableVoices[i]?.Replace("#", "").Trim() + "#Unknown";
         }
 
         // Ensure that the selected voice index falls within the available voices range

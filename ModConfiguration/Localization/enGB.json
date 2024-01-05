@@ -1,13 +1,10 @@
 {
   "Strings": {
-    "osmodium.speechmod.feature.playback.pause": {
-      "Text": "Pause playback"
-    },
-    "osmodium.speechmod.feature.playback.stop": {
+    "osmodium.speechmod.feature.playback.stop.description": {
       "Text": "Stop playback"
     },
-    "osmodium.speechmod.feature.playback.play": {
-      "Text": "Continue playback"
+    "osmodium.speechmod.feature.playback.stop.tooltip-description": {
+      "Text": "Stops playback of SpeechMod TTS"
     },
     "osmodium.speechmod.group.main": {
       "Text": "Speech Mod"

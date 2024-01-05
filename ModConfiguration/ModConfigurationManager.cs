@@ -64,7 +64,7 @@ public static class SettingsUIPatches
     [HarmonyPostfix]
     static void AddSettingsGroup()
     {
-        if (Game.Instance.UISettingsManager.m_ControlSettingsList.Any(group => group.name?.StartsWith(ModConfigurationManager.Instance.SettingsPrefix) ?? false))
+        if (Game.Instance.UISettingsManager.m_SoundSettingsList.Any(group => group.name?.StartsWith(ModConfigurationManager.Instance.SettingsPrefix) ?? false))
         {
             return;
         }
@@ -73,27 +73,22 @@ public static class SettingsUIPatches
 
         foreach (var settings in ModConfigurationManager.Instance.GroupedSettings)
         {
-            Game.Instance.UISettingsManager.m_ControlSettingsList.Add(
+            Game.Instance.UISettingsManager.m_SoundSettingsList?.Add(
                 OwlcatUITools.MakeSettingsGroup($"{ModConfigurationManager.Instance.SettingsPrefix}.group.{settings.Key}", "Speech Mod",
-                    settings.Value.Select(x => x.GetUISettings()).ToArray()
+                    settings.Value?.Select(x => x.GetUISettings()).ToArray()
                 ));
         }
     }
 
-    /// <summary>
-    /// Allows registration of any key combination for custom hotkeys.
-    /// This is because original Owlcat validation is too strict and
-    /// prevents usage of same key even if executed actions between keys do not conflict
-    /// </summary>
     [HarmonyPatch(typeof(KeyboardAccess), nameof(KeyboardAccess.CanBeRegistered))]
     [HarmonyPrefix]
     public static bool CanRegisterAnything(ref bool __result, string name)
     {
-        if (name != null && name.StartsWith(ModConfigurationManager.Instance.SettingsPrefix))
+        if (name == null || !name.StartsWith(ModConfigurationManager.Instance.SettingsPrefix))
         {
-            __result = true;
-            return false;
+            return true;
         }
-        return true;
+        __result = true;
+        return false;
     }
 }

@@ -21,7 +21,6 @@ public class PlaybackStop : ModHotkeySettingEntry
     [HarmonyPatch]
     private static class Patches
     {
-        // TODO Does not work in loading screens, and thereby maybe more places?
         /// <summary>
         /// Binds key after CommonPCView is initialized.
         /// </summary>
@@ -34,6 +33,7 @@ public class PlaybackStop : ModHotkeySettingEntry
 
         private static void StopPlayback()
         {
+            // TODO: Add notification?
             Main.Speech?.Stop();
         }
     }
