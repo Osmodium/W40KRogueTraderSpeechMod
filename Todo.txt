@@ -68,6 +68,7 @@ CharGenChangeNameMessageBoxPCView
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
+DialogAnswerPCView
 
 Buttons:
 "Right Button"
@@ -76,11 +77,13 @@ Buttons:
     /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PlayButton
 
 🔲 Look into SubtitleView (when cutscenes are playing)
-SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
-uses barks, so might incur some double playback sometimes.
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
+SubtitleView
+might use barks, so might incur some double playback sometimes.
 
 🔲 Look into keybinds for Stop/pause/play playback.
 Stop "implemented"
+Use "WarningTexts" as notification? WarningsTextView in /CommonPCView(Clone)/CommonCanvas/WarningsText
 
 🔲 Look into journal/rumors/contracts
 

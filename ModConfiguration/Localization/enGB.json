@@ -8,6 +8,9 @@
     },
     "osmodium.speechmod.group.main": {
       "Text": "Speech Mod"
+    },
+    "osmodium.speechmod.feature.playback.stop.notification": {
+      "Text": "SpeechMod: Playback stopped!"
     }
   }
 }
