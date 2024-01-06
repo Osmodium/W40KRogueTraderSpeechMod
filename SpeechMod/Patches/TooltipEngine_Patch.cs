@@ -29,7 +29,7 @@ public static class Tooltip_Patch
     private static void HookBricksByContainer(RectTransform container)
     {
 #if DEBUG
-        Debug.Log(container?.transform.GetGameObjectPath());
+        //Debug.Log(container?.transform.GetGameObjectPath());
 #endif
         var allTexts = container?.transform?.parent?.GetComponentsInChildren<TextMeshProUGUI>(true)?
             .Where(t => ApplyFilter(t?.transform))

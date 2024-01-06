@@ -5,10 +5,6 @@ using Kingmaker;
 using Kingmaker.Blueprints.Base;
 using SpeechMod.Unity;
 
-#if DEBUG
-using System.Reflection;
-#endif
-
 namespace SpeechMod.Voice;
 
 public class WindowsSpeech : ISpeech
@@ -112,37 +108,30 @@ public class WindowsSpeech : ISpeech
 
     public string PrepareSpeechText(string text)
     {
-#if DEBUG
-        UnityEngine.Debug.Log(text);
-#endif
+        if (Main.Settings?.LogVoicedLines == true)
+            UnityEngine.Debug.Log(text);
+
         text = new Regex("<[^>]+>").Replace(text, "");
         text = text.PrepareText();
         text = $"{CombinedNarratorVoiceStart}{text}</voice>";
 
-#if DEBUG
-        if (Assembly.GetEntryAssembly() == null)
+        if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
-#endif
+
         return text;
     }
 
     public string PrepareDialogText(string text)
     {
-        text = text.PrepareText();
-
-        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
-
-#if DEBUG
-        if (Assembly.GetEntryAssembly() == null)
+        if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
-#endif
 
+        text = text.PrepareText();
+        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = FormatGenderSpecificVoices(text);
 
-#if DEBUG
-        if (Assembly.GetEntryAssembly() == null)
+        if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
-#endif
 
         return text;
     }
@@ -168,17 +157,16 @@ public class WindowsSpeech : ISpeech
 
     public void SpeakAs(string text, VoiceType type, float delay = 0f)
     {
-        if (string.IsNullOrEmpty(text)) {
+        if (string.IsNullOrEmpty(text))
+        {
             Main.Logger?.Warning("No text to speak!");
             return;
         }
 
         text = text.PrepareText();
 
-#if DEBUG
-        if (Assembly.GetEntryAssembly() == null)
+        if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
-#endif
 
         if (!Main.Settings!.UseGenderSpecificVoices)
         {

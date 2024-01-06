@@ -19,7 +19,7 @@ public class TutorialWindowView_Patch_Small
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
+        //Debug.Log($"{nameof(TutorialHintWindowPCView)}_SetContent_Postfix");
 #endif
 
         Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_SMALL_TITLE_PATH);
@@ -40,7 +40,7 @@ public class TutorialWindowView_Patch_Big
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialModalWindowPCView)}_BindViewImplementation_Postfix");
+        //Debug.Log($"{nameof(TutorialModalWindowPCView)}_BindViewImplementation_Postfix");
 #endif
 
         Hooks.HookUpTextToSpeechOnTransformWithPath(TUTORIAL_BIG_TITLE_PATH);

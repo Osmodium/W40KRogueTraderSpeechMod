@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -12,6 +13,12 @@ namespace SpeechMod.Voice;
 public static class SpeechExtensions
 {
     private static Dictionary<string, string> m_PhoneticDictionary;
+    private static readonly Dictionary<string, string> m_LitteralDictionary = new()
+    {
+        { "—", "<silence msec=\"500\"/>" },
+        { " - ", "<silence msec=\"500\"/>" },
+        { "...", " <silence msec=\"500\"/> "}
+    };
 
     public static void LoadDictionary()
     {
@@ -46,22 +53,22 @@ public static class SpeechExtensions
     {
         m_PhoneticDictionary = new Dictionary<string, string>
         {
-            { "—", "<silence msec=\"500\"/>" },
-            {"...", " <silence msec=\"500\"/> "},
             { "servitor", "servitur" }
         };
     }
 
     public static string PrepareText(this string text)
     {
+        text = text!.ToLower();
         text = text.Replace("\"", "");
         text = text.Replace("\n", ". ");
-        text = text.Trim().Trim('.');
+        text = text.Trim();
 
         if (m_PhoneticDictionary == null)
             LoadBackupDictionary();
 
-        return m_PhoneticDictionary.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
+        text = m_LitteralDictionary!.Aggregate(text, (current, entry) => current?.Replace(entry.Key!, entry.Value));
+        return m_PhoneticDictionary!.Aggregate(text, (current, entry) => Regex.Replace(current!, $@"\b{entry.Key}\b", $"{entry.Value}"));
     }
 
     public static void AddUiElements<T>(string name) where T : MonoBehaviour

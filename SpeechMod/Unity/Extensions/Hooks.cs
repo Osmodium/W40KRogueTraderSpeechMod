@@ -49,7 +49,7 @@ public static class Hooks
         }
 
 #if DEBUG
-        Debug.Log($"Found {allTexts?.Length} TextMeshProUGUIs on '{path}'!");
+        //Debug.Log($"Found {allTexts?.Length} TextMeshProUGUIs on '{path}'!");
 #endif
 
         allTexts.HookupTextToSpeech(force);

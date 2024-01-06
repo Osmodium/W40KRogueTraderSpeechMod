@@ -26,8 +26,12 @@ public static class BarkExtensions
         if (Game.Instance == null || Game.Instance.IsModeActive(GameModeType.Dialog))
             return false;
 
-        if (Main.Settings.PlaybackBarkOnlyIfSilence && Main.Speech?.IsSpeaking() == true)
-            return false;
+        switch (Main.Settings.PlaybackBarkOnlyIfSilence)
+        {
+            case true when Main.Speech?.IsSpeaking() == true:
+            case true when Game.Instance.DialogController?.CurrentCue != null:
+                return false;
+        }
 
         if (!Main.Settings.PlaybackBarksInVicinity)
         {

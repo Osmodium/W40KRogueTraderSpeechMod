@@ -4,6 +4,8 @@ namespace SpeechMod;
 
 public class Settings : UnityModManager.ModSettings
 {
+    public bool LogVoicedLines = false;
+
     public int NarratorRate = 0;
     public int NarratorVolume = 100;
     public int NarratorPitch = 0;

@@ -78,6 +78,9 @@ public static class Main
 
     private static void SetUpSettings()
     {
+        if (ModConfigurationManager.Instance.GroupedSettings.TryGetValue("main", out _))
+            return;
+
         ModConfigurationManager.Instance.GroupedSettings.Add("main", new List<ModSettingEntry> { new PlaybackStop() });
     }
 
@@ -91,13 +94,11 @@ public static class Main
             return false;
         }
 
-        //#if DEBUG
         Logger?.Log("Available voices:");
         foreach (var voice in availableVoices)
         {
             Logger?.Log(voice);
         }
-        //#endif
         Logger?.Log("Setting available voices list...");
 
         for (int i = 0; i < availableVoices.Length; i++)
