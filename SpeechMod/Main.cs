@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ModConfiguration;
+using ModConfiguration.Settings;
+using SpeechMod.Keybinds;
 using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
@@ -13,7 +16,7 @@ using UnityModManagerNet;
 namespace SpeechMod;
 
 #if DEBUG
-    [EnableReloading]
+[EnableReloading]
 #endif
 public static class Main
 {
@@ -57,6 +60,10 @@ public static class Main
         var harmony = new Harmony(modEntry.Info?.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+        ModConfigurationManager.Build(harmony, modEntry, Constants.SETTINGS_PREFIX);
+        SetUpSettings();
+        harmony.CreateClassProcessor(typeof(SettingsUIPatches)).Patch();
+
         Logger?.Log(Speech?.GetStatusMessage());
 
         if (!SetAvailableVoices())
@@ -69,6 +76,11 @@ public static class Main
         return true;
     }
 
+    private static void SetUpSettings()
+    {
+        ModConfigurationManager.Instance.GroupedSettings.Add("main", new List<ModSettingEntry> { new PlaybackStop() });
+    }
+
     private static bool SetAvailableVoices()
     {
         var availableVoices = Speech?.GetAvailableVoices();
@@ -79,20 +91,20 @@ public static class Main
             return false;
         }
 
-//#if DEBUG
+        //#if DEBUG
         Logger?.Log("Available voices:");
         foreach (var voice in availableVoices)
         {
             Logger?.Log(voice);
         }
-//#endif
+        //#endif
         Logger?.Log("Setting available voices list...");
 
         for (int i = 0; i < availableVoices.Length; i++)
         {
             string[] splitVoice = availableVoices[i]?.Split('#');
             if (splitVoice?.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
-                availableVoices[i] = availableVoices[i]?.Replace("#","").Trim() + "#Unknown";
+                availableVoices[i] = availableVoices[i]?.Replace("#", "").Trim() + "#Unknown";
         }
 
         // Ensure that the selected voice index falls within the available voices range

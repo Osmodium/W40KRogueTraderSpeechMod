@@ -45,6 +45,7 @@ public class Settings : UnityModManager.ModSettings
     public bool PlaybackBarks = true;
     public bool PlaybackBarksInVicinity = false;
     public bool PlaybackBarkOnlyIfSilence = false;
+    public bool ShowNotificationOnPlaybackStop = true;
 
     public override void Save(UnityModManager.ModEntry modEntry)
     {
