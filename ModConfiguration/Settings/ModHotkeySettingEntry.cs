@@ -15,10 +15,16 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
 
     public static bool ReSavingRequired { get; private set; } = false;
 
-    public ModHotkeySettingEntry(string key, string title, string tooltip, string DefaultKeyPairString)
-        : base(key, title, tooltip)
+    protected ModHotkeySettingEntry(string key, string title, string tooltip, string DefaultKeyPairString) : base(key, title, tooltip)
     {
-        SettingEntity = new(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", new(DefaultKeyPairString), false, true);
+        try
+        {
+            SettingEntity = new SettingsEntityKeyBindingPair(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", new(DefaultKeyPairString), false, true);
+        }
+        catch (Exception ex)
+        {
+            ModConfigurationManager.Instance?.ModEntry?.Logger?.Error($"Failed to create {Key} setting entity: {ex}");
+        }
     }
 
     public override UISettingsEntityBase GetUISettings() => UiSettingEntity;
