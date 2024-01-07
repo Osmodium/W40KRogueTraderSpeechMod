@@ -69,6 +69,12 @@ CharGenChangeNameMessageBoxPCView
 Stop "implemented"
 Use "WarningTexts" as notification? WarningsTextView in /CommonPCView(Clone)/CommonCanvas/WarningsText
 
+✅ Look into book event
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/BookEventPCView/TextCanvas/CuesContainer/CuesScrollView/Viewport/Content/CuesPanel/Cue 0/Text
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/BookEventPCView/TextCanvas/CuesContainer/CuesScrollView/Viewport/Content/CuesPanel/Cue 1/Text
+BookEventCueView or BookEventPCView
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/BookEventPCView/TextCanvas/HistoryContainer/CuesScrollView/Viewport/Content/CuesHistory/Cue 0/Text
+
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
@@ -87,7 +93,7 @@ might use barks, so might incur some double playback sometimes.
 
 🔲 Look into journal/rumors/contracts
 
-Look into Biography
+🔲 Look into Biography
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/BiographyGroup_ShouldBeActive/StoriesViewNew/ItemsScroll/Viewport/Content/BiographyText
 CharInfoStoriesView or CharacterInfoPCView
 

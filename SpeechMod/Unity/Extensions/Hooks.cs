@@ -41,10 +41,10 @@ public static class Hooks
         //Debug.Log($"Attempting to get TextMeshProUGUI in children on '{path}'...");
 #endif
 
-        var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
+        var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>(true);
         if (allTexts?.Length == 0)
         {
-            Debug.LogWarning($"No TextMeshProUGUI found on '{path}'!");
+            Debug.LogWarning($"No TextMeshProUGUI found in children on '{path}'!");
             return;
         }
 
