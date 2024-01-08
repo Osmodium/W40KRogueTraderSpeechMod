@@ -75,6 +75,14 @@ Use "WarningTexts" as notification? WarningsTextView in /CommonPCView(Clone)/Com
 BookEventCueView or BookEventPCView
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/BookEventPCView/TextCanvas/HistoryContainer/CuesScrollView/Viewport/Content/CuesHistory/Cue 0/Text
 
+✅ Look into ship posts descriptions
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/ShipInventoryPCView/Views/SkillsAndPostsPCPanel/Content/ShipPostsView/CharacterPanel/ChooseCharacter/HorizontalGroup/PostDescriptionBlock/PostDiscription
+ShipPostsView
+
+✅ Look into Biography
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/BiographyGroup_ShouldBeActive/StoriesViewNew/ItemsScroll/Viewport/Content/BiographyText
+CharInfoStoriesView or CharacterInfoPCView
+
 🔲 Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
@@ -86,20 +94,12 @@ Buttons:
 "Play Button"
     /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PlayButton
 
-🔲 Look into SubtitleView (when cutscenes are playing)
+🔲 Look into SubtitleView (when cutscenes are playing, and no vo- is being played.)
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
 SubtitleView
 might use barks, so might incur some double playback sometimes.
 
 🔲 Look into journal/rumors/contracts
-
-🔲 Look into Biography
-/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/BiographyGroup_ShouldBeActive/StoriesViewNew/ItemsScroll/Viewport/Content/BiographyText
-CharInfoStoriesView or CharacterInfoPCView
-
-🔲 Look into ship posts descriptions
-/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/ShipInventoryPCView/Views/SkillsAndPostsPCPanel/Content/ShipPostsView/CharacterPanel/ChooseCharacter/HorizontalGroup/PostDescriptionBlock/PostDiscription
-ShipPostsView
 
 🔲 Look into exploration view
 /SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ExplorationPCView/Content/ExplorationPlanetDollRoomWrapperBaseView/PlanetTitheGrade/Text
@@ -111,6 +111,10 @@ ExplorationPCView
 🔲 Look into resources hover in exploration view
 /SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ExplorationPCView/Content/ExplorationScanResultsWrapperPCView/ResourceMinersPCView
 ResourceMinersPCView or the OwlcatMultiButton on the gameobject
+
+🔲 Look into throphy window
+/CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/BodyContainer/ScrollView/ViewPort/Content/TooltipBrickNestedMessageView(Clone)/Text
+TooltipBrickNestedMessageView
 
 🔲 Look into popups/notifications?
 
