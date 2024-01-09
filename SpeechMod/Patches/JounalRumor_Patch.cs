@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.Journal;
 using SpeechMod.Unity.Extensions;
-using UnityEngine;
 using UnityEngine.UI;
+#if DEBUG
+using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 

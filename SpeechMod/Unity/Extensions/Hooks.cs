@@ -1,5 +1,5 @@
-﻿using System;
-using Owlcat.Runtime.UniRx;
+﻿using Owlcat.Runtime.UniRx;
+using System;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -93,13 +93,14 @@ public static class Hooks
 
         var defaultValues = textMeshProTransform.GetComponent<TextMeshProValues>();
         if (defaultValues == null)
+        {
             defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
+            defaultValues!.FontStyles = textMeshPro.fontStyle;
+            defaultValues.Color = textMeshPro.color;
+            defaultValues.ExtraPadding = textMeshPro.extraPadding;
+        }
         else
             skipEventAssignment = true;
-
-        defaultValues!.FontStyles = textMeshPro.fontStyle;
-        defaultValues.Color = textMeshPro.color;
-        defaultValues.ExtraPadding = textMeshPro.extraPadding;
 
         if (skipEventAssignment)
         {

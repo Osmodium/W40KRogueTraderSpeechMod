@@ -27,7 +27,7 @@ public static class MenuGUI
 
         AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
-        GUILayout.BeginVertical("", GUI.skin.box);
+        GUILayout.BeginVertical("Playback voices", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
@@ -52,6 +52,12 @@ public static class MenuGUI
             Main.Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Main.Settings.InterruptPlaybackOnPlay, Main.Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
             GUILayout.EndHorizontal();
         }
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Auto stop playback on loading", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.AutoStopPlaybackOnLoading = GUILayout.Toggle(Main.Settings.AutoStopPlaybackOnLoading, "Enabled");
+        GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Auto play dialog", GUILayout.ExpandWidth(false));
@@ -84,15 +90,19 @@ public static class MenuGUI
         if (Main.Settings.ShowPlaybackOfDialogAnswers)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Say number of dialog answer", GUILayout.ExpandWidth(false));
+            GUILayout.Label("Include dialog answer number in playback", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
             Main.Settings.SayDialogAnswerNumber = GUILayout.Toggle(Main.Settings.SayDialogAnswerNumber, "Enabled");
             GUILayout.EndHorizontal();
 
+            GUILayout.EndVertical();
+
             AddColorPicker("Color answer on hover", ref Main.Settings.DialogAnswerColorOnHover, "Hover color", ref Main.Settings.DialogAnswerHoverColorR, ref Main.Settings.DialogAnswerHoverColorG, ref Main.Settings.DialogAnswerHoverColorB);
         }
-
-        GUILayout.EndVertical();
+        else
+        {
+            GUILayout.EndVertical();
+        }
 
         GUILayout.BeginVertical("", GUI.skin.box);
 
@@ -130,8 +140,6 @@ public static class MenuGUI
         GUILayout.EndVertical();
 
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
-
-        //AddColorPicker("Show playback progress", ref Main.Settings.ShowPlaybackProgress, "Playback progress color", ref Main.Settings.PlaybackColorR, ref Main.Settings.PlaybackColorG, ref Main.Settings.PlaybackColorB, ref Main.Settings.PlaybackColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
 

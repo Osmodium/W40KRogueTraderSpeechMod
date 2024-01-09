@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
-using Kingmaker;
 using Kingmaker.Code.UI.MVVM.View.Dialog.BookEvent;
 using SpeechMod.Unity.Extensions;
+#if DEBUG
+using Kingmaker;
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 

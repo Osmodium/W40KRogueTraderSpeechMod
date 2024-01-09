@@ -57,9 +57,6 @@ public class ModConfigurationManager
 [HarmonyPatch]
 public static class SettingsUIPatches
 {
-    /// <summary>
-    /// Initializes mod features and adds setting group to Controls section of game settings
-    /// </summary>
     [HarmonyPatch(typeof(UISettingsManager), nameof(UISettingsManager.Initialize))]
     [HarmonyPostfix]
     static void AddSettingsGroup()

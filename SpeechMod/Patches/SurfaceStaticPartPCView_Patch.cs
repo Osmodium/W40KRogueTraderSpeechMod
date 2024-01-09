@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.Code.UI.MVVM.View.Space.PC;
-using Kingmaker.Code.UI.MVVM.View.Surface;
 using Kingmaker.Code.UI.MVVM.View.Surface.PC;
 using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
@@ -14,20 +13,6 @@ public static class SurfaceStaticPartPCView_Patch
 {
     private const string SURFACE_SCROLL_VIEW_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView";
     private const string SPACE_SCROLL_VIEW_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/LeftSide/CueAndHistoryPlace/ScrollView";
-
-    [HarmonyPatch(typeof(SurfaceBaseView), "Initialize")]
-    [HarmonyPostfix]
-    public static void InstantiateArrowButtonPrefab()
-    {
-        if (!Main.Enabled)
-            return;
-
-#if DEBUG
-        Debug.Log($"{nameof(SurfaceBaseView)}_Initialize_Postfix");
-#endif
-
-        ButtonFactory.Instantiate();
-    }
 
     [HarmonyPatch(typeof(SurfaceStaticPartPCView), "Initialize")]
     [HarmonyPostfix]

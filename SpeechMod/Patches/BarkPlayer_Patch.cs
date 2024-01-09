@@ -8,7 +8,9 @@ using Kingmaker.GameModes;
 using Kingmaker.Mechanics.Entities;
 using SpeechMod.Voice;
 using System;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 

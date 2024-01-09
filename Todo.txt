@@ -34,6 +34,7 @@ Dialog autoplay and gendered voices.
 ✅ Look into more ToolTip Bricks
 
 ✅ Look into button activated barks
+Also barks in general
 (OvertipMapObjectInteractionPCView)
 
 ✅ Character creation archetype talents no feature text and header
@@ -45,14 +46,6 @@ Dialog autoplay and gendered voices.
 ShipNameAndPortraitPCView /BindViewImplementation
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/InformationLabel
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/StarShipDescription
-
-🔲 Loading screen description text
-LoadingScreenPCView
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
-Doesn't work on subsequent loading screen showings
 
 ✅ Modal dialog when ending character creation
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message
@@ -67,6 +60,7 @@ CharGenChangeNameMessageBoxPCView
 
 ✅ Keybinds for stop playback.
 Use "WarningTexts" as notification! WarningsTextView in /CommonPCView(Clone)/CommonCanvas/WarningsText
+See GameModesGroup for where the keybind can be used (no Loading screen atm.)
 
 ✅ Look into book event
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/BookEventPCView/TextCanvas/CuesContainer/CuesScrollView/Viewport/Content/CuesPanel/Cue 0/Text
@@ -82,27 +76,37 @@ ShipPostsView
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/BiographyGroup_ShouldBeActive/StoriesViewNew/ItemsScroll/Viewport/Content/BiographyText
 CharInfoStoriesView or CharacterInfoPCView
 
-✅ Look into journal/rumors/contracts
+Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView/Viewport/Content/JournalQuestObjectivePCView(Clone)/BodyGroup/DescriptionLabel
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView
 JournalQuestPCView
 JournalQuestObjectivePCView
 
-✅ Look into screen customization screen
+✅ Look into ship customization screen
 
 ✅ Update PhoneticDictionary backup and file
 
-🔲 Look into playback of dialog answers:
+✅ Look into playback of dialog answers:
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView/RightSide/AnswersGroup/Scroll View/Viewport/Content/AnswersPanel/SurfaceAnswerPCView(Clone)
 Has a "Text" gameobject with TMP component
 DialogAnswerPCView
 
-Buttons:
-"Right Button"
-    /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PagesGroup/RightButton
-"Play Button"
-    /MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PlayButton
+✅ Look into the encyclopedia view (Corpus Valanius)
+Right side text
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/EncyclopediaView/SafeZone/BackgroundImage (1)/ContentGroup/EncyclopediaPageView/BodyGroup/ServiceWindowStandardScrollView/Viewport/Content/GlossaryEntry/Text (TMP)
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/EncyclopediaView/SafeZone/BackgroundImage (1)/ContentGroup/EncyclopediaPageView/BodyGroup/ServiceWindowStandardScrollView/Viewport/Content/PageContent/Content/GlossaryEntryBlockView(Clone)/Description
+EncyclopediaPageBaseView
+
+🔲 Loading screen description text
+LoadingScreenPCView
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+Doesn't work on subsequent loading screen showings
+And doesn't work, in general, also does't work with the stop shortcut, as the keybinding 'ALL' doesn't include the loading screen.
 
 🔲 Look into SubtitleView (when cutscenes are playing, and no vo- is being played.)
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
@@ -126,7 +130,7 @@ TooltipBrickNestedMessageView
 
 🔲 Look into popups/notifications?
 
-🔲 Playback view with stop functionality
+🔲 Playback-view with stop functionality
 
 🔲 Update readme!
 

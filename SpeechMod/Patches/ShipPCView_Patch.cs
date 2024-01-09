@@ -25,7 +25,7 @@ public class ShipPCView_Patch
         __instance.m_ShipName.HookupTextToSpeech();
 
         var textMeshProUguis = new[] { __instance.m_ExperienceText, __instance.m_Experience, __instance.m_LevelText, __instance.m_Level };
-        __instance.m_ExperienceText.TryAddButton("SpeechMod_ExpButton", new Vector2(0f, 2f), textMeshProUguis);
+        __instance.m_ExperienceText.TryAddButton("SpeechMod_ExpButton", new Vector2(0f, 0f), new Vector3(0.8f, 0.8f, 1f), textMeshProUguis);
     }
 
     [HarmonyPatch(typeof(ShipComponentSlotBaseView<ItemSlotBaseView>), nameof(ShipComponentSlotBaseView<ItemSlotBaseView>.BindViewImplementation))]

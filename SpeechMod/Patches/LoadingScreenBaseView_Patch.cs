@@ -1,28 +1,47 @@
-﻿//using HarmonyLib;
-//using Kingmaker.Code.UI.MVVM.View.LoadingScreen;
-//using SpeechMod.Unity.Extensions;
-//using UnityEngine;
+﻿using HarmonyLib;
+using Kingmaker.Code.UI.MVVM.View.LoadingScreen;
+using SpeechMod.Unity.Extensions;
+#if DEBUG
+using UnityEngine;
+#endif
 
-//namespace SpeechMod.Patches;
+namespace SpeechMod.Patches;
 
-//[HarmonyPatch(typeof(LoadingScreenBaseView), "Show")]
-//public static class LoadingScreenBaseView_Patch
-//{
-//    private const string LOADING_SCREEN_TITLE_TEXT_PATH = "/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText";
-//    private const string LOADING_SCREEN_BOTTOM_TITLE_TEXT_PATH = "/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText";
-//    private const string LOADING_SCREEN_BOTTOM_DESCRIPTION_TEXT_PATH = "/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText";
+[HarmonyPatch]
+public static class LoadingScreenBaseView_Patch
+{
+    [HarmonyPatch(typeof(LoadingScreenBaseView), "BindViewImplementation")]
+    [HarmonyPostfix]
+    public static void BindViewImplementation(LoadingScreenBaseView __instance)
+    {
+        if (!Main.Enabled)
+            return;
 
-//    public static void Postfix()
-//    {
-//        if (!Main.Enabled)
-//            return;
+#if DEBUG
+        Debug.Log($"{nameof(LoadingScreenBaseView)}_BindViewImplementation_Postfix");
+#endif
 
-//#if DEBUG
-//        Debug.Log($"{nameof(LoadingScreenBaseView)}_Show_Postfix");
-//#endif
+        __instance?.m_BottomDescriptionText.HookupTextToSpeech();
+        __instance?.m_BottomTitleText.HookupTextToSpeech();
+        __instance?.m_CharacterDescriptionText.HookupTextToSpeech();
+        __instance?.m_CharacterNameText.HookupTextToSpeech();
+        __instance?.m_LocationName.HookupTextToSpeech();
+    }
 
-//        Hooks.HookUpTextToSpeechOnTransformWithPath(LOADING_SCREEN_TITLE_TEXT_PATH);
-//        Hooks.HookUpTextToSpeechOnTransformWithPath(LOADING_SCREEN_BOTTOM_TITLE_TEXT_PATH);
-//        Hooks.HookUpTextToSpeechOnTransformWithPath(LOADING_SCREEN_BOTTOM_DESCRIPTION_TEXT_PATH);
-//    }
-//}
+    [HarmonyPatch(typeof(LoadingScreenBaseView), "Show")]
+    [HarmonyPostfix]
+    public static void Show(LoadingScreenBaseView __instance)
+    {
+        if (!Main.Enabled)
+            return;
+
+#if DEBUG
+        Debug.Log($"{nameof(LoadingScreenBaseView)}_BindViewImplementation_Postfix");
+#endif
+
+        if (Main.Settings?.AutoStopPlaybackOnLoading == false)
+            return;
+
+        Main.Speech?.Stop();
+    }
+}

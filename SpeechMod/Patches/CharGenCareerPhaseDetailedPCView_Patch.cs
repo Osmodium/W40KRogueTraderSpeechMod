@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM.View.CharGen.PC.Phases.Career;
 using SpeechMod.Unity.Extensions;
+using UnityEngine.UI;
 #if DEBUG
 using UnityEngine;
 #endif
-using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 

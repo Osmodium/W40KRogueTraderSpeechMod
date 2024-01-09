@@ -23,9 +23,6 @@ public class PlaybackStop : ModHotkeySettingEntry
     [HarmonyPatch]
     private static class Patches
     {
-        /// <summary>
-        /// Binds key after CommonPCView is initialized.
-        /// </summary>
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
         [HarmonyPostfix]
         private static void Add(CommonPCView __instance)
@@ -38,11 +35,14 @@ public class PlaybackStop : ModHotkeySettingEntry
             if (!Main.Speech?.IsSpeaking() == true)
                 return;
 
-            if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out string text, false))
-                text = "Stopping Playback!";
+            if (instance != null && instance.m_WarningsTextView != null)
+            {
+                if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out string text, false))
+                    text = "Stopping Playback!";
 
-            if (Main.Settings!.ShowNotificationOnPlaybackStop)
-                instance?.m_WarningsTextView?.Show(text, WarningNotificationFormat.Common);
+                if (Main.Settings!.ShowNotificationOnPlaybackStop)
+                    instance?.m_WarningsTextView?.Show(text, WarningNotificationFormat.Common);
+            }
 
             Main.Speech?.Stop();
         }

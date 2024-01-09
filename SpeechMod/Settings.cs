@@ -50,6 +50,8 @@ public class Settings : UnityModManager.ModSettings
     public float DialogAnswerHoverColorG = 0f;
     public float DialogAnswerHoverColorB = 0f;
 
+    public bool AutoStopPlaybackOnLoading = false;
+
     public override void Save(UnityModManager.ModEntry modEntry)
     {
         Save(this, modEntry);

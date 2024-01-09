@@ -38,6 +38,7 @@ public class WindowsVoiceUnity : MonoBehaviour
     {
         initSpeech(1, 100);
     }
+
     private static bool IsVoiceInitialized()
     {
         if (m_TheVoice != null)

@@ -28,7 +28,6 @@ public class TutorialWindowView_Patch_Small
 }
 
 [HarmonyPatch(typeof(TutorialModalWindowPCView), "BindViewImplementation")]
-//[HarmonyPatch(typeof(TutorialModalWindowPCView), "OnNext")]
 public class TutorialWindowView_Patch_Big
 {
     private const string TUTORIAL_BIG_TITLE_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView/Window/Content/Header/TitleGroup/Title";
