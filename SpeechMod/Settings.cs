@@ -37,12 +37,6 @@ public class Settings : UnityModManager.ModSettings
     public bool FontStyleOnHover = true;
     public bool[] FontStyles = { false, false, false, true, false, false, false, false, false, false, false };
 
-    //public bool ShowPlaybackProgress = true;
-    //public float PlaybackColorR = 0.7f;
-    //public float PlaybackColorG = 0.9f;
-    //public float PlaybackColorB = 0.7f;
-    //public float PlaybackColorA = 0.5f;
-
     public bool InterruptPlaybackOnPlay = true;
     public bool PlaybackBarks = true;
     public bool PlaybackBarksInVicinity = false;
@@ -50,6 +44,7 @@ public class Settings : UnityModManager.ModSettings
     public bool ShowNotificationOnPlaybackStop = true;
 
     public bool ShowPlaybackOfDialogAnswers = false;
+    public bool SayDialogAnswerNumber = false;
     public bool DialogAnswerColorOnHover = false;
     public float DialogAnswerHoverColorR = 0f;
     public float DialogAnswerHoverColorG = 0f;

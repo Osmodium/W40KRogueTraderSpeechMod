@@ -1,15 +1,12 @@
-﻿using System.Linq;
-using JetBrains.Annotations;
-using Kingmaker.Code.UI.MVVM.View.Dialog.Dialog;
+﻿using JetBrains.Annotations;
 using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
 using Kingmaker.Code.UI.MVVM.VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
-using Owlcat.Runtime.UI.Controls.Other;
 using SpeechMod.Unity.Extensions;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace SpeechMod.Unity;
 
@@ -17,7 +14,32 @@ public static class ButtonFactory
 {
     private const string ARROW_BUTTON_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceHUD/SurfaceActionBarPCView/MainContainer/ActionBarContainer/LeftSide/BackgroundContainer/Mask/Container/SurfaceActionBarPatyWeaponsView/CurrentSet/Layout/WeaponSlotsContainer/ConvertButton";
 
-    private static GameObject ArrowButton => Extensions.UIHelper.TryFind(ARROW_BUTTON_PATH)?.gameObject;
+    private static GameObject ArrowButton => UIHelper.TryFind(ARROW_BUTTON_PATH)?.gameObject;
+
+    private static GameObject m_ArrowButtonPrefab = null;
+
+    public static void Instantiate()
+    {
+        Debug.Log("ButtonFactory Instantiate!");
+        if (ArrowButton == null)
+        {
+#if DEBUG
+            Debug.LogWarning("ArrowButton is null!");
+            return;
+#endif
+        }
+
+        m_ArrowButtonPrefab = Object.Instantiate(ArrowButton);
+        var button = m_ArrowButtonPrefab!.GetComponent<OwlcatMultiButton>();
+        if (button == null)
+        {
+            button = m_ArrowButtonPrefab.AddComponent<OwlcatMultiButton>();
+        }
+        button.SetInteractable(false);
+        button.OnLeftClick.RemoveAllListeners();
+
+        Object.DontDestroyOnLoad(m_ArrowButtonPrefab);
+    }
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction action)
     {
@@ -26,15 +48,15 @@ public static class ButtonFactory
 
     private static GameObject CreatePlayButton(Transform parent, UnityAction action, string text, string toolTip)
     {
-        if (ArrowButton == null)
+        if (m_ArrowButtonPrefab == null)
         {
 #if DEBUG
-            Debug.LogWarning("ArrowButton is null!");
+            Debug.LogWarning("ArrowButtonPrefab is null!");
             return null;
 #endif
         }
 
-        var buttonGameObject = Object.Instantiate(ArrowButton, parent);
+        var buttonGameObject = Object.Instantiate(m_ArrowButtonPrefab, parent);
         SetLeftClickAction(buttonGameObject, action, text, toolTip);
         return buttonGameObject;
     }
@@ -42,11 +64,6 @@ public static class ButtonFactory
     private static void SetLeftClickAction(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
     {
         var button = buttonGameObject!.GetComponent<OwlcatMultiButton>();
-        if (button == null)
-        {
-            button = buttonGameObject.AddComponent<OwlcatMultiButton>();
-        }
-        button.OnLeftClick.RemoveAllListeners();
         button.OnLeftClick.AddListener(action);
 
         if (!string.IsNullOrWhiteSpace(text))

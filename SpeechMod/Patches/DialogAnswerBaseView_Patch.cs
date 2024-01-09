@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.Blueprints.Base;
 using Kingmaker.Code.UI.MVVM.View.Dialog.Dialog;
@@ -7,16 +6,18 @@ using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
+using System.Collections;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
 namespace SpeechMod.Patches;
 
 [HarmonyPatch]
 public class DialogAnswerBaseView_Patch
 {
-    private const string DIALOG_ANSWER_BUTTON_NAME = "SpeechMod_DialogButton";
+    private const string DIALOG_ANSWER_BUTTON_NAME = "SpeechMod_DialogAnswerButton";
 
     [HarmonyPatch(typeof(DialogAnswerBaseView), nameof(DialogAnswerBaseView.BindViewImplementation))]
     [HarmonyPostfix]
@@ -29,7 +30,7 @@ public class DialogAnswerBaseView_Patch
         Debug.Log($"{nameof(DialogAnswerBaseView)}_{nameof(DialogAnswerBaseView.BindViewImplementation)}_Postfix");
 #endif
 
-        TryAddDialogButton(__instance.Text, __instance, new Vector2(0f, 0f));
+        TryAddDialogButton(__instance.Text, __instance, new Vector2(-20f, -2f));
     }
 
     private static void TryAddDialogButton(TextMeshProUGUI textMeshPro, DialogAnswerBaseView instance, Vector2? anchoredPosition = null)
@@ -37,7 +38,7 @@ public class DialogAnswerBaseView_Patch
         var transform = textMeshPro?.transform;
 
 #if DEBUG
-        Debug.Log($"Adding a dialog answer button to {textMeshPro?.name}...");
+        Debug.Log($"Adding/Removing dialog answer button on {textMeshPro?.name}...");
 #endif
 
         var playButtonGameObject = transform?.Find(DIALOG_ANSWER_BUTTON_NAME)?.gameObject;
@@ -58,7 +59,20 @@ public class DialogAnswerBaseView_Patch
         // 3. We want the button but it doesn't exist.
         playButtonGameObject = ButtonFactory.CreatePlayButton(transform, () =>
         {
-            Main.Speech?.SpeakAs(textMeshPro?.text, Game.Instance?.DialogController?.ActingUnit?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male);
+            if (textMeshPro == null)
+                return;
+            var text = textMeshPro.text;
+            text = text.PrepareText();
+
+            if (Main.Settings?.LogVoicedLines == true)
+                Debug.Log(text);
+
+            if (Main.Settings?.SayDialogAnswerNumber == true)
+                text = new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 <silence msec=\"500\"/> $2");
+            else
+                text = new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
+
+            Main.Speech?.SpeakAs(text, Game.Instance?.Player?.MainCharacterEntity?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male);
         });
 
         if (playButtonGameObject == null || playButtonGameObject.transform == null)
@@ -71,6 +85,7 @@ public class DialogAnswerBaseView_Patch
 
         playButtonGameObject.name = DIALOG_ANSWER_BUTTON_NAME;
         playButtonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 270);
+        playButtonGameObject.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
         playButtonGameObject.RectAlignTopLeft(anchoredPosition);
         playButtonGameObject.SetActive(true);
     }
@@ -104,10 +119,25 @@ public class DialogAnswerBaseView_Patch
                 var color1On = new Color(Main.Settings!.DialogAnswerHoverColorR, Main.Settings!.DialogAnswerHoverColorG, Main.Settings!.DialogAnswerHoverColorB, 0.2f);
                 var color2On = new Color(Main.Settings!.DialogAnswerHoverColorR, Main.Settings!.DialogAnswerHoverColorG, Main.Settings!.DialogAnswerHoverColorB, 0.1f);
 
-                image0.color = hover ? color0On : color0Off;
-                image1.color = hover ? color1On : color1Off;
-                image2.color = hover ? color2On : color2Off;
+                if (hover)
+                {
+                    image0.color = hover ? color0On : color0Off;
+                    image1.color = hover ? color1On : color1Off;
+                    image2.color = hover ? color2On : color2Off;
+                }
+                else
+                {
+                    button.StartCoroutine(ResetColor(image0, color0Off, image1, color1Off, image2, color2Off));
+                }
             }
         );
+    }
+
+    private static IEnumerator ResetColor(Image image0, Color color0, Image image1, Color color1, Image image2, Color color2)
+    {
+        yield return new WaitForEndOfFrame();
+        image0.color = color0;
+        image1.color = color1;
+        image2.color = color2;
     }
 }

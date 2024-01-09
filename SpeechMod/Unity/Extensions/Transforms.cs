@@ -14,78 +14,78 @@ public static class Transforms
         SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignTopMiddle(this GameObject uiObject)
+    public static void RectAlignTopMiddle(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0.5f, 1);
         var anchorMax = new Vector2(0.5f, 1);
         var pivot = new Vector2(0.5f, 1);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignTopRight(this GameObject uiObject)
+    public static void RectAlignTopRight(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(1, 1);
         var anchorMax = new Vector2(1, 1);
         var pivot = new Vector2(1, 1);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
     //------------Middle-------------------
-    public static void RectAlignMiddleLeft(this GameObject uiObject)
+    public static void RectAlignMiddleLeft(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0, 0.5f);
         var anchorMax = new Vector2(0, 0.5f);
         var pivot = new Vector2(0, 0.5f);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignMiddle(this GameObject uiObject)
+    public static void RectAlignMiddle(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0.5f, 0.5f);
         var anchorMax = new Vector2(0.5f, 0.5f);
         var pivot = new Vector2(0.5f, 0.5f);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignMiddleRight(this GameObject uiObject)
+    public static void RectAlignMiddleRight(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(1, 0.5f);
         var anchorMax = new Vector2(1, 0.5f);
         var pivot = new Vector2(1, 0.5f);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
     //------------Bottom-------------------
-    public static void RectAlignBottomLeft(this GameObject uiObject)
+    public static void RectAlignBottomLeft(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0, 0);
         var anchorMax = new Vector2(0, 0);
         var pivot = new Vector2(0, 0);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignBottomMiddle(this GameObject uiObject)
+    public static void RectAlignBottomMiddle(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(0.5f, 0);
         var anchorMax = new Vector2(0.5f, 0);
         var pivot = new Vector2(0.5f, 0);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
-    public static void RectAlignBottomRight(this GameObject uiObject)
+    public static void RectAlignBottomRight(this GameObject uiObject, Vector2? anchoredPosition = null)
     {
         var anchorMin = new Vector2(1, 0);
         var anchorMax = new Vector2(1, 0);
         var pivot = new Vector2(1, 0);
 
-        SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        SetRectAlign(uiObject, anchorMin, anchorMax, pivot, anchoredPosition);
     }
 
     private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2? anchoredPosition = null)

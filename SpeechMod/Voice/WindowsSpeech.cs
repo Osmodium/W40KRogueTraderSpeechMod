@@ -163,8 +163,6 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareText();
-
         if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
 

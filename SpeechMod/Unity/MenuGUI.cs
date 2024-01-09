@@ -81,7 +81,16 @@ public static class MenuGUI
         Main.Settings.ShowPlaybackOfDialogAnswers = GUILayout.Toggle(Main.Settings.ShowPlaybackOfDialogAnswers, "Enabled");
         GUILayout.EndHorizontal();
 
-        AddColorPicker("Color answer on hover", ref Main.Settings.DialogAnswerColorOnHover, "Hover color", ref Main.Settings.DialogAnswerHoverColorR, ref Main.Settings.DialogAnswerHoverColorG, ref Main.Settings.DialogAnswerHoverColorB);
+        if (Main.Settings.ShowPlaybackOfDialogAnswers)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Say number of dialog answer", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.SayDialogAnswerNumber = GUILayout.Toggle(Main.Settings.SayDialogAnswerNumber, "Enabled");
+            GUILayout.EndHorizontal();
+
+            AddColorPicker("Color answer on hover", ref Main.Settings.DialogAnswerColorOnHover, "Hover color", ref Main.Settings.DialogAnswerHoverColorR, ref Main.Settings.DialogAnswerHoverColorG, ref Main.Settings.DialogAnswerHoverColorB);
+        }
 
         GUILayout.EndVertical();
 
