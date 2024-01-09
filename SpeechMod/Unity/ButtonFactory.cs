@@ -1,15 +1,20 @@
-﻿using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
+﻿using System.Linq;
+using JetBrains.Annotations;
+using Kingmaker.Code.UI.MVVM.View.Dialog.Dialog;
+using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
 using Kingmaker.Code.UI.MVVM.VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
+using Owlcat.Runtime.UI.Controls.Other;
+using SpeechMod.Unity.Extensions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace SpeechMod.Unity;
 
 public static class ButtonFactory
 {
-    //private static GameObject m_ButtonPrefab = null;
-    //private const string ARROW_BUTTON_PATH = "/MainMenuPCView(Clone)/UICanvas/CreditsPCView/SafeZone/RaycastImage/Content/LeftPanel/BottomPanel/PagesGroup/RightButton";
     private const string ARROW_BUTTON_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceHUD/SurfaceActionBarPCView/MainContainer/ActionBarContainer/LeftSide/BackgroundContainer/Mask/Container/SurfaceActionBarPatyWeaponsView/CurrentSet/Layout/WeaponSlotsContainer/ConvertButton";
 
     private static GameObject ArrowButton => Extensions.UIHelper.TryFind(ARROW_BUTTON_PATH)?.gameObject;
@@ -30,11 +35,11 @@ public static class ButtonFactory
         }
 
         var buttonGameObject = Object.Instantiate(ArrowButton, parent);
-        SetAction(buttonGameObject, action, text, toolTip);
+        SetLeftClickAction(buttonGameObject, action, text, toolTip);
         return buttonGameObject;
     }
 
-    private static void SetAction(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
+    private static void SetLeftClickAction(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
     {
         var button = buttonGameObject!.GetComponent<OwlcatMultiButton>();
         if (button == null)
@@ -42,21 +47,41 @@ public static class ButtonFactory
             button = buttonGameObject.AddComponent<OwlcatMultiButton>();
         }
         button.OnLeftClick.RemoveAllListeners();
-        //button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off); // Is this needed here?
         button.OnLeftClick.AddListener(action);
 
         if (!string.IsNullOrWhiteSpace(text))
             button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
+
+        button.SetInteractable(true);
     }
 
-    //public static GameObject CreateSquareButton()
-    //{
-    //    if (m_ButtonPrefab != null)
-    //        return Object.Instantiate(m_ButtonPrefab);
+    public static void TryAddButton(this TextMeshProUGUI textMeshPro, string buttonName, Vector2? anchoredPosition = null, [CanBeNull] TextMeshProUGUI[] textMeshProUguis = null)
+    {
+        var transform = textMeshPro?.transform;
+        var tmpButton = transform.TryFind(buttonName)?.gameObject;
+        if (tmpButton != null)
+            return;
 
-    //    var staticRoot = Game.Instance.UI.Canvas.transform;
-    //    var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
-    //    m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
-    //    return Object.Instantiate(m_ButtonPrefab);
-    //}
+#if DEBUG
+        Debug.Log($"Adding playbutton to {textMeshPro?.name}...");
+#endif
+
+        var button = CreatePlayButton(transform, () =>
+        {
+            var text = textMeshPro?.text;
+            if (textMeshProUguis != null)
+            {
+                text = textMeshProUguis.Where(textOverride => textOverride != null).Select(to => to.text).Aggregate("", (previous, current) => $"{previous}, {current}");
+            }
+            Main.Speech?.Speak(text);
+        });
+
+        if (button == null || button.transform == null)
+            return;
+
+        button.name = buttonName;
+        button.transform.localRotation = Quaternion.Euler(0, 0, 270);
+        button.RectAlignTopLeft(anchoredPosition);
+        button.SetActive(true);
+    }
 }

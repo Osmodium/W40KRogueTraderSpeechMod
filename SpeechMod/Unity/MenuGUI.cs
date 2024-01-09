@@ -71,6 +71,22 @@ public static class MenuGUI
             GUI.enabled = true;
         }
 
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Show playback button of dialog answers", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.ShowPlaybackOfDialogAnswers = GUILayout.Toggle(Main.Settings.ShowPlaybackOfDialogAnswers, "Enabled");
+        GUILayout.EndHorizontal();
+
+        AddColorPicker("Color answer on hover", ref Main.Settings.DialogAnswerColorOnHover, "Hover color", ref Main.Settings.DialogAnswerHoverColorR, ref Main.Settings.DialogAnswerHoverColorG, ref Main.Settings.DialogAnswerHoverColorB);
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Playback barks", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
@@ -94,6 +110,10 @@ public static class MenuGUI
 
             GUI.enabled = true;
         }
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Show notification on playback stop (set the keybind in the game menu under sound).", GUILayout.ExpandWidth(false));
@@ -197,7 +217,13 @@ public static class MenuGUI
         GUILayout.EndVertical();
     }
 
-    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a)
+    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b)
+    {
+        float a = 1;
+        AddColorPicker(enableLabel, ref enabledBool, colorLabel, ref r, ref g, ref b, ref a, false);
+    }
+
+    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a, bool useAlpha = true)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
         GUILayout.BeginHorizontal();
@@ -219,9 +245,16 @@ public static class MenuGUI
             GUILayout.Label("B", GUILayout.ExpandWidth(false));
             b = GUILayout.HorizontalSlider(b, 0, 1);
             GUILayout.Space(10);
-            GUILayout.Label("A", GUILayout.ExpandWidth(false));
-            a = GUILayout.HorizontalSlider(a, 0, 1);
-            GUILayout.Space(10);
+            if (useAlpha)
+            {
+                GUILayout.Label("A", GUILayout.ExpandWidth(false));
+                a = GUILayout.HorizontalSlider(a, 0, 1);
+                GUILayout.Space(10);
+            }
+            else
+            {
+                a = 1;
+            }
             GUILayout.Box(GetColorPreview(ref r, ref g, ref b, ref a), GUILayout.Width(20));
             GUILayout.EndHorizontal();
         }

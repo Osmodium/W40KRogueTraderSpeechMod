@@ -49,6 +49,12 @@ public class Settings : UnityModManager.ModSettings
     public bool PlaybackBarkOnlyIfSilence = false;
     public bool ShowNotificationOnPlaybackStop = true;
 
+    public bool ShowPlaybackOfDialogAnswers = false;
+    public bool DialogAnswerColorOnHover = false;
+    public float DialogAnswerHoverColorR = 0f;
+    public float DialogAnswerHoverColorG = 0f;
+    public float DialogAnswerHoverColorB = 0f;
+
     public override void Save(UnityModManager.ModEntry modEntry)
     {
         Save(this, modEntry);
