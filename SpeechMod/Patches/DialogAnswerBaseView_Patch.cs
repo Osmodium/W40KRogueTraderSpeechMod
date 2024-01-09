@@ -62,7 +62,6 @@ public class DialogAnswerBaseView_Patch
             if (textMeshPro == null)
                 return;
             var text = textMeshPro.text;
-            text = text.PrepareText();
 
             if (Main.Settings?.LogVoicedLines == true)
                 Debug.Log(text);
@@ -71,6 +70,8 @@ public class DialogAnswerBaseView_Patch
                 text = new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 <silence msec=\"500\"/> $2");
             else
                 text = new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
+
+            text = text.PrepareText();
 
             Main.Speech?.SpeakAs(text, Game.Instance?.Player?.MainCharacterEntity?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male);
         });

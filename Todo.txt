@@ -99,6 +99,11 @@ Right side text
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/EncyclopediaView/SafeZone/BackgroundImage (1)/ContentGroup/EncyclopediaPageView/BodyGroup/ServiceWindowStandardScrollView/Viewport/Content/PageContent/Content/GlossaryEntryBlockView(Clone)/Description
 EncyclopediaPageBaseView
 
+🔲 Look into contracts view
+
+🔲 Look into reputation view
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/FactionsReputation/ItemsContainer/CharInfoProfitFactorItemPCView(Clone)/ActivesPanel/Viewport/Content/CharInfoColonyItemView/StatTitle
+
 🔲 Loading screen description text
 LoadingScreenPCView
 /CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText

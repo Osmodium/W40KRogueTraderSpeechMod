@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.CharacterInfo.Sections.BuffsAndConditions;
+using Kingmaker.Code.UI.MVVM.View.ServiceWindows.CharacterInfo.Sections.FactionsReputation;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.CharacterInfo.Sections.Summary;
 using SpeechMod.Unity.Extensions;
 #if DEBUG
@@ -45,5 +46,19 @@ public class CharInfoSummaryPCView_Patch
         __instance.m_WidgetEntityView?.m_DisplayName.HookupTextToSpeech();
         __instance.m_WidgetEntityView?.m_FactDescription.HookupTextToSpeech();
         __instance.m_WidgetEntityView?.m_RankText.HookupTextToSpeech();
+    }
+
+    [HarmonyPatch(typeof(CharInfoProfitFactorItemPCView), "BindViewImplementation")]
+    [HarmonyPostfix]
+    public static void HookFator(CharInfoProfitFactorItemPCView __instance)
+    {
+        if (!Main.Enabled)
+            return;
+
+#if DEBUG
+        Debug.Log($"{nameof(CharInfoProfitFactorItemPCView)}_BindViewImplementation_Postfix");
+#endif
+
+        __instance.m_Title.HookupTextToSpeech();
     }
 }
