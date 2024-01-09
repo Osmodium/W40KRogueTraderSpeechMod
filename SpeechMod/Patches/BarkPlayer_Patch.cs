@@ -12,6 +12,52 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+[HarmonyPatch]
+public class BarkPlayer_Patch
+{
+    [HarmonyPatch(typeof(BarkPlayer), "Bark", typeof(Entity), typeof(string), typeof(float), typeof(string), typeof(BaseUnitEntity), typeof(bool))]
+    [HarmonyPostfix]
+    public static void Bark(Entity entity, string text, float duration = -1f, string voiceOver = null, BaseUnitEntity interactUser = null, bool synced = true)
+    {
+        if (!BarkExtensions.PlayBark())
+            return;
+
+#if DEBUG
+        Debug.Log($"{nameof(BarkPlayer)}_Bark_Postfix");
+#endif
+
+        BarkExtensions.DoBark(entity, text, voiceOver);
+    }
+
+    [HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(float), typeof(string))]
+    [HarmonyPostfix]
+    public static void BarkExploration_1(Entity entity, string text, float duration = -1f, string voiceOver = null)
+    {
+        if (!BarkExtensions.PlayBark())
+            return;
+
+#if DEBUG
+        Debug.Log($"{nameof(BarkPlayer)}_BarkExploration_1_Postfix");
+#endif
+
+        BarkExtensions.DoBark(entity, text, voiceOver);
+    }
+
+    [HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(string), typeof(float), typeof(string))]
+    [HarmonyPostfix]
+    public static void BarkExploration_2(Entity entity, string text, string encyclopediaLink, float duration = -1f, string voiceOver = null)
+    {
+        if (!BarkExtensions.PlayBark())
+            return;
+
+#if DEBUG
+        Debug.Log($"{nameof(BarkPlayer)}_BarkExploration_2_Postfix");
+#endif
+
+        BarkExtensions.DoBark(entity, text, voiceOver);
+    }
+}
+
 public static class BarkExtensions
 {
     public static bool PlayBark()
@@ -89,53 +135,5 @@ public static class BarkExtensions
                 Main.Speech?.SpeakAs(text, VoiceType.Narrator);
                 break;
         }
-    }
-}
-
-[HarmonyPatch(typeof(BarkPlayer), "Bark", typeof(Entity), typeof(string), typeof(float), typeof(string), typeof(BaseUnitEntity), typeof(bool))]
-public class BarkPlayer_Bark_Patch
-{
-    [HarmonyPostfix]
-    public static void Bark_Postfix(Entity entity, string text, float duration = -1f, string voiceOver = null, BaseUnitEntity interactUser = null, bool synced = true)
-    {
-        if (!BarkExtensions.PlayBark())
-            return;
-
-#if DEBUG
-        Debug.Log($"{nameof(BarkPlayer)}_Bark_Postfix");
-#endif
-
-        BarkExtensions.DoBark(entity, text, voiceOver);
-    }
-}
-
-[HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(float), typeof(string))]
-[HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(string), typeof(float), typeof(string))]
-public class BarkPlayer_BarkExploration_Patch
-{
-    [HarmonyPostfix]
-    public static void BarkExploration_1_Postfix(Entity entity, string text, float duration = -1f, string voiceOver = null)
-    {
-        if (!BarkExtensions.PlayBark())
-            return;
-
-#if DEBUG
-        Debug.Log($"{nameof(BarkPlayer)}_BarkExploration_1_Postfix");
-#endif
-
-        BarkExtensions.DoBark(entity, text, voiceOver);
-    }
-
-    [HarmonyPostfix]
-    public static void BarkExploration_2_Postfix(Entity entity, string text, string encyclopediaLink, float duration = -1f, string voiceOver = null)
-    {
-        if (!BarkExtensions.PlayBark())
-            return;
-
-#if DEBUG
-        Debug.Log($"{nameof(BarkPlayer)}_BarkExploration_2_Postfix");
-#endif
-
-        BarkExtensions.DoBark(entity, text, voiceOver);
     }
 }

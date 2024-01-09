@@ -102,9 +102,8 @@ public static class MenuGUI
         Main.Settings.PlaybackBarks = GUILayout.Toggle(Main.Settings.PlaybackBarks, "Enabled");
         GUILayout.EndHorizontal();
 
+        if (Main.Settings.PlaybackBarks)
         {
-            GUI.enabled = Main.Settings.PlaybackBarks;
-
             GUILayout.BeginHorizontal();
             GUILayout.Label("Only playback barks if there's silence", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
@@ -116,8 +115,6 @@ public static class MenuGUI
             GUILayout.Space(10);
             Main.Settings.PlaybackBarksInVicinity = GUILayout.Toggle(Main.Settings.PlaybackBarksInVicinity, "Enabled");
             GUILayout.EndHorizontal();
-
-            GUI.enabled = true;
         }
 
         GUILayout.EndVertical();
