@@ -6,7 +6,7 @@ using Kingmaker.UI.Models.SettingsUI.SettingAssets;
 using System;
 using UnityEngine;
 
-namespace ModConfiguration.Settings;
+namespace SpeechMod.Configuration.Settings;
 
 public abstract class ModHotkeySettingEntry : ModSettingEntry
 {

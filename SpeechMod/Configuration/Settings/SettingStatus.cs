@@ -1,4 +1,4 @@
-﻿namespace ModConfiguration.Settings;
+﻿namespace SpeechMod.Configuration.Settings;
 
 public enum SettingStatus
 {

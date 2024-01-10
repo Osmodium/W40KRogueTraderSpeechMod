@@ -5,7 +5,7 @@ using ModConfiguration.Localization;
 using System;
 using UnityEngine;
 
-namespace ModConfiguration.Settings;
+namespace SpeechMod.Configuration.Settings;
 
 public abstract class ModToggleSettingEntry : ModSettingEntry
 {

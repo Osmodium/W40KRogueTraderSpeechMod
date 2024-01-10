@@ -57,6 +57,12 @@ public static class SpeechExtensions
         };
     }
 
+    private static string SpaceOutDate(string text)
+    {
+        var pattern = @"([0-9]{2})\/([0-9]{2})\/([0-9]{4})";
+        return Regex.Replace(text, pattern, "$1 / $2 / $3");
+    }
+
     public static string PrepareText(this string text)
     {
         text = text!.ToLower();
@@ -64,6 +70,8 @@ public static class SpeechExtensions
         text = text.Replace("\n", ". ");
         text = text.Replace("---", "");
         text = text.Trim();
+
+        text = SpaceOutDate(text);
 
         if (m_PhoneticDictionary == null)
             LoadBackupDictionary();

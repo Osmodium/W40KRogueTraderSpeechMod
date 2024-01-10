@@ -3,7 +3,7 @@ using Kingmaker.UI.Models.SettingsUI.SettingAssets;
 using ModConfiguration.Localization;
 using UnityEngine;
 
-namespace ModConfiguration.UI;
+namespace SpeechMod.Configuration.UI;
 
 public static class OwlcatUITools
 {

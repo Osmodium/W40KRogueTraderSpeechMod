@@ -3,7 +3,7 @@ using Kingmaker;
 using Kingmaker.Code.UI.MVVM.View.Common.PC;
 using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
-using ModConfiguration.Settings;
+using SpeechMod.Configuration.Settings;
 
 namespace SpeechMod.Keybinds;
 
