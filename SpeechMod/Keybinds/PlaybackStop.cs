@@ -4,6 +4,9 @@ using Kingmaker.Code.UI.MVVM.View.Common.PC;
 using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
 using SpeechMod.Configuration.Settings;
+#if DEBUG
+using UnityEngine;
+#endif
 
 namespace SpeechMod.Keybinds;
 
@@ -27,7 +30,10 @@ public class PlaybackStop : ModHotkeySettingEntry
         [HarmonyPostfix]
         private static void Add(CommonPCView __instance)
         {
-            __instance!.AddDisposable(Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); }));
+#if DEBUG
+        Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix");
+#endif
+            __instance?.AddDisposable(Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); }));
         }
 
         private static void StopPlayback(CommonPCView instance)
@@ -38,10 +44,10 @@ public class PlaybackStop : ModHotkeySettingEntry
             if (instance != null && instance.m_WarningsTextView != null)
             {
                 if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out string text, false))
-                    text = "Stopping Playback!";
+                    text = "SpeechMod: Playback stopped!";
 
                 if (Main.Settings!.ShowNotificationOnPlaybackStop)
-                    instance?.m_WarningsTextView?.Show(text, WarningNotificationFormat.Common);
+                    instance.m_WarningsTextView?.Show(text, WarningNotificationFormat.Common);
             }
 
             Main.Speech?.Stop();
