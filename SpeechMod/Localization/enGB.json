@@ -4,7 +4,7 @@
       "Text": "Stop playback"
     },
     "osmodium.speechmod.feature.playback.stop.tooltip-description": {
-      "Text": "Stops playback of SpeechMod TTS"
+      "Text": "Stops playback of SpeechMod TTS when it is playing."
     },
     "osmodium.speechmod.group.main": {
       "Text": "Speech Mod"

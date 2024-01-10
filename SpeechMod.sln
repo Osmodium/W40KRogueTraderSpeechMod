@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechMod", "SpeechMod\Spee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{A75D9932-76B4-44F0-9478-CAF648B0996E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModConfiguration", "ModConfiguration\ModConfiguration.csproj", "{4D66B95F-1752-445C-B868-AC1F50E44413}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutionfiles", "Solutionfiles", "{504859E5-17AA-4CD4-BD1C-40BCAFCF4E5F}"
 	ProjectSection(SolutionItems) = preProject
 		Todo.txt = Todo.txt
@@ -28,10 +26,6 @@ Global
 		{A75D9932-76B4-44F0-9478-CAF648B0996E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A75D9932-76B4-44F0-9478-CAF648B0996E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A75D9932-76B4-44F0-9478-CAF648B0996E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4D66B95F-1752-445C-B868-AC1F50E44413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4D66B95F-1752-445C-B868-AC1F50E44413}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4D66B95F-1752-445C-B868-AC1F50E44413}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4D66B95F-1752-445C-B868-AC1F50E44413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -50,8 +50,7 @@ public class ModConfigurationManager
         }
     }
 
-    private static readonly ModConfigurationManager instance = new();
-    public static ModConfigurationManager Instance => instance;
+    public static ModConfigurationManager Instance { get; } = new();
 }
 
 [HarmonyPatch]

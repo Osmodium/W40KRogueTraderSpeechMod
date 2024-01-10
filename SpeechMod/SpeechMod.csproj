@@ -19,6 +19,10 @@
 			<HintPath>$(SolutionDir)lib\Code_public.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="Kingmaker.Localization.Enums">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.Localization.Enums.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="Kingmaker.Blueprints.Base">
 			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.Blueprints.Base.dll</HintPath>
 			<Private>False</Private>
@@ -28,7 +32,7 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-			<HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Newtonsoft.Json.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Owlcat.Runtime.UI">
@@ -63,6 +67,18 @@
 			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.UI.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="Kingmaker.Settings.Interfaces">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.Settings.Interfaces.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Kingmaker.UI.InputSystems.Enums">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Kingmaker.UI.InputSystems.Enums.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="RogueTrader.GameCore">
+			<HintPath>$(SolutionDir)lib\RogueTrader.GameCore_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="UnityModManager">
 			<HintPath>$(SolutionDir)lib\UnityModManager_public.dll</HintPath>
 			<Private>False</Private>
@@ -76,6 +92,7 @@
 		<PubliciseInputAssemblies Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Code.dll" />
 		<PubliciseInputAssemblies Include="$(RogueTraderData)\UnityModManager\UnityModManager.dll" />
 		<PubliciseInputAssemblies Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UI.dll" />
+		<PubliciseInputAssemblies Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\RogueTrader.GameCore.dll" />
 	</ItemGroup>
 	<!-- <Target Name="Deploy" AfterTargets="Build">
 		<ItemGroup>
@@ -89,9 +106,6 @@
 	<ItemGroup>
 		<PackageReference Include="Aze.Publicise.MSBuild.Task" Version="1.1.0" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
 		<PackageReference Include="PublishToWorkshop" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" Version="1.0.10" PrivateAssets="all" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\ModConfiguration\ModConfiguration.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="Localization\enGB.json">
