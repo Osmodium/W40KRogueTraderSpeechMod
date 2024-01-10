@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
-Version: 0.6.0
+Version: 0.9.0
 
 **Disclaimer: UNDER DEVELOPMENT**
 
@@ -12,7 +12,7 @@ Version: 0.6.0
 
 **Works with all languages as long as you have a voice in that language installed.**
 
-[How to unlock more voices in Windows 10](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
+[How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 
 ### How to install
 
@@ -28,49 +28,103 @@ Version: 0.6.0
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/WH40KRTSpeechMod/issues)*
 
 #### Limitations:
-- None known
+- Keybind doesn't seem to work in loading screen. Probably no fix to this.
+- Can't playback book event choices yet.
 
 #### Todo:
-- A bunch, see https://github.com/Osmodium/W40KRogueTraderSpeechMod/blob/main/Todo.txt for more info.
+- Still some work to do, see https://github.com/Osmodium/W40KRogueTraderSpeechMod/blob/main/Todo.txt for more info.
 
 ### How to use
 
 #### 1) Dialog
-When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
+When in dialog you can press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
 
-![Playbutton for the current dialog](https://dashvoid.com/speechmod/w40krt/1_DialogPlayButton_0_6_0.png)
+![Playbutton for the current dialog](https://dashvoid.com/speechmod/w40krt/18_DialogPlayButton.png)
 
-#### 2) Inspection Information
+#### 2) Dialog Answers
+Also when in dialog, you can choose to have playbuttons for each of the dialog answers, and which color the hover effect should make the answer, so you know when you are selecting it or having it playback.
+
+![Playbutton for each dialog answer](https://dashvoid.com/speechmod/w40krt/7_Dialog_Option_Playback_Hover_Color.png)
+
+#### 3) Inspection Information
 When inspecting items and links (through *right-click->Info* or just *right-click* for expanded tooltip) *hover* over the text and *left click*.
 
-![Here the hover behaviour is set to underline the text, see the settings for more custumization](https://dashvoid.com/speechmod/w40krt/2_ExpandedTooltips_0_6_0.png)
+![Here the hover behaviour is set to underline the text, see the settings for more custumization](https://dashvoid.com/speechmod/w40krt/1_ExpandedTooltips.png)
 
-#### 4) 🔳 Journal Quest text
-**NOT IMPLEMENTED YET** In the journal, each of the bigger text blocks and important stuff can be played through the play button adjacent to the text.
+#### 4) Journal Quest and Rumors text
+In the journal, each of the bigger text blocks and important stuff can be played through the play button adjacent to the text. The text blocks without a playbutton can be played by hovering and left-clicking.
 
-#### 5) 🔳 Lexica text
-**NOT IMPLEMENTED YET** In the lexica the text blocks (defined by Owlcat) can be played by pressing the play button adjacent to the text.
+![Hover of quest-texts, and play button for titles](https://dashvoid.com/speechmod/w40krt/13_Jounal_Quest_Texts.png)
+![Same goes for rumors](https://dashvoid.com/speechmod/w40krt/14_Journal_Rumors_Texts.png)
 
-#### 6) 🔳 Book Event text
-**NOT IMPLEMENTED YET** When encountering a book event, the text can be played by hovering the text part (it will apply the chosen hover effect) and left-clicking.
+#### 5) Corpus Valancius (Encyclopedia)
+In the Corpus Valancius the text blocks (defined by Owlcat) can be played by pressing the play button adjacent to the text. The rest of the text can be played by hovering and left-clicking.
 
-#### 7) ✅ Messagebox text
+![Playbuttons for each part and left-clicking on text for the rest](https://dashvoid.com/speechmod/w40krt/12_Encyclopedia_Corpus_Valancius_Texts.png)
+
+#### 6) Book Event text
+When encountering a book event, the text can be played by hovering the text part (it will apply the chosen hover effect) and left-clicking.
+Historical text also supported.
+
+![Book event text support](https://dashvoid.com/speechmod/w40krt/5_BookEvent_And_History.png)
+
+#### 7) Messagebox text
 The various pop-up boxes that eventually shows up throughout the game, can be played when hovered and left-clicked.
 
-![Some texts might be so important that I decided to add support for them.](https://dashvoid.com/speechmod/w40krt/4_MessageBoxes_0_6_0.png)
+![Some texts might be so important that I decided to add support for them.](https://dashvoid.com/speechmod/w40krt/3_MessageBoxes.png)
 
-#### 8) 🔳 Space battle(?) Results text
-**NOT IMPLEMENTED YET** When your amy has defeated an enemy, the resulting message text is also supported for playback when hovered and left-clicked. Might not exist, haven't played that far yet.
-
-#### 9) ✅ Tutorial Windows text
+#### 8) Tutorial Windows text
 Both big and small tutorial windows text is supported and can be played by hovering and left-clicking.
 
-![Tutorials can be helpful to learn more.](https://dashvoid.com/speechmod/w40krt/3_TutorialSmall_0_6_0.png)
+![Tutorials can be helpful to learn more.](https://dashvoid.com/speechmod/w40krt/2_Tutorial_Small.png)
 
-#### 10) ✅? Character story under summary and biography
-**MIGHT WORK** When inspecting a character, the story of that character is displayed both under *Summary* and under *Biography*, and are both supported by hovering and left-clicking.
+#### 9) Character biography
+When inspecting a character, the story of that character is displayed both under *Summary* and under *Biography*, and are both supported by hovering and left-clicking.
+
+![Character biography support](https://dashvoid.com/speechmod/w40krt/11_Biography_Texts.png)
+
+#### 10) Character archetypes
+Either when just inspecting a character or leveling up, the text for each of the parts are now supported by hovering and left-clicking.
+
+![Showcasing the officers archetype](https://dashvoid.com/speechmod/w40krt/17_Character_Archetypes_Texts.png)
+
+#### 11) Loading screen
+When loading, the various texts can now be played by hovering and left-clicking. Note that the shortcut (keybind) doesn't work in loading screens.
+
+![Bottom text](https://dashvoid.com/speechmod/w40krt/10_Loading_Screen_Texts.png)
+![Character biography text](https://dashvoid.com/speechmod/w40krt/10_Loading_Screen_Character_Texts.png)
+
+#### 12) Ship Upgrade screen
+In the ship upgrade screen, different part of the ui texts can be played back by hovering and left-clicking.
+
+![Flagship explanation text](https://dashvoid.com/speechmod/w40krt/15_Ship_Upgrade_Texts.png)
+
+#### 13) Ship Posts screen
+When assigning your crew different posts on the ship, the different texts can not be played back by hovering and left-clicking.
+
+![Ship post of supreme commander text](https://dashvoid.com/speechmod/w40krt/16_Ship_Posts_Texts.png)
+
+#### 14) Settings texts
+When hovering a setting, the right part shows a description of the setting, this can now be played back by hovering and left-clicking.
+
+![Menu text of the setting Bloodstains](https://dashvoid.com/speechmod/w40krt/9_Menu_Texts.png)
+
+#### 15) Welcome message
+In the main menu view, a welcome message is shown, this can be played back by hovering and left-clicking.
+
+![The welcome message for the main story of the game](https://dashvoid.com/speechmod/w40krt/8_Welcome_Text.png)
+
+#### 16) 🔳 Space battle(?) Results text
+**NOT IMPLEMENTED YET**
 
 ### Settings
+
+New keybind setting in the game menu under "Sound"
+![Assign keybind(s) to stopping of playback](https://dashvoid.com/speechmod/w40krt/4_Keybinding.png)
+
+If enabled in the mod-settings, a notification will be shown when stopping the playback through use of the keybind.
+
+![Notification showing that the playback has stopped](https://dashvoid.com/speechmod/w40krt/6_Stopping_TTS_Notification.png)
 
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Narrator Voice**: The settings for the voice used for either all or non-gender specific text in dialogs when *Use gender specific voices* is turned on.
@@ -85,14 +139,21 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Use gender specific voices**: Specify voices for female and male dialog parts. Each of the voices can be adjusted with rate, volume and pitch where available.
 - Windows Only:
 	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
+- **Auto stop playback on loading**: When enabled, currently playing TTS will stop whenever the game loads (through a loading screen).
 - **Auto play dialog**: When enabled, dialogs will be played automatically when theres no voice acted dialog.
 - **Auto play ignores voiced dialog lines**: Only available when using auto play dialog. This option makes the auto play ignore when there is voiced dialog, remember to turn dialog off in the settings.
+- **Show playback button of dialog answers**: When enabled, a play button will be added next to all dialog choices. These buttons playbacks the dialog answer, while not selecting it.
+- **Include dialog answer number in playback**: When enabled and pressing a play button next to a dialog answer, the playback will lead with the choice number.
+- **Color answer on hover**: This enables highlighting the dialog choice that corresponds to the play button that is hovered.
 - **Playback barks**: When clicking on points of interests in the world, the small description is called a "Bark". Enabling this feature reads the bark aloud in the narrator voice. This also applies to character "banter" which is in the same style.
-- **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
-- **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
+- **Only playback barks if silence**: When enabled, barks are only played if there is no other TTS playback currently playing. Can be useful with the next option.
+- **Playback vicinity and cutscene triggered barks**: When enabled, all barks that are automatically played by either triggers or cutscenes, will be played. This can cause a lot of overlapping of playbacks. Hence the prior setting to only play when silence. Might look at some sort of system where automatically played barks, are low priority, compared to manually started playbacks.
+- **Show notification on playback stop**: When this is enabled, a notification will show on the screen that the playback was stopped when the keybind for stopping is pressed. This keybinding can be set in the game menu under "Sound".
+- **Color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
+- **Font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](https://dashvoid.com/speechmod/w40krt/0_Settings_0_6_0.png)
+![Settings for SpeechMod](https://dashvoid.com/speechmod/w40krt/0_Settings_0_9_0.png)
 
 ### Motivation
 *Why did I create this mod?*
@@ -109,5 +170,6 @@ Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS in the original mod, and various exploration work.
+- Enhanced Controls mod for the keybinding and localization code.
 - Owlcat Modding Discord channel members
 - Join the [Discord](https://discord.gg/EFWq7rJFNN)
