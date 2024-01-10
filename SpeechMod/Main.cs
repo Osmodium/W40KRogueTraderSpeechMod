@@ -5,13 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ModConfiguration;
-using ModConfiguration.Settings;
 using SpeechMod.Keybinds;
 using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
+using SpeechMod.Configuration.Settings;
+using SpeechMod.Configuration;
 
 namespace SpeechMod;
 

@@ -4,14 +4,14 @@ using Kingmaker.Settings;
 using Kingmaker.UI.InputSystems;
 using Kingmaker.UI.Models.SettingsUI;
 using ModConfiguration.Localization;
-using ModConfiguration.Settings;
-using ModConfiguration.UI;
+using SpeechMod.Configuration.Settings;
+using SpeechMod.Configuration.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static UnityModManagerNet.UnityModManager;
 
-namespace ModConfiguration;
+namespace SpeechMod.Configuration;
 
 public class ModConfigurationManager
 {
