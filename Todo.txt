@@ -76,14 +76,6 @@ ShipPostsView
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/BiographyGroup_ShouldBeActive/StoriesViewNew/ItemsScroll/Viewport/Content/BiographyText
 CharInfoStoriesView or CharacterInfoPCView
 
-Look into journal/rumors/contracts
-/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
-/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
-/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView/Viewport/Content/JournalQuestObjectivePCView(Clone)/BodyGroup/DescriptionLabel
-/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView
-JournalQuestPCView
-JournalQuestObjectivePCView
-
 ✅ Look into ship customization screen
 
 ✅ Update PhoneticDictionary backup and file
@@ -99,7 +91,20 @@ Right side text
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/EncyclopediaView/SafeZone/BackgroundImage (1)/ContentGroup/EncyclopediaPageView/BodyGroup/ServiceWindowStandardScrollView/Viewport/Content/PageContent/Content/GlossaryEntryBlockView(Clone)/Description
 EncyclopediaPageBaseView
 
+🔲 Look into journal/rumors/contracts
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView/Viewport/Content/JournalQuestObjectivePCView(Clone)/BodyGroup/DescriptionLabel
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView
+JournalQuestPCView
+JournalQuestObjectivePCView
+Outstanding -> Rumor title is propbably being raycast blocked
+
 🔲 Look into contracts view
+
+🔲 Look into Space Event View
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ExplorationSpaceEventPCView/Container/Body/View/Scroll View/Viewport/Content/DialogCuePCView/EventMessage
+ExplorationSpaceEventPCView
 
 🔲 Look into reputation view
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/FactionsReputation/ItemsContainer/CharInfoProfitFactorItemPCView(Clone)/ActivesPanel/Viewport/Content/CharInfoColonyItemView/StatTitle
