@@ -57,7 +57,7 @@ public class DialogAnswerBaseView_Patch
             return;
 
         // 3. We want the button but it doesn't exist.
-        playButtonGameObject = ButtonFactory.CreatePlayButton(transform, () =>
+        playButtonGameObject = ButtonFactory.TryCreatePlayButton(transform, () =>
         {
             if (textMeshPro == null)
                 return;

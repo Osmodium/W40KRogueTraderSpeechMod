@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
+﻿using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
 using Kingmaker.Code.UI.MVVM.VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity.Extensions;
@@ -7,6 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace SpeechMod.Unity;
 
@@ -30,16 +30,20 @@ public static class ButtonFactory
             return;
 
         m_ArrowButtonPrefab = Object.Instantiate(ArrowButton);
+        if (m_ArrowButtonPrefab == null)
+            return;
         Object.DontDestroyOnLoad(m_ArrowButtonPrefab);
     }
 
-    public static GameObject CreatePlayButton(Transform parent, UnityAction action)
+    public static GameObject TryCreatePlayButton(Transform parent, UnityAction action)
     {
         return CreatePlayButton(parent, action, null, null);
     }
 
     private static GameObject CreatePlayButton(Transform parent, UnityAction action, string text, string toolTip)
     {
+        GameObject buttonGameObject = null;
+
         if (ArrowButton == null)
         {
 #if DEBUG
@@ -53,28 +57,30 @@ public static class ButtonFactory
                 return null;
             }
 
-            var prefabButtonGameObject = Object.Instantiate(m_ArrowButtonPrefab, parent);
-            SetupButton(prefabButtonGameObject, action, text, toolTip);
-            return prefabButtonGameObject;
+            buttonGameObject = Object.Instantiate(m_ArrowButtonPrefab, parent);
+        }
+        else
+        {
+            TryTakeArrowBackup();
+            buttonGameObject = Object.Instantiate(ArrowButton, parent);
         }
 
-        TryTakeArrowBackup();
-
-        var buttonGameObject = Object.Instantiate(ArrowButton, parent);
         SetupButton(buttonGameObject, action, text, toolTip);
-
         return buttonGameObject;
     }
 
     private static void SetupButton(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
     {
-        var button = buttonGameObject!.GetComponent<OwlcatMultiButton>();
+        if (buttonGameObject == null)
+            return;
+
+        var button = buttonGameObject.GetComponent<OwlcatMultiButton>();
         if (button == null)
         {
             button = buttonGameObject.AddComponent<OwlcatMultiButton>();
         }
 
-        button.OnLeftClick.RemoveAllListeners();
+        button!.OnLeftClick!.RemoveAllListeners();
         button.OnLeftClick.AddListener(action);
 
         if (!string.IsNullOrWhiteSpace(text))
@@ -83,7 +89,7 @@ public static class ButtonFactory
         button.SetInteractable(true);
     }
 
-    public static GameObject TryAddButton(this TextMeshProUGUI textMeshPro, string buttonName, Vector2? anchoredPosition = null, Vector3? scale = null, [CanBeNull] TextMeshProUGUI[] textMeshProUguis = null)
+    public static GameObject TryAddButtonToTextMeshPro(this TextMeshProUGUI textMeshPro, string buttonName, Vector2? anchoredPosition = null, Vector3? scale = null, TextMeshProUGUI[] textMeshProUguis = null)
     {
         var transform = textMeshPro?.transform;
         var tmpButton = transform.TryFind(buttonName)?.gameObject;
@@ -94,7 +100,7 @@ public static class ButtonFactory
         Debug.Log($"Adding playbutton to {textMeshPro?.name}...");
 #endif
 
-        var button = CreatePlayButton(transform, () =>
+        var button = TryCreatePlayButton(transform, () =>
         {
             var text = textMeshPro?.text;
             if (textMeshProUguis != null)

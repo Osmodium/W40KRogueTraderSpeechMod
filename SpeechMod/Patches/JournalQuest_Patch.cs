@@ -66,7 +66,7 @@ public static class JournalQuest_Patch
         Debug.Log($"{nameof(JournalQuestObjectiveBaseView)}_{nameof(JournalQuestObjectiveBaseView.BindViewImplementation)}_Postfix");
 #endif
 
-        __instance.m_Title.TryAddButton(BUTTON_NAME, new Vector2(18f, -11f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_Title.TryAddButtonToTextMeshPro(BUTTON_NAME, new Vector2(18f, -11f), new Vector3(0.8f, 0.8f, 1f));
         __instance.m_Description.HookupTextToSpeech();
         __instance.m_Destination.HookupTextToSpeech();
         __instance.m_EtudeCounter.HookupTextToSpeech();

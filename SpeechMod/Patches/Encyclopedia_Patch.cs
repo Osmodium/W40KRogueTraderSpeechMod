@@ -27,8 +27,8 @@ public static class Encyclopedia_Patch
 #endif
 
         __instance.m_Title.HookupTextToSpeech();
-        __instance.m_PageAdditionText.TryAddButton(PAGE_VIEW_ADDITION_BUTTON_NAME, new Vector2(24f, -4f), new Vector3(0.8f, 0.8f, 1f));
-        __instance.m_GlossaryEntryBlockPrefab?.m_Description.TryAddButton(PAGE_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(0f, -4f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_PageAdditionText.TryAddButtonToTextMeshPro(PAGE_VIEW_ADDITION_BUTTON_NAME, new Vector2(24f, -4f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_GlossaryEntryBlockPrefab?.m_Description.TryAddButtonToTextMeshPro(PAGE_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(0f, -4f), new Vector3(0.8f, 0.8f, 1f));
     }
 
     [HarmonyPatch(typeof(EncyclopediaPageBlockTextPCView), "BindViewImplementation")]
@@ -40,7 +40,7 @@ public static class Encyclopedia_Patch
 #if DEBUG
         Debug.Log($"{nameof(EncyclopediaPageBlockTextPCView)}_BindViewImplementation_Postfix");
 #endif
-        __instance.m_Text.TryAddButton(TEXT_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(-1f, -4f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_Text.TryAddButtonToTextMeshPro(TEXT_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(-1f, -4f), new Vector3(0.8f, 0.8f, 1f));
     }
 
     [HarmonyPatch(typeof(EncyclopediaPageBlockGlossaryEntryPCView), "BindViewImplementation")]
@@ -54,6 +54,6 @@ public static class Encyclopedia_Patch
 #endif
 
         __instance.m_Title.HookupTextToSpeech();
-        __instance.m_Description.TryAddButton(BLOCK_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(-2f, -4f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_Description.TryAddButtonToTextMeshPro(BLOCK_VIEW_GLOSSARY_BUTTON_NAME, new Vector2(-2f, -4f), new Vector3(0.8f, 0.8f, 1f));
     }
 }

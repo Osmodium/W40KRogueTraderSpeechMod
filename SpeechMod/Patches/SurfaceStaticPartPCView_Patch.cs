@@ -59,10 +59,15 @@ public static class SurfaceStaticPartPCView_Patch
             return;
         }
 
-        var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
+        var buttonGameObject = ButtonFactory.TryCreatePlayButton(parent, () =>
         {
             Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
         });
+
+        if (buttonGameObject == null)
+        {
+            return;
+        }
 
         buttonGameObject.name = "SpeechMod_DialogButton";
         buttonGameObject.RectAlignTopLeft(new Vector2(40, 10));
