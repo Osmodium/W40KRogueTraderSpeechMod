@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutionfiles", "Solutionfiles", "{504859E5-17AA-4CD4-BD1C-40BCAFCF4E5F}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 		Todo.txt = Todo.txt
 	EndProjectSection
 EndProject

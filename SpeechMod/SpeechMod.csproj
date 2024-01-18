@@ -43,10 +43,6 @@
 			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Owlcat.Runtime.UniRx.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="RogueTrader.GameCore">
-			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\RogueTrader.GameCore.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
 		<Reference Include="UniRx">
 			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UniRx.dll</HintPath>
 			<Private>False</Private>

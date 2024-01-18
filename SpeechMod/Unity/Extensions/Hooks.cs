@@ -89,24 +89,14 @@ public static class Hooks
             return;
         }
 
-        var skipEventAssignment = false;
-
         var defaultValues = textMeshProTransform.GetComponent<TextMeshProValues>();
         if (defaultValues == null)
         {
             defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
-            defaultValues!.FontStyles = textMeshPro.fontStyle;
-            defaultValues.Color = textMeshPro.color;
-            defaultValues.ExtraPadding = textMeshPro.extraPadding;
         }
         else
-            skipEventAssignment = true;
-
-        if (skipEventAssignment)
         {
-#if DEBUG
-            //Debug.Log("Skipping event assignment!");
-#endif
+            // Skip event assignment since it should already be hooked up
             return;
         }
 
@@ -115,13 +105,18 @@ public static class Hooks
         textMeshPro.OnPointerEnterAsObservable().Subscribe(
             _ =>
             {
+                defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
+                defaultValues!.FontStyles = textMeshPro.fontStyle;
+                defaultValues.Color = textMeshPro.color;
+                defaultValues.ExtraPadding = textMeshPro.extraPadding;
+
                 if (Main.Settings!.FontStyleOnHover)
                 {
                     for (int i = 0; i < Main.Settings.FontStyles!.Length; i++)
                     {
                         if (Main.Settings.FontStyles[i])
                         {
-                            textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
+                            textMeshPro.fontStyle ^= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
                         }
                     }
                     textMeshPro.extraPadding = false;

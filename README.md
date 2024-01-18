@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
-Version: 0.9.0
+Version: 0.9.2
 
 **Disclaimer: UNDER DEVELOPMENT**
 
@@ -119,7 +119,7 @@ In the main menu view, a welcome message is shown, this can be played back by ho
 
 ### Settings
 
-New keybind setting in the game menu under "Sound"
+New keybind setting in the game menu under "Sound" to stop playback.
 ![Assign keybind(s) to stopping of playback](https://dashvoid.com/speechmod/w40krt/4_Keybinding.png)
 
 If enabled in the mod-settings, a notification will be shown when stopping the playback through use of the keybind.

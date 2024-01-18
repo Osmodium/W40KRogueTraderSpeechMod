@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kingmaker.Code.UI.MVVM.View.Tooltip.Bricks;
+using Kingmaker.Utility;
 using Owlcat.Runtime.UI.Controls.Button;
 using TMPro;
 using UnityEngine;
@@ -79,9 +80,13 @@ public static class Tooltip_Patch
         if (string.IsNullOrWhiteSpace(transform.name))
             return false;
 
-        return !(transform.name.Trim().Equals("bracket", StringComparison.InvariantCultureIgnoreCase)
+        return !(transform.GetGameObjectPath().Contains("ComparativeTooltipPCView")
+            || transform.name.Trim().Equals("bracket", StringComparison.InvariantCultureIgnoreCase)
             || transform.name.Trim().Equals("Acronim", StringComparison.InvariantCultureIgnoreCase)
             || transform.name.Trim().Equals("decortext", StringComparison.InvariantCultureIgnoreCase)
+            || transform.name.Trim().Equals("Text (TMP) (1)", StringComparison.InvariantCultureIgnoreCase)
+            || transform.name.Trim().Equals("Text (TMP) (2)", StringComparison.InvariantCultureIgnoreCase)
+            || transform.GetGameObjectPath()!.Contains("/LeftBlock (1)/Empty/Text (TMP)")
             || transform.parent?.GetComponent<OwlcatButton>() != null);
     }
 }
