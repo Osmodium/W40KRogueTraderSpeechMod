@@ -108,6 +108,7 @@ ExplorationSpaceEventPCView
 
 🔲 Look into reputation view
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/FactionsReputation/ItemsContainer/CharInfoProfitFactorItemPCView(Clone)/ActivesPanel/Viewport/Content/CharInfoColonyItemView/StatTitle
+CharInfoFactionReputationItemPCView
 
 🔲 Loading screen description text
 LoadingScreenPCView
