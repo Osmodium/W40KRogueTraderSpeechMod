@@ -151,6 +151,8 @@ TooltipBrickNestedMessageView
 CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/HeaderContainer/TooltipBrickFeatureHeaderPaperView(Clone)/TextBlock/Title-H1
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/Device/Content/UnitProgressionPCView/CareerPathProgressionPCView/Content/RightContainer/CareerPathSelectionPartPCView/Content/ContentPanel/RankEntryFeatureDescriptionPCView/ChargenDescriptionView/Header/TooltipBrickFeatureHeaderView(Clone)/TextBlock/Title-H1
 
+🔲 Use ILRepack to pack the mod into a single dll
+
 --Filter transform names in negative list--
 bracket
 Acronim
