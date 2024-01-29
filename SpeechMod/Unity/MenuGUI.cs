@@ -1,9 +1,98 @@
 ﻿using SpeechMod.Voice;
 using System.Linq;
+using ModKit;
+using ModKit.DataViewer;
+using ModKit.Utility;
 using SpeechMod.Unity.Extensions;
+using TMPro;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 
 namespace SpeechMod.Unity;
+
+public class VoiceSelector
+{
+    public static UI.Browser<Voice.Edge.Voice, Voice.Edge.Voice> VoiceBrowser = new(true, true);
+
+    public static void OnGUI()
+    {
+        if (Main.NarratorVoice == null || Main.AvailableVoices == null)
+            return;
+
+        VoiceBrowser ??= new(true, true);
+
+        var selectedVoice = Main.AvailableVoices.Where(v => v.ShortName.Equals(Main.NarratorVoice));
+
+        if (!selectedVoice.Any())
+        {
+            Main.Logger.Log("No selected voice!");
+            return;
+        }
+
+        foreach (var voice in selectedVoice)
+        {
+            Main.Logger.Log(voice.ShortName);
+        }
+
+        UI.Label("Select voice".yellow().bold());
+
+        VoiceBrowser.OnGUI(selectedVoice,
+            () => Main.AvailableVoices,
+            current => current,
+            voice => $"{voice.Name}",
+            voice => new[] { voice.Name },
+            () =>
+            {
+                UI.Label("Header");
+                UI.Div(0, 25);
+            },
+            (voice, maybeVoice) =>
+            {
+                var remainingWidth = UI.ummWidth;
+                remainingWidth -= 50;
+                var titleWidth = (remainingWidth / (UI.IsWide ? 3.5f : 4.0f)) - 100;
+                remainingWidth -= titleWidth;
+
+                var text = voice.Name.MarkedSubstring(VoiceBrowser.SearchText);
+                if (maybeVoice != null)
+                {
+                    text = text.Cyan().Bold();
+                }
+
+                UI.Label(text, UI.Width((int)titleWidth));
+
+                if (maybeVoice == null)
+                {
+                    UI.ActionButton(
+                        "Set voice",
+                        () =>
+                        {
+                            Main.Settings.NarratorVoice = voice.ShortName;
+                        }, UI.Width(116)
+                    );
+                    UI.Space(70);
+                }
+                else
+                {
+                    UI.Space(190);
+                }
+
+                remainingWidth -= 190;
+                UI.Space(20);
+                remainingWidth -= 20;
+                ReflectionTreeView.DetailToggle("", voice, voice, 0);
+            },
+            (voice, maybeVoice) =>
+            {
+                ReflectionTreeView.OnDetailGUI(voice);
+            },
+            50,
+            false
+        );
+    }
+}
 
 public static class MenuGUI
 {
@@ -25,7 +114,10 @@ public static class MenuGUI
         GUILayout.EndVertical();
 #endif
 
-        AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
+        VoiceSelector.OnGUI();
+
+        //AddVoiceSelector("Narrator Voice - See nationality below", ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
+        //AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
         GUILayout.BeginVertical("Playback voices", GUI.skin.box);
 
@@ -36,11 +128,11 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
 
-        if (Main.Settings.UseGenderSpecificVoices)
-        {
-            AddVoiceSelector("Female Voice - See nationality below", ref Main.Settings.FemaleVoice, ref m_FemalePreviewText, ref Main.Settings.FemaleRate, ref Main.Settings.FemaleVolume, ref Main.Settings.FemalePitch, VoiceType.Female);
-            AddVoiceSelector("Male Voice - See nationality below", ref Main.Settings.MaleVoice, ref m_MalePreviewText, ref Main.Settings.MaleRate, ref Main.Settings.MaleVolume, ref Main.Settings.MalePitch, VoiceType.Male);
-        }
+        //if (Main.Settings.UseGenderSpecificVoices)
+        //{
+        //    AddVoiceSelector("Female Voice - See nationality below", ref Main.Settings.FemaleVoice, ref m_FemalePreviewText, ref Main.Settings.FemaleRate, ref Main.Settings.FemaleVolume, ref Main.Settings.FemalePitch, VoiceType.Female);
+        //    AddVoiceSelector("Male Voice - See nationality below", ref Main.Settings.MaleVoice, ref m_MalePreviewText, ref Main.Settings.MaleRate, ref Main.Settings.MaleVolume, ref Main.Settings.MalePitch, VoiceType.Male);
+        //}
 
         GUILayout.BeginVertical("", GUI.skin.box);
 
@@ -172,7 +264,7 @@ public static class MenuGUI
         GUILayout.EndVertical();
     }
 
-    private static void AddVoiceSelector(string label, ref int voice, ref string previewString, ref int rate, ref int volume, ref int pitch, VoiceType type)
+    private static void AddVoiceSelector(string label, ref string previewString, ref int rate, ref int volume, ref int pitch, VoiceType type)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
 
@@ -181,44 +273,35 @@ public static class MenuGUI
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        voice = GUILayout.SelectionGrid(voice, Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray(),
-            Main.Speech is WindowsSpeech ? 4 : 5
-        );
+
+        //voice = GUILayout.SelectionGrid(voice, Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray(), Main.Speech is WindowsSpeech ? 4 : 5);
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        GUILayout.Label(Main.VoicesDict.ElementAt(voice).Value, GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
+        //GUILayout.Space(10);
+        //GUILayout.Label(Main.VoicesDict.ElementAt(voice).Value, GUILayout.ExpandWidth(false));
+        //GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
+        GUILayout.Label("Speech rate %", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        rate = Main.Speech switch
-        {
-            WindowsSpeech => (int)GUILayout.HorizontalSlider(rate, -10, 10, GUILayout.Width(300f)),
-            AppleSpeech => (int)GUILayout.HorizontalSlider(rate, 150, 300, GUILayout.Width(300f)),
-            _ => rate
-        };
+        rate = (int)GUILayout.HorizontalSlider(rate, -100, 100, GUILayout.Width(300f));
         GUILayout.Label($" {rate}", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
-        if (Main.Speech is WindowsSpeech)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
-            GUILayout.Space(10);
-            volume = (int)GUILayout.HorizontalSlider(volume, 0, 100, GUILayout.Width(300f));
-            GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Speech pitch %", GUILayout.ExpandWidth(false));
+        pitch = (int)GUILayout.HorizontalSlider(pitch, -100, 100, GUILayout.Width(300f));
+        GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
-            pitch = (int)GUILayout.HorizontalSlider(pitch, -10, 10, GUILayout.Width(300f));
-            GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-        }
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Speech volume dB", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        volume = (int)GUILayout.HorizontalSlider(volume, -50, 50, GUILayout.Width(300f));
+        GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
@@ -230,6 +313,65 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
     }
+
+    //private static void AddVoiceSelector(string label, ref int voice, ref string previewString, ref int rate, ref int volume, ref int pitch, VoiceType type)
+    //{
+    //    GUILayout.BeginVertical("", GUI.skin.box);
+
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label(label, GUILayout.ExpandWidth(false));
+    //    GUILayout.EndHorizontal();
+    //    GUILayout.BeginHorizontal();
+
+    //    voice = GUILayout.SelectionGrid(voice, Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray(),
+    //        Main.Speech is WindowsSpeech ? 4 : 5
+    //    );
+    //    GUILayout.EndHorizontal();
+
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
+    //    GUILayout.Space(10);
+    //    GUILayout.Label(Main.VoicesDict.ElementAt(voice).Value, GUILayout.ExpandWidth(false));
+    //    GUILayout.EndHorizontal();
+
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
+    //    GUILayout.Space(10);
+    //    rate = Main.Speech switch
+    //    {
+    //        WindowsSpeech => (int)GUILayout.HorizontalSlider(rate, -10, 10, GUILayout.Width(300f)),
+    //        AppleSpeech => (int)GUILayout.HorizontalSlider(rate, 150, 300, GUILayout.Width(300f)),
+    //        _ => rate
+    //    };
+    //    GUILayout.Label($" {rate}", GUILayout.ExpandWidth(false));
+    //    GUILayout.EndHorizontal();
+
+    //    if (Main.Speech is WindowsSpeech)
+    //    {
+    //        GUILayout.BeginHorizontal();
+    //        GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
+    //        GUILayout.Space(10);
+    //        volume = (int)GUILayout.HorizontalSlider(volume, 0, 100, GUILayout.Width(300f));
+    //        GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
+    //        GUILayout.EndHorizontal();
+
+    //        GUILayout.BeginHorizontal();
+    //        GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
+    //        pitch = (int)GUILayout.HorizontalSlider(pitch, -10, 10, GUILayout.Width(300f));
+    //        GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
+    //        GUILayout.EndHorizontal();
+    //    }
+
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
+    //    GUILayout.Space(10);
+    //    previewString = GUILayout.TextField(previewString, GUILayout.Width(700f));
+    //    if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
+    //        Main.Speech.SpeakPreview(previewString, type);
+    //    GUILayout.EndHorizontal();
+
+    //    GUILayout.EndVertical();
+    //}
 
     private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b)
     {

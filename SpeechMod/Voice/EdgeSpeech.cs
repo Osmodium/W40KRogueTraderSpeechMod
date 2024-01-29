@@ -11,7 +11,7 @@ public class EdgeSpeech : ISpeech
 
     public string[] GetAvailableVoices()
     {
-        return new[]{ "Edge" };
+        return EdgeVoiceUnity.GetAvailableVoices();
     }
 
     public bool IsSpeaking()
