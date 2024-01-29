@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\ModKit\ModKitSrc.projitems" Label="Shared" />
 	<Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
@@ -8,8 +9,13 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>SpeechMod</RootNamespace>
-    <RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
 	</PropertyGroup>
+	 <ItemGroup>
+		<None Include="LICENSE" Pack="true" Visible="false" PackagePath=""/>
+	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="0Harmony">
 			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\0Harmony.dll</HintPath>
@@ -77,6 +83,14 @@
 		</Reference>
 		<Reference Include="UnityModManager">
 			<HintPath>$(SolutionDir)lib\UnityModManager_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityEngine.InputLegacyModule">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="UnityEngine.TextRenderingModule">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 	</ItemGroup>

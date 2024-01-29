@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutionfiles", "Solutionfi
 		Todo.txt = Todo.txt
 	EndProjectSection
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ModKitSrc", "ModKit\ModKitSrc.shproj", "{7D3F9428-C134-47FE-9D04-305B4D330401}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,5 +35,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65A6B4C7-22CA-4183-A92B-FFCCD3369DA3}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ModKit\ModKitSrc.projitems*{7d3f9428-c134-47fe-9d04-305b4d330401}*SharedItemsImports = 13
+		ModKit\ModKitSrc.projitems*{de7d77d9-db2b-456b-b2e8-734963c7de0d}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
