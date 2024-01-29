@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -32,6 +33,11 @@ public class EdgeVoiceUnity : MonoBehaviour
     public static bool IsSpeaking()
     {
         return EdgeVoice.Instance?.IsSpeaking() ?? false;
+    }
+
+    public static string[] GetAvailableVoices()
+    {
+        return EdgeVoice.Instance?.GetAvailableVoices().Result;
     }
 }
 
@@ -71,17 +77,24 @@ public class EdgeVoice
     private EdgeVoice()
     { }
 
-    public async Task<List<Voice>> GetVoices()
+    public async Task<string[]> GetAvailableVoices()
     {
         var voicesClient = new HttpClient
         {
             BaseAddress = new Uri("https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/")
         };
-        var voicesListResponse = await voicesClient.GetAsync($"list?trustedclienttoken={token}");
-        if (voicesListResponse == null)
+
+        var voicesListResponse = await voicesClient.GetAsync($"list?trustedclienttoken={token}").ConfigureAwait(false);
+        if (voicesListResponse?.Content == null)
             return null;
-        var voicesListResponseString = await voicesListResponse.Content?.ReadAsStringAsync();
-        return voicesListResponseString == null ? null : JsonConvert.DeserializeObject<List<Voice>>(voicesListResponseString);
+
+        var voicesListResponseString = await voicesListResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+        if (voicesListResponseString == null)
+            return null;
+
+        Main.AvailableVoices = JsonConvert.DeserializeObject<List<Voice.Edge.Voice>>(voicesListResponseString)?.ToArray();
+
+        return Main.AvailableVoices.Select(x => x.ShortName).ToArray();
     }
 
     private async Task AddAudioAsync(byte[] audioData)
@@ -235,13 +248,15 @@ public class EdgeVoice
                 //success.Dump();
                 if (success)
                 {
-                    string ssml = $"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='Microsoft Server Speech Text to Speech Voice (en-AU, NatashaNeural)'><prosody pitch='{FormatValue(pitch)}Hz' rate='{FormatValue(rate)}%' volume='{FormatValue(volume)}%'>{text}</prosody></voice></speak>";
+                    var voice = Main.Settings.NarratorVoice;
+                    Main.Logger.Log(voice);
+                    string ssml = $"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='{voice}'><prosody pitch='{FormatValue(pitch)}Hz' rate='{FormatValue(rate)}%' volume='{FormatValue(volume)}%'>{text}</prosody></voice></speak>";
+                    Main.Logger.Log(ssml);
                     var s1 = $"X-RequestId:{connect_id}\r\n" +
                              "Content-Type:application/ssml+xml\r\n" +
                              $"X-Timestamp:{date}Z\r\n" +
                              "Path:ssml\r\n\r\n" +
                              $"{ssml}";
-                    //s1.Dump();
                     ws.Send(s1);
                 }
             });
@@ -300,22 +315,4 @@ public class RequestInfo
     public string ContentType { get; set; }
     public string Path { get; set; }
     public string Data { get; set; }
-}
-
-public class Voice
-{
-    public string Name { get; set; }
-    public string ShortName { get; set; }
-    public string Gender { get; set; }
-    public string Locale { get; set; }
-    public string SuggestedCodec { get; set; }
-    public string FriendlyName { get; set; }
-    public string Status { get; set; }
-    public VoiceTag VoiceTag { get; set; }
-}
-
-public class VoiceTag
-{
-    public List<string> ContentCategories { get; set; }
-    public List<string> VoicePersonalities { get; set; }
 }

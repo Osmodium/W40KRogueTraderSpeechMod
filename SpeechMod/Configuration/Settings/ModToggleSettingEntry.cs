@@ -12,8 +12,7 @@ public abstract class ModToggleSettingEntry : ModSettingEntry
     public readonly SettingsEntityBool SettingEntity;
     public UISettingsEntityBool UiSettingEntity { get; private set; }
 
-    public ModToggleSettingEntry(string key, string title, string tooltip, bool defaultValue)
-        : base(key, title, tooltip)
+    protected ModToggleSettingEntry(string key, string title, string tooltip, bool defaultValue) : base(key, title, tooltip)
     {
         SettingEntity = new(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", defaultValue, false, true);
     }

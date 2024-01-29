@@ -12,15 +12,15 @@ public class StringManipulationTests
         Main.Settings = new Settings
         {
             NarratorPitch = 0,
-            NarratorVoice = 0,
+            NarratorVoice = null,
             NarratorRate = 0,
             NarratorVolume = 100,
             FemalePitch = 0,
-            FemaleVoice = 1,
+            FemaleVoice = null,
             FemaleRate = 0,
             FemaleVolume = 100,
             MalePitch = 0,
-            MaleVoice = 2,
+            MaleVoice = null,
             MaleRate = 0,
             MaleVolume = 100,
             AvailableVoices = new[] { "Narrator", "Female", "Male" }

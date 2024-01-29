@@ -1,17 +1,18 @@
 ﻿using HarmonyLib;
+using SpeechMod.Configuration;
+using SpeechMod.Configuration.Settings;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using SpeechMod.Keybinds;
-using SpeechMod.Unity.Extensions;
+using ModKit;
+using SpeechMod.Configuration.SettingEntries;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using SpeechMod.Configuration.Settings;
-using SpeechMod.Configuration;
 
 namespace SpeechMod;
 
@@ -26,17 +27,23 @@ public static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
-    public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
-    public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
+    public static string NarratorVoice => Settings.NarratorVoice;
+    public static string FemaleVoice => Settings.FemaleVoice;
+    public static string MaleVoice => Settings.MaleVoice;
 
-    public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
-    {
-        var splitV = v?.Split('#');
-        return splitV?.Length != 2
-            ? new { Key = v, Value = "Unknown" }
-            : new { Key = splitV[0], Value = splitV[1] };
-    }).ToDictionary(p => p.Key, p => p.Value);
+    //public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
+    //public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
+    //public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
+
+    //public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
+    //{
+    //    var splitV = v?.Split('#');
+    //    return splitV?.Length != 2
+    //        ? new { Key = v, Value = "Unknown" }
+    //        : new { Key = splitV[0], Value = splitV[1] };
+    //}).ToDictionary(p => p.Key, p => p.Value);
+
+    public static Voice.Edge.Voice[] AvailableVoices;
 
     public static ISpeech Speech;
     private static bool m_Loaded = false;
@@ -101,33 +108,35 @@ public static class Main
         }
         Logger?.Log("Setting available voices list...");
 
-        for (int i = 0; i < availableVoices.Length; i++)
-        {
-            string[] splitVoice = availableVoices[i]?.Split('#');
-            if (splitVoice?.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
-                availableVoices[i] = availableVoices[i]?.Replace("#", "").Trim() + "#Unknown";
-        }
+
+
+        //for (int i = 0; i < availableVoices.Length; i++)
+        //{
+        //    string[] splitVoice = availableVoices[i]?.Split('#');
+        //    if (splitVoice?.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
+        //        availableVoices[i] = availableVoices[i]?.Replace("#", "").Trim() + "#Unknown";
+        //}
 
         // Ensure that the selected voice index falls within the available voices range
-        if (Settings?.NarratorVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.NarratorVoice)} was out of range, resetting to first voice available.");
-            Settings.NarratorVoice = 0;
-        }
+        //if (Settings?.NarratorVoice >= availableVoices.Length)
+        //{
+        //    Logger?.Log($"{nameof(Settings.NarratorVoice)} was out of range, resetting to first voice available.");
+        //    Settings.NarratorVoice = 0;
+        //}
 
-        if (Settings?.FemaleVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.FemaleVoice)} was out of range, resetting to first voice available.");
-            Settings.FemaleVoice = 0;
-        }
+        //if (Settings?.FemaleVoice >= availableVoices.Length)
+        //{
+        //    Logger?.Log($"{nameof(Settings.FemaleVoice)} was out of range, resetting to first voice available.");
+        //    Settings.FemaleVoice = 0;
+        //}
 
-        if (Settings?.MaleVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.MaleVoice)} was out of range, resetting to first voice available.");
-            Settings.MaleVoice = 0;
-        }
+        //if (Settings?.MaleVoice >= availableVoices.Length)
+        //{
+        //    Logger?.Log($"{nameof(Settings.MaleVoice)} was out of range, resetting to first voice available.");
+        //    Settings.MaleVoice = 0;
+        //}
 
-        Settings!.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
+        //Settings!.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
 
         return true;
     }

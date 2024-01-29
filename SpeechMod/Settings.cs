@@ -6,27 +6,27 @@ public class Settings : UnityModManager.ModSettings
 {
     public bool LogVoicedLines = false;
 
+    public string[] AvailableVoices;
+
+    public string NarratorVoice;
     public int NarratorRate = 0;
-    public int NarratorVolume = 100;
+    public int NarratorVolume = 0;
     public int NarratorPitch = 0;
 
+    public string FemaleVoice;
     public int FemaleRate = 0;
-    public int FemaleVolume = 100;
+    public int FemaleVolume = 0;
     public int FemalePitch = 0;
 
+    public string MaleVoice;
     public int MaleRate = 0;
-    public int MaleVolume = 100;
+    public int MaleVolume = 0;
     public int MalePitch = 0;
+
+    public bool UseGenderSpecificVoices = false;
 
     public bool AutoPlay = false;
     public bool AutoPlayIgnoreVoice = false;
-
-    public string[] AvailableVoices;
-    public int NarratorVoice = 0;
-
-    public bool UseGenderSpecificVoices = false;
-    public int FemaleVoice = 0;
-    public int MaleVoice = 0;
 
     public bool ColorOnHover = false;
     public float HoverColorR = 0f;
