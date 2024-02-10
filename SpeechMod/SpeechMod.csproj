@@ -9,6 +9,7 @@
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>SpeechMod</RootNamespace>
     <RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
+    <UserSecretsId>e4c4f946-fd54-448c-8da8-4b6e7762fd6f</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="0Harmony">

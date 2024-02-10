@@ -6,7 +6,7 @@ public class Settings : UnityModManager.ModSettings
 {
     public bool LogVoicedLines = false;
 
-    public string[] AvailableVoices;
+    public bool UseEdgeVoice = false;
 
     public string NarratorVoice;
     public int NarratorRate = 0;

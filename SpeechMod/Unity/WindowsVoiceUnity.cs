@@ -70,10 +70,8 @@ public class WindowsVoiceUnity : MonoBehaviour
         string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < voices.Length; ++i)
         {
-            if (!voices[i].Contains('-'))
-                voices[i] = $"{voices[i]}#Unknown";
-            else
-                voices[i] = voices[i].Replace(" - ", "#");
+            if (voices[i].Contains('-'))
+                voices[i] = voices[i].Substring(0, voices[i].IndexOf('-'));
         }
         return voices;
     }

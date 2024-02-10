@@ -23,7 +23,7 @@ public class StringManipulationTests
             MaleVoice = null,
             MaleRate = 0,
             MaleVolume = 100,
-            AvailableVoices = new[] { "Narrator", "Female", "Male" }
+            //AvailableVoices = new[] { "Narrator", "Female", "Male" }
         };
     }
 

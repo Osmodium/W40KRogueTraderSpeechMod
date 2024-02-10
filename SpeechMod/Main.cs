@@ -8,11 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ModKit;
 using SpeechMod.Configuration.SettingEntries;
+using SpeechMod.Voice.Edge;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
+using SpeechMod.Unity.GUIs;
 
 namespace SpeechMod;
 
@@ -27,23 +28,17 @@ public static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string NarratorVoice => Settings.NarratorVoice;
-    public static string FemaleVoice => Settings.FemaleVoice;
-    public static string MaleVoice => Settings.MaleVoice;
+    public static string NarratorVoice => Settings?.NarratorVoice;
+    public static string FemaleVoice => Settings?.FemaleVoice;
+    public static string MaleVoice => Settings?.MaleVoice;
 
-    //public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
-    //public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
-    //public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
+    public static string[] AvailableVoices;
 
-    //public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
-    //{
-    //    var splitV = v?.Split('#');
-    //    return splitV?.Length != 2
-    //        ? new { Key = v, Value = "Unknown" }
-    //        : new { Key = splitV[0], Value = splitV[1] };
-    //}).ToDictionary(p => p.Key, p => p.Value);
-
-    public static Voice.Edge.Voice[] AvailableVoices;
+    public static EdgeVoiceInfo[] EdgeAvailableVoices;
+    public static Dictionary<string, EdgeVoiceInfo[]> EdgeVoicesDict => EdgeAvailableVoices?
+        .Select(lang => lang?.Locale?.Substring(0, 2))
+        .Distinct()
+        .ToDictionary(locale => locale?.Substring(0, 2), locale => EdgeAvailableVoices.Where(voice => voice.Locale.StartsWith(locale!.Substring(0, 2))).ToArray());
 
     public static ISpeech Speech;
     private static bool m_Loaded = false;
@@ -54,11 +49,11 @@ public static class Main
 
         Logger = modEntry?.Logger;
 
-        if (!SetSpeech())
-            return false;
-
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
         Hooks.UpdateHoverColor();
+
+        if (!SetSpeech())
+            return false;
 
         modEntry!.OnToggle = OnToggle;
         modEntry!.OnGUI = OnGui;
@@ -68,22 +63,17 @@ public static class Main
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         ModConfigurationManager.Build(harmony, modEntry, Constants.SETTINGS_PREFIX);
-        SetUpSettings();
+        SetUpIngameSettings();
         harmony.CreateClassProcessor(typeof(SettingsUIPatches)).Patch();
 
         Logger?.Log(Speech?.GetStatusMessage());
-
-        if (!SetAvailableVoices())
-            return false;
-
-        SpeechExtensions.LoadDictionary();
 
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initialized!");
         m_Loaded = true;
         return true;
     }
 
-    private static void SetUpSettings()
+    private static void SetUpIngameSettings()
     {
         if (ModConfigurationManager.Instance.GroupedSettings.TryGetValue("main", out _))
             return;
@@ -93,50 +83,34 @@ public static class Main
 
     private static bool SetAvailableVoices()
     {
-        var availableVoices = Speech?.GetAvailableVoices();
+        Speech?.SetAvailableVoices();
 
-        if (availableVoices == null || availableVoices.Length == 0)
+        switch (Speech)
         {
-            Logger?.Warning("No available voices found! Disabling mod!");
-            return false;
+            case EdgeSpeech when (EdgeAvailableVoices == null || EdgeAvailableVoices.Length == 0):
+                Logger?.Warning("No available voices found! Disabling mod!");
+                return false;
+            case WindowsSpeech or AppleSpeech when (AvailableVoices == null || AvailableVoices.Length == 0):
+                Logger?.Warning("No available voices found! Disabling mod!");
+                return false;
         }
 
         Logger?.Log("Available voices:");
-        foreach (var voice in availableVoices)
+        switch (Speech)
         {
-            Logger?.Log(voice);
+            case EdgeSpeech:
+                foreach (var voice in EdgeAvailableVoices!)
+                {
+                    Logger?.Log(voice.ShortName);
+                }
+                break;
+            case WindowsSpeech or AppleSpeech:
+                foreach (var voice in AvailableVoices!)
+                {
+                    Logger?.Log(voice);
+                }
+                break;
         }
-        Logger?.Log("Setting available voices list...");
-
-
-
-        //for (int i = 0; i < availableVoices.Length; i++)
-        //{
-        //    string[] splitVoice = availableVoices[i]?.Split('#');
-        //    if (splitVoice?.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
-        //        availableVoices[i] = availableVoices[i]?.Replace("#", "").Trim() + "#Unknown";
-        //}
-
-        // Ensure that the selected voice index falls within the available voices range
-        //if (Settings?.NarratorVoice >= availableVoices.Length)
-        //{
-        //    Logger?.Log($"{nameof(Settings.NarratorVoice)} was out of range, resetting to first voice available.");
-        //    Settings.NarratorVoice = 0;
-        //}
-
-        //if (Settings?.FemaleVoice >= availableVoices.Length)
-        //{
-        //    Logger?.Log($"{nameof(Settings.FemaleVoice)} was out of range, resetting to first voice available.");
-        //    Settings.FemaleVoice = 0;
-        //}
-
-        //if (Settings?.MaleVoice >= availableVoices.Length)
-        //{
-        //    Logger?.Log($"{nameof(Settings.MaleVoice)} was out of range, resetting to first voice available.");
-        //    Settings.MaleVoice = 0;
-        //}
-
-        //Settings!.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
 
         return true;
     }
@@ -149,18 +123,25 @@ public static class Main
                 Speech = new AppleSpeech();
                 SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
-            //case RuntimePlatform.WindowsPlayer:
-            //    Speech = new WindowsSpeech();
-            //    SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
-            //    break;
             case RuntimePlatform.WindowsPlayer:
-                Speech = new EdgeSpeech();
-                SpeechExtensions.AddUiElements<EdgeVoiceUnity>(Constants.EDGE_VOICE_NAME);
+                if (Settings.UseEdgeVoice)
+                    Speech = new EdgeSpeech();
+                else
+                {
+                    Speech = new WindowsSpeech();
+                    SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
+                    SpeechExtensions.LoadDictionary();
+                }
                 break;
             default:
                 Logger?.Critical($"Warhammer 40K: Rogue Trader SpeechMod is not supported on {Application.platform}!");
                 return false;
         }
+
+        if (!SetAvailableVoices())
+            return false;
+
+        MenuGUI.SetupVoicePickers();
 
         return true;
     }
