@@ -33,36 +33,44 @@ public class VoicePicker : VoicePickerBase
             GUILayout.BeginHorizontal();
             GUILayout.Label("<color=cyan><b>Voice</b></color>", GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
-            VoiceIndex = GUILayout.SelectionGrid(VoiceIndex, Main.AvailableVoices, 6);
+            VoiceIndex = GUILayout.SelectionGrid(VoiceIndex, Main.AvailableVoices, 5);
 
             voiceShortName = Main.AvailableVoices?.ElementAt(VoiceIndex);
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(voiceShortName, GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
         }
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("<color=cyan>Speech rate %</color>", GUILayout.ExpandWidth(false));
+        GUILayout.Label(voiceShortName, GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("<color=cyan>Speech rate</color>", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        rate = (int)GUILayout.HorizontalSlider(rate, -100, 100, GUILayout.Width(300f));
+        rate = Main.Speech switch
+        {
+            WindowsSpeech => (int)GUILayout.HorizontalSlider(rate, -10, 10, GUILayout.Width(300f)),
+            AppleSpeech => (int)GUILayout.HorizontalSlider(rate, 150, 300, GUILayout.Width(300f)),
+            _ => rate
+        };
         GUILayout.Label($" {rate}", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("<color=cyan>Speech pitch %</color>", GUILayout.ExpandWidth(false));
-        pitch = (int)GUILayout.HorizontalSlider(pitch, -100, 100, GUILayout.Width(300f));
-        GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+        if (Main.Speech is WindowsSpeech)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("<color=cyan>Speech pitch</color>", GUILayout.ExpandWidth(false));
+            pitch = (int)GUILayout.HorizontalSlider(pitch, -10, 10, GUILayout.Width(300f));
+            GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("<color=cyan>Speech volume dB</color>", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        volume = (int)GUILayout.HorizontalSlider(volume, -50, 50, GUILayout.Width(300f));
-        GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("<color=cyan>Speech volume</color>", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            volume = (int)GUILayout.HorizontalSlider(volume, 0, 100, GUILayout.Width(300f));
+            GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+        }
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("<color=green>Preivew voice</color>", GUILayout.ExpandWidth(false));

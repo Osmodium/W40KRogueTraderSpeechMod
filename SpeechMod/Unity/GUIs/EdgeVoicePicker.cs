@@ -49,14 +49,14 @@ public class EdgeVoicePicker : VoicePickerBase
                 _voiceIndex = GUILayout.SelectionGrid(_voiceIndex, localeVoices.Select(v => v.ShortName).ToArray(), 7);
 
                 voiceShortName = localeVoices.ElementAt(_voiceIndex).ShortName;
-
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(voiceShortName, GUILayout.ExpandWidth(false));
-                GUILayout.EndHorizontal();
             }
 
             GUILayout.EndVertical();
         }
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(voiceShortName, GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("<color=cyan>Speech rate %</color>", GUILayout.ExpandWidth(false));

@@ -48,7 +48,7 @@ public static class MenuGUI
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Log speech", GUILayout.ExpandWidth(false));
-        Main.Settings.LogVoicedLines = GUILayout.Toggle(Main.Settings.LogVoicedLines, "Enabled");
+        Main.Settings.LogVoicedLines = GUILayout.Toggle(Main.Settings.LogVoicedLines, "Enabled", GUI.skin.button);
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
@@ -56,14 +56,13 @@ public static class MenuGUI
         GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("<color=yellow><b>EXPERIMENTAL!</b></color> - <color=red><i>When changing this setting you need to restart the game for it to take effect!</i></color>", GUI.skin.box);
+        GUILayout.Label("<color=yellow><b>EXPERIMENTAL!</b></color> - <color=red><i>When changing this setting you need to restart the game for it to take effect!</i></color>");
+        GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("<color=yellow>Use Edge (Bing) Natural Voices</color>", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         Main.Settings.UseEdgeVoice = GUILayout.Toggle(Main.Settings.UseEdgeVoice, Main.Settings.UseEdgeVoice ? "<color=red><b>These voices requires internet access and might slow the playback down!</b></color>" : "");
-        GUILayout.EndHorizontal();
-
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

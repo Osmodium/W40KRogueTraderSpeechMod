@@ -71,7 +71,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         for (int i = 0; i < voices.Length; ++i)
         {
             if (voices[i].Contains('-'))
-                voices[i] = voices[i].Substring(0, voices[i].IndexOf('-'));
+                voices[i] = voices[i].Substring(0, voices[i].IndexOf('-')).Trim();
         }
         return voices;
     }
