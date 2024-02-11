@@ -125,7 +125,10 @@ public static class Main
                 break;
             case RuntimePlatform.WindowsPlayer:
                 if (Settings.UseEdgeVoice)
+                {
                     Speech = new EdgeSpeech();
+                    SpeechExtensions.AddUiElements<EdgeVoiceUnity>(Constants.EDGE_VOICE_NAME);
+                }
                 else
                 {
                     Speech = new WindowsSpeech();

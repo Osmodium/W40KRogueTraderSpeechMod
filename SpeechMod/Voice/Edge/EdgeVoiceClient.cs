@@ -96,6 +96,12 @@ public class EdgeVoiceClient : IDisposable
             if (e.IsText)
             {
                 var info = EdgeVoiceRequestInfo.ParseInput(e.Data);
+
+                if (info?.Path == null)
+                    return;
+
+                Debug.Log($"webSocket.OnMessage [Text]: {info.Path}");
+
                 if (info.Path.Equals("turn.start", StringComparison.InvariantCultureIgnoreCase) && _currentState == EdgeVoiceClientState.Ready)
                 {
                     _currentState = EdgeVoiceClientState.Loading;

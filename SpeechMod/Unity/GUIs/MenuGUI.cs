@@ -62,7 +62,19 @@ public static class MenuGUI
         GUILayout.BeginHorizontal();
         GUILayout.Label("<color=yellow>Use Edge (Bing) Natural Voices</color>", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        Main.Settings.UseEdgeVoice = GUILayout.Toggle(Main.Settings.UseEdgeVoice, Main.Settings.UseEdgeVoice ? "<color=red><b>These voices requires internet access and might slow the playback down!</b></color>" : "");
+        var useEdgeVoice = GUILayout.Toggle(Main.Settings.UseEdgeVoice, Main.Settings.UseEdgeVoice ? "<color=red><b>These voices requires internet access and might slow the playback down!</b></color>" : "");
+        if (Main.Settings.UseEdgeVoice != useEdgeVoice)
+        {
+            Main.Settings.UseEdgeVoice = useEdgeVoice;
+            if (useEdgeVoice)
+            {
+                Main.Settings.NarratorVolume = Main.Settings.FemaleVolume = Main.Settings.MaleVolume = 0;
+            }
+            else
+            {
+                Main.Settings.NarratorVolume = Main.Settings.FemaleVolume = Main.Settings.MaleVolume = 100;
+            }
+        }
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

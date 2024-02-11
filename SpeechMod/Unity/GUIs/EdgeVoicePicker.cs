@@ -12,7 +12,7 @@ public class EdgeVoicePicker : VoicePickerBase
 
     public EdgeVoicePicker(string label, string voiceShortName, string previewString, VoiceType voiceType) : base(label, previewString, voiceType)
     {
-        var voice = Main.EdgeAvailableVoices.FirstOrDefault(v => v.ShortName.Equals(voiceShortName));
+        var voice = Main.EdgeAvailableVoices.FirstOrDefault(v => v.ShortName.Equals(voiceShortName)) ?? Main.EdgeAvailableVoices.FirstOrDefault();
         _localeIndex = Main.EdgeVoicesDict.Keys.IndexOf(voice.Locale.Substring(0, 2));
         _voiceIndex = Main.EdgeVoicesDict.ElementAt(_localeIndex).Value.IndexOf(voice);
     }
