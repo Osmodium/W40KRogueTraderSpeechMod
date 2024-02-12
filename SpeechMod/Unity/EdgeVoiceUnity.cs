@@ -41,22 +41,17 @@ public class EdgeVoiceUnity : MonoBehaviour
 
     public static bool IsSpeaking()
     {
-        if (s_Instance?._voiceTasks == null)
+        if (s_Instance?._voiceTasks == null || s_Instance._voiceTasks.Count == 0)
             return false;
 
         if (s_Instance._playIndex < 0 || s_Instance._playIndex >= s_Instance._voiceTasks.Count)
-        {
-            s_Instance._playIndex = 0;
             return false;
-        }
+
+        if (s_Instance._playIndex + 1 < s_Instance._voiceTasks.Count)
+            return true;
 
         var edgeVoiceClient = s_Instance._voiceTasks[s_Instance._playIndex]?.Result;
-        return edgeVoiceClient != null &&
-               s_Instance._voiceTasks.Count > 0 &&
-               s_Instance._playIndex < s_Instance._voiceTasks.Count - 1 &&
-               s_Instance._voiceTasks[s_Instance._playIndex] != null &&
-               s_Instance._voiceTasks[s_Instance._playIndex].Status == TaskStatus.RanToCompletion &&
-               edgeVoiceClient.IsSpeaking;
+        return edgeVoiceClient is { IsSpeaking: true };
     }
 
     public static string GetStatusMessage()

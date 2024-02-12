@@ -62,19 +62,19 @@ public class EdgeVoiceClient : IDisposable
 
     public void Stop()
     {
-        if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
-            return;
+        //if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
+        //    return;
 
-        _outputDevice.Stop();
+        _outputDevice?.Stop();
         _currentState = EdgeVoiceClientState.Stopped;
     }
 
     public void Pause()
     {
-        if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
-            return;
+        //if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
+        //    return;
 
-        _outputDevice.Pause();
+        _outputDevice?.Pause();
         _currentState = EdgeVoiceClientState.Paused;
     }
 
