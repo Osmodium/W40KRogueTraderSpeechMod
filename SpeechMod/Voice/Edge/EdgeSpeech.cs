@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Kingmaker.Blueprints.Base;
 using UnityEngine;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Voices;
 
 namespace SpeechMod.Voice.Edge;
 
@@ -70,9 +70,12 @@ public class EdgeSpeech : ISpeech
         if (string.IsNullOrWhiteSpace(text))
             return null;
 
-        if (Game.Instance.DialogController.CurrentSpeaker.Gender == Gender.Female)
-            return new EdgeVoiceDto(text, Main.Settings.FemaleVoice, Main.Settings.FemalePitch, Main.Settings.FemaleRate, Main.Settings.FemaleVolume);
-        return new EdgeVoiceDto(text, Main.Settings.MaleVoice, Main.Settings.MalePitch, Main.Settings.MaleRate, Main.Settings.MaleVolume);
+        return Game.Instance?.DialogController?.CurrentSpeaker?.Gender switch
+        {
+            Gender.Female => new EdgeVoiceDto(text, Main.Settings.FemaleVoice, Main.Settings.FemalePitch, Main.Settings.FemaleRate, Main.Settings.FemaleVolume),
+            Gender.Male => new EdgeVoiceDto(text, Main.Settings.MaleVoice, Main.Settings.MalePitch, Main.Settings.MaleRate, Main.Settings.MaleVolume),
+            _ => new EdgeVoiceDto(text, Main.Settings.NarratorVoice, Main.Settings.NarratorPitch, Main.Settings.NarratorRate, Main.Settings.NarratorVolume)
+        };
     }
 
     public string GetStatusMessage()

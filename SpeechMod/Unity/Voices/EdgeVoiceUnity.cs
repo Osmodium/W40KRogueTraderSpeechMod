@@ -9,14 +9,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SpeechMod.Unity;
+namespace SpeechMod.Unity.Voices;
 
 public class EdgeVoiceUnity : MonoBehaviour
 {
     private const string TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
-    private int _playIndex;
-    private List<Task<EdgeVoiceClient>> _voiceTasks = new();
     private static EdgeVoiceUnity s_Instance;
+    public int PlayIndex;
+    public List<Task<EdgeVoiceClient>> VoiceTasks = new();
+    public CancellationToken CancellationToken;
 
     private EdgeVoiceUnity()
     {
@@ -41,47 +42,44 @@ public class EdgeVoiceUnity : MonoBehaviour
 
     public static bool IsSpeaking()
     {
-        if (s_Instance?._voiceTasks == null || s_Instance._voiceTasks.Count == 0)
+        if (s_Instance?.VoiceTasks == null || s_Instance.VoiceTasks.Count == 0)
             return false;
 
-        if (s_Instance._playIndex < 0 || s_Instance._playIndex >= s_Instance._voiceTasks.Count)
+        if (s_Instance.PlayIndex < 0 || s_Instance.PlayIndex >= s_Instance.VoiceTasks.Count)
             return false;
 
-        if (s_Instance._playIndex + 1 < s_Instance._voiceTasks.Count)
+        if (s_Instance.PlayIndex + 1 < s_Instance.VoiceTasks.Count)
             return true;
 
-        var edgeVoiceClient = s_Instance._voiceTasks[s_Instance._playIndex]?.Result;
+        var edgeVoiceClient = s_Instance.VoiceTasks[s_Instance.PlayIndex]?.Result;
         return edgeVoiceClient is { IsSpeaking: true };
     }
 
     public static string GetStatusMessage()
     {
-        if (s_Instance?._voiceTasks == null)
-            return "Idle";
+        if (s_Instance?.VoiceTasks == null)
+            return EdgeVoiceClient.EdgeVoiceClientState.Ready.ToString();
 
-        if (s_Instance._playIndex < 0 || s_Instance._playIndex >= s_Instance._voiceTasks.Count)
-        {
-            s_Instance._playIndex = 0;
-            return "Idle";
-        }
+        if (s_Instance.PlayIndex < 0 || s_Instance.PlayIndex >= s_Instance.VoiceTasks.Count)
+            return EdgeVoiceClient.EdgeVoiceClientState.Ready.ToString();
 
-        var edgeVoiceClient = s_Instance._voiceTasks[s_Instance._playIndex]?.Result;
+        var edgeVoiceClient = s_Instance.VoiceTasks[s_Instance.PlayIndex]?.Result;
         if (edgeVoiceClient != null)
             return edgeVoiceClient.CurrentState.ToString();
 
-        return "Error";
+        return EdgeVoiceClient.EdgeVoiceClientState.Error.ToString();
     }
 
     public static void Speak(EdgeVoiceDto edgeVoiceDTO)
     {
-        var cancellationToken = new CancellationToken();
-        SpeakInternal(edgeVoiceDTO, cancellationToken);
+        s_Instance.CancellationToken = new CancellationToken();
+        SpeakInternal(edgeVoiceDTO);
     }
 
     public static void SpeakMulti(EdgeVoiceDto[] edgeVoiceDTOs)
     {
-        var cancellationToken = new CancellationToken();
-        SpeakMultiInternal(edgeVoiceDTOs, cancellationToken);
+        s_Instance.CancellationToken = new CancellationToken();
+        SpeakMultiInternal(edgeVoiceDTOs);
     }
 
     public static void Stop()
@@ -89,9 +87,11 @@ public class EdgeVoiceUnity : MonoBehaviour
         if (!IsSpeaking())
             return;
 
-        var edgeVoiceClient = s_Instance?._voiceTasks?[s_Instance._playIndex]?.Result;
+        s_Instance?.StopCoroutine(PlayMultipleCoroutine());
+
+        var edgeVoiceClient = s_Instance?.VoiceTasks?[s_Instance.PlayIndex]?.Result;
         edgeVoiceClient?.Stop();
-        s_Instance._playIndex = 0;
+        s_Instance.PlayIndex = 0;
     }
 
     void OnDestroy()
@@ -124,39 +124,40 @@ public class EdgeVoiceUnity : MonoBehaviour
         return Main.EdgeAvailableVoices?.Select(x => x.ShortName).ToArray();
     }
 
-    private static async Task SpeakInternal(EdgeVoiceDto edgeVoiceDTO, CancellationToken cancellationToken)
+    private static async Task SpeakInternal(EdgeVoiceDto edgeVoiceDTO)
     {
-        Debug.Log($"SpeakInternal: '{edgeVoiceDTO.Voice}' - R: {edgeVoiceDTO.Rate}, P: {edgeVoiceDTO.Pitch}, V: {edgeVoiceDTO.Volume} ");
+#if DEBUG
+        Debug.Log($"SpeakInternal: {edgeVoiceDTO.Text}");
+#endif
 
         Stop();
         Reset();
 
-        s_Instance._voiceTasks.Add(new Task<EdgeVoiceClient>(() =>
+        s_Instance.VoiceTasks.Add(new Task<EdgeVoiceClient>(() =>
         {
             var edgeVoice = new EdgeVoiceClient();
             edgeVoice.Load(edgeVoiceDTO, TOKEN);
             return edgeVoice;
         }));
 
-        var single = s_Instance._voiceTasks.First();
+        var single = s_Instance.VoiceTasks.First();
+
+        //s_Instance.StartCoroutine(SpeakingCoroutine());
 
         single.Start();
         await single;
 
-        if (cancellationToken.IsCancellationRequested)
+        if (s_Instance.CancellationToken.IsCancellationRequested)
             return;
 
-        Debug.Log("Play");
         single.Result?.Play();
     }
 
-    private static async Task SpeakMultiInternal(EdgeVoiceDto[] edgeVoiceDTOs, CancellationToken cancellationToken)
+    private static async Task SpeakMultiInternal(EdgeVoiceDto[] edgeVoiceDTOs)
     {
-        foreach (var edgeVoiceDto in edgeVoiceDTOs)
-        {
-            Debug.Log($"Speak: '{edgeVoiceDto.Text}'  '{edgeVoiceDto.Voice}'");
-        }
-
+#if DEBUG
+        Debug.Log($"SpeakMultiInternal: {edgeVoiceDTOs.Length}");
+#endif
         Stop();
         Reset();
 
@@ -165,7 +166,7 @@ public class EdgeVoiceUnity : MonoBehaviour
             if (string.IsNullOrWhiteSpace(edgeVoiceDTO.Text))
                 continue;
 
-            s_Instance._voiceTasks?.Add(new Task<EdgeVoiceClient>(() =>
+            s_Instance.VoiceTasks?.Add(new Task<EdgeVoiceClient>(() =>
             {
                 var edgeVoice = new EdgeVoiceClient();
                 edgeVoice.Load(edgeVoiceDTO, TOKEN);
@@ -173,52 +174,59 @@ public class EdgeVoiceUnity : MonoBehaviour
             }));
         }
 
-        foreach (var task in s_Instance._voiceTasks)
+        //s_Instance.StartCoroutine(SpeakingCoroutine());
+
+        foreach (var task in s_Instance.VoiceTasks)
         {
             task.Start();
         }
 
-        await s_Instance._voiceTasks.First();
+        await s_Instance.VoiceTasks.First();
 
-        if (cancellationToken.IsCancellationRequested)
+        if (s_Instance.CancellationToken.IsCancellationRequested)
             return;
 
-        var voiceClient = s_Instance._voiceTasks[s_Instance._playIndex]?.Result;
+        var voiceClient = s_Instance.VoiceTasks[s_Instance.PlayIndex]?.Result;
         if (voiceClient != null)
         {
-            Debug.Log("Play first");
             voiceClient.Play();
 
-            Debug.Log("Starting Coroutine");
-            s_Instance.StartCoroutine(PlayMultipleCoroutine(cancellationToken));
+            s_Instance.StartCoroutine(PlayMultipleCoroutine());
         }
     }
 
-    private static IEnumerator PlayMultipleCoroutine(CancellationToken cancellationToken)
+    private static IEnumerator PlayMultipleCoroutine()
     {
-        Debug.Log("Play Multiple Coroutine");
-        while (s_Instance._playIndex < s_Instance._voiceTasks.Count)
+        while (s_Instance.PlayIndex < s_Instance.VoiceTasks.Count)
         {
-            if (cancellationToken.IsCancellationRequested)
+            if (s_Instance.CancellationToken.IsCancellationRequested)
                 break;
 
-            var edgeVoiceClient = s_Instance._voiceTasks[s_Instance._playIndex].Result;
+            var edgeVoiceClient = s_Instance.VoiceTasks[s_Instance.PlayIndex].Result;
             if (edgeVoiceClient is { IsSpeaking: true })
                 yield return new WaitForSeconds(0.1f);
             else
             {
-                if (++s_Instance._playIndex >= s_Instance._voiceTasks.Count)
+                if (++s_Instance.PlayIndex >= s_Instance.VoiceTasks.Count)
                     break;
-                Debug.Log("Play next");
-                s_Instance._voiceTasks[s_Instance._playIndex]?.Result?.Play();
+
+                s_Instance.VoiceTasks[s_Instance.PlayIndex]?.Result?.Play();
             }
+        }
+    }
+
+    private static IEnumerator SpeakingCoroutine()
+    {
+        while (IsSpeaking())
+        {
+            yield return new WaitForEndOfFrame();
         }
     }
 
     private static void Reset()
     {
-        s_Instance?.StopAllCoroutines();
-        s_Instance._playIndex = 0;
-        s_Instance._voiceTasks = new List<Task<EdgeVoiceClient>>();
+        s_Instance?.StopCoroutine(PlayMultipleCoroutine());
+        s_Instance.PlayIndex = 0;
+        s_Instance.VoiceTasks = new List<Task<EdgeVoiceClient>>();
     }
 }

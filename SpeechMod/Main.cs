@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using SpeechMod.Configuration;
 using SpeechMod.Configuration.Settings;
-using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System;
@@ -14,6 +13,7 @@ using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
 using SpeechMod.Unity.GUIs;
+using SpeechMod.Unity.Voices;
 
 namespace SpeechMod;
 

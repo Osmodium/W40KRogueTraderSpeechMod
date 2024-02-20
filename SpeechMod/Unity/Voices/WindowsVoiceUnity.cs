@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
-namespace SpeechMod.Unity;
+namespace SpeechMod.Unity.Voices;
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
@@ -104,7 +104,7 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static float GetNormalizedProgress()
     {
-        return 1-(float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
+        return 1 - (float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
     }
 
     public static void Stop()

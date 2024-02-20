@@ -1,4 +1,4 @@
-﻿using SpeechMod.Unity;
+﻿using SpeechMod.Unity.Voices;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;

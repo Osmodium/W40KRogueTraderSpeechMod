@@ -42,6 +42,9 @@ public class EdgeVoiceClient : IDisposable
     {
         get
         {
+#if DEBUG
+            Debug.Log($"IsSpeaking: {_outputDevice?.PlaybackState == PlaybackState.Playing}");
+#endif
             if (_outputDevice != null)
                 return _outputDevice.PlaybackState == PlaybackState.Playing;
             return false;
@@ -50,6 +53,9 @@ public class EdgeVoiceClient : IDisposable
 
     public void Play()
     {
+#if DEBUG
+        Debug.Log("Play!");
+#endif
         if (_outputDevice == null)
         {
             _audio = new StreamMediaFoundationReader(_voiceStream);
@@ -64,22 +70,31 @@ public class EdgeVoiceClient : IDisposable
     {
         //if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
         //    return;
-
+#if DEBUG
+        Debug.Log("Stop!");
+#endif
         _outputDevice?.Stop();
         _currentState = EdgeVoiceClientState.Stopped;
     }
 
-    public void Pause()
-    {
-        //if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
-        //    return;
+    //public void Pause()
+    //{
+    //    //if (_outputDevice is not { PlaybackState: PlaybackState.Playing })
+    //    //    return;
 
-        _outputDevice?.Pause();
-        _currentState = EdgeVoiceClientState.Paused;
-    }
+    //    _outputDevice?.Pause();
+    //    _currentState = EdgeVoiceClientState.Paused;
+    //}
 
     public void Load(EdgeVoiceDto edgeVoiceDTO, string token)
     {
+#if DEBUG
+        Debug.Log($"Load: {edgeVoiceDTO.Text}");
+#endif
+
+        if (_currentState != EdgeVoiceClientState.Ready)
+            return;
+
         var connectId = Guid.NewGuid().ToString().Replace("-", "");
         var dateTime = DateTime.UtcNow.ToString("ddd MMM dd yyyy HH:mm:ss 'GMT+0000 (Coordinated Universal Time)'");
 
@@ -100,7 +115,7 @@ public class EdgeVoiceClient : IDisposable
                 if (info?.Path == null)
                     return;
 
-                Debug.Log($"webSocket.OnMessage [Text]: {info.Path}");
+                //Debug.Log($"webSocket.OnMessage [Text]: {info.Path}");
 
                 if (info.Path.Equals("turn.start", StringComparison.InvariantCultureIgnoreCase) && _currentState == EdgeVoiceClientState.Ready)
                 {
@@ -140,20 +155,17 @@ public class EdgeVoiceClient : IDisposable
                 }
             }
 
-            if (e.IsPing)
-            {
-                Debug.Log("Ping received!");
-                return;
-            }
+            //if (e.IsPing)
+            //{
+            //    //Debug.Log("Ping received!");
+            //    return;
+            //}
         };
 
         webSocket.ConnectAsync();
 
         webSocket.OnOpen += (sender, e) =>
         {
-            //sender.Dump();
-            //e.Dump();
-
             var setupRequestString = $"X-Timestamp:{dateTime}\r\n" +
                                      "Content-Type:application/json; charset=utf-8\r\n" +
                                      "Path:speech.config\r\n\r\n" +
@@ -162,11 +174,8 @@ public class EdgeVoiceClient : IDisposable
                                      "\"outputFormat\":\"audio-24khz-48kbitrate-mono-mp3\"" +
                                      "}}}}\r\n";
 
-            //setupRequestString.Dump();
-
             webSocket.SendAsync(setupRequestString, success =>
             {
-                //success.Dump();
                 if (!success)
                     return;
 
@@ -177,7 +186,6 @@ public class EdgeVoiceClient : IDisposable
                          "Path:ssml\r\n\r\n" +
                          $"{ssml}";
 
-                //s1.Dump();
                 webSocket!.Send(s1);
                 //$"STA {connect_id}".Dump();
             });
@@ -186,6 +194,9 @@ public class EdgeVoiceClient : IDisposable
         while (_currentState != EdgeVoiceClientState.Done)
         {
         }
+#if DEBUG
+        Debug.Log("Done!");
+#endif
         webSocket.Close();
     }
 

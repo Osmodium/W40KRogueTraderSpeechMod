@@ -1,10 +1,14 @@
 ﻿using HarmonyLib;
 using Kingmaker;
+using Kingmaker.Blueprints.Root;
 using Kingmaker.Code.UI.MVVM.View.Common.PC;
 using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
+using Kingmaker.UI.Pointer;
 using SpeechMod.Configuration.Settings;
+#if DEBUG
 using UnityEngine;
+#endif
 
 namespace SpeechMod.Configuration.SettingEntries;
 
