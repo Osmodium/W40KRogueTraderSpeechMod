@@ -39,11 +39,11 @@ public class Settings : UnityModManager.ModSettings
 
     public bool InterruptPlaybackOnPlay = true;
     public bool PlaybackBarks = true;
+    public bool PlaybackBarkOnlyIfSilence = true;
     public bool PlaybackBarksInVicinity = false;
-    public bool PlaybackBarkOnlyIfSilence = false;
     public bool ShowNotificationOnPlaybackStop = true;
 
-    public bool ShowPlaybackOfDialogAnswers = false;
+    public bool ShowPlaybackOfDialogAnswers = true;
     public bool SayDialogAnswerNumber = false;
     public bool DialogAnswerColorOnHover = true;
     public float DialogAnswerHoverColorR = 0.15f;
