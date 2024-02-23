@@ -100,8 +100,8 @@ public static class SpeechExtensions
 
         Debug.Log($"Adding {typeof(T).Name} SpeechMod UI elements.");
 
-        var windowsVoiceGameObject = new GameObject(name);
-        windowsVoiceGameObject.AddComponent<T>();
-        UnityEngine.Object.DontDestroyOnLoad(windowsVoiceGameObject);
+        voiceGameObject = new GameObject(name);
+        voiceGameObject.AddComponent<T>();
+        UnityEngine.Object.DontDestroyOnLoad(voiceGameObject);
     }
 }

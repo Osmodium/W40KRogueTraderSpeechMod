@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Kingmaker;
 using Kingmaker.Blueprints.Base;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Voices;
 
 namespace SpeechMod.Voice;
 
@@ -209,9 +209,9 @@ public class WindowsSpeech : ISpeech
         WindowsVoiceUnity.Stop();
     }
 
-    public string[] GetAvailableVoices()
+    public void SetAvailableVoices()
     {
-        return WindowsVoiceUnity.GetAvailableVoices();
+        Main.AvailableVoices = WindowsVoiceUnity.GetAvailableVoices();
     }
 
     public string GetStatusMessage()

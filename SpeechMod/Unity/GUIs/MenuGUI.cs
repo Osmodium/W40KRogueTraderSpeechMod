@@ -1,31 +1,85 @@
 ﻿using SpeechMod.Voice;
-using System.Linq;
-using SpeechMod.Unity.Extensions;
+using SpeechMod.Voice.Edge;
 using UnityEngine;
 
-namespace SpeechMod.Unity;
+namespace SpeechMod.Unity.GUIs;
 
 public static class MenuGUI
 {
-    private static string m_NarratorPreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Narrator voice speech test";
-    private static string m_FemalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Female voice speech test";
-    private static string m_MalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Male voice speech test";
+    private const string NARRATOR_PREVIEW_TEXT = "Speech Mod for Warhammer 40K: Rogue Trader - Narrator voice speech test";
+    private const string FEMALE_PREVIEW_TEXT = "Speech Mod for Warhammer 40K: Rogue Trader - Female voice speech test";
+    private const string MALE_PREVIEW_TEXT = "Speech Mod for Warhammer 40K: Rogue Trader - Male voice speech test";
+
+    private static VoicePickerBase NarratorVoicePicker;
+    private static VoicePickerBase FemaleVoicePicker;
+    private static VoicePickerBase MaleVoicePicker;
+
+    public static void SetupVoicePickers()
+    {
+        if (NarratorVoicePicker == null)
+        {
+            if (Main.Speech is EdgeSpeech)
+                NarratorVoicePicker = new EdgeVoicePicker("Narrator", Main.Settings.NarratorVoice, NARRATOR_PREVIEW_TEXT, VoiceType.Narrator);
+            else
+                NarratorVoicePicker = new VoicePicker("Narrator", Main.Settings.NarratorVoice, NARRATOR_PREVIEW_TEXT, VoiceType.Narrator);
+        }
+
+        if (FemaleVoicePicker == null)
+        {
+            if (Main.Speech is EdgeSpeech)
+                FemaleVoicePicker = new EdgeVoicePicker("Female", Main.Settings.FemaleVoice, FEMALE_PREVIEW_TEXT, VoiceType.Female);
+            else
+                FemaleVoicePicker = new VoicePicker("Female", Main.Settings.FemaleVoice, FEMALE_PREVIEW_TEXT, VoiceType.Female);
+        }
+
+        if (MaleVoicePicker == null)
+        {
+            if (Main.Speech is EdgeSpeech)
+                MaleVoicePicker = new EdgeVoicePicker("Male", Main.Settings.MaleVoice, MALE_PREVIEW_TEXT, VoiceType.Male);
+            else
+                MaleVoicePicker = new VoicePicker("Male", Main.Settings.MaleVoice, MALE_PREVIEW_TEXT, VoiceType.Male);
+        }
+    }
 
     public static void OnGui()
     {
-
 #if DEBUG
         GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Log speech", GUILayout.ExpandWidth(false));
-        Main.Settings.LogVoicedLines = GUILayout.Toggle(Main.Settings.LogVoicedLines, "Enabled");
+        Main.Settings.LogVoicedLines = GUILayout.Toggle(Main.Settings.LogVoicedLines, "Enabled", GUI.skin.button);
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
 #endif
+        GUILayout.BeginVertical("", GUI.skin.box);
 
-        AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("<color=yellow><b>EXPERIMENTAL!</b></color> - <color=red><i>When changing this setting you need to restart the game for it to take effect!</i></color>");
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("<color=yellow>Use Edge (Bing) Natural Voices</color>", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        var useEdgeVoice = GUILayout.Toggle(Main.Settings.UseEdgeVoice, Main.Settings.UseEdgeVoice ? "<color=red><b>These voices requires internet access and might slow the playback down!</b></color>" : "");
+        if (Main.Settings.UseEdgeVoice != useEdgeVoice)
+        {
+            Main.Settings.UseEdgeVoice = useEdgeVoice;
+            if (useEdgeVoice)
+            {
+                Main.Settings.NarratorVolume = Main.Settings.FemaleVolume = Main.Settings.MaleVolume = 0;
+            }
+            else
+            {
+                Main.Settings.NarratorVolume = Main.Settings.FemaleVolume = Main.Settings.MaleVolume = 100;
+            }
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+
+        NarratorVoicePicker?.OnGUI(ref Main.Settings.NarratorVoice, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorPitch, ref Main.Settings.NarratorVolume);
 
         GUILayout.BeginVertical("Playback voices", GUI.skin.box);
 
@@ -38,8 +92,8 @@ public static class MenuGUI
 
         if (Main.Settings.UseGenderSpecificVoices)
         {
-            AddVoiceSelector("Female Voice - See nationality below", ref Main.Settings.FemaleVoice, ref m_FemalePreviewText, ref Main.Settings.FemaleRate, ref Main.Settings.FemaleVolume, ref Main.Settings.FemalePitch, VoiceType.Female);
-            AddVoiceSelector("Male Voice - See nationality below", ref Main.Settings.MaleVoice, ref m_MalePreviewText, ref Main.Settings.MaleRate, ref Main.Settings.MaleVolume, ref Main.Settings.MalePitch, VoiceType.Male);
+            FemaleVoicePicker?.OnGUI(ref Main.Settings.FemaleVoice, ref Main.Settings.FemaleRate, ref Main.Settings.FemalePitch, ref Main.Settings.FemaleVolume);
+            MaleVoicePicker?.OnGUI(ref Main.Settings.MaleVoice, ref Main.Settings.MaleRate, ref Main.Settings.MalePitch, ref Main.Settings.MaleVolume);
         }
 
         GUILayout.BeginVertical("", GUI.skin.box);
@@ -167,65 +221,6 @@ public static class MenuGUI
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
             SpeechExtensions.LoadDictionary();
-        GUILayout.EndHorizontal();
-
-        GUILayout.EndVertical();
-    }
-
-    private static void AddVoiceSelector(string label, ref int voice, ref string previewString, ref int rate, ref int volume, ref int pitch, VoiceType type)
-    {
-        GUILayout.BeginVertical("", GUI.skin.box);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label(label, GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-
-        voice = GUILayout.SelectionGrid(voice, Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray(),
-            Main.Speech is WindowsSpeech ? 4 : 5
-        );
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        GUILayout.Label(Main.VoicesDict.ElementAt(voice).Value, GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        rate = Main.Speech switch
-        {
-            WindowsSpeech => (int)GUILayout.HorizontalSlider(rate, -10, 10, GUILayout.Width(300f)),
-            AppleSpeech => (int)GUILayout.HorizontalSlider(rate, 150, 300, GUILayout.Width(300f)),
-            _ => rate
-        };
-        GUILayout.Label($" {rate}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-
-        if (Main.Speech is WindowsSpeech)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
-            GUILayout.Space(10);
-            volume = (int)GUILayout.HorizontalSlider(volume, 0, 100, GUILayout.Width(300f));
-            GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
-            pitch = (int)GUILayout.HorizontalSlider(pitch, -10, 10, GUILayout.Width(300f));
-            GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-        }
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        previewString = GUILayout.TextField(previewString, GUILayout.Width(700f));
-        if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
-            Main.Speech.SpeakPreview(previewString, type);
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

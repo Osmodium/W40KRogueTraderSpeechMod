@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
-namespace SpeechMod.Unity;
+namespace SpeechMod.Unity.Voices;
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
@@ -70,10 +70,8 @@ public class WindowsVoiceUnity : MonoBehaviour
         string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < voices.Length; ++i)
         {
-            if (!voices[i].Contains('-'))
-                voices[i] = $"{voices[i]}#Unknown";
-            else
-                voices[i] = voices[i].Replace(" - ", "#");
+            if (voices[i].Contains('-'))
+                voices[i] = voices[i].Substring(0, voices[i].IndexOf('-')).Trim();
         }
         return voices;
     }
@@ -106,7 +104,7 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static float GetNormalizedProgress()
     {
-        return 1-(float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
+        return 1 - (float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
     }
 
     public static void Stop()

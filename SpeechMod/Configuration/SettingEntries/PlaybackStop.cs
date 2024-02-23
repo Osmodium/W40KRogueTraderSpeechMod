@@ -1,14 +1,16 @@
 ﻿using HarmonyLib;
 using Kingmaker;
+using Kingmaker.Blueprints.Root;
 using Kingmaker.Code.UI.MVVM.View.Common.PC;
 using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
+using Kingmaker.UI.Pointer;
 using SpeechMod.Configuration.Settings;
 #if DEBUG
 using UnityEngine;
 #endif
 
-namespace SpeechMod.Keybinds;
+namespace SpeechMod.Configuration.SettingEntries;
 
 public class PlaybackStop : ModHotkeySettingEntry
 {
@@ -31,7 +33,7 @@ public class PlaybackStop : ModHotkeySettingEntry
         private static void Add(CommonPCView __instance)
         {
 #if DEBUG
-        Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix");
+            Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix");
 #endif
             __instance?.AddDisposable(Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); }));
         }

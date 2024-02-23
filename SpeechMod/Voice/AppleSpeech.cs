@@ -1,4 +1,4 @@
-﻿using SpeechMod.Unity;
+﻿using SpeechMod.Unity.Voices;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -73,7 +73,7 @@ public class AppleSpeech : ISpeech
         AppleVoiceUnity.Stop();
     }
 
-    public string[] GetAvailableVoices()
+    public void SetAvailableVoices()
     {
         string arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
         var process = new Process
@@ -97,7 +97,7 @@ public class AppleSpeech : ISpeech
         process.WaitForExit();
         process.Dispose();
 
-        return !string.IsNullOrWhiteSpace(text) ? text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries) : null;
+        Main.AvailableVoices = !string.IsNullOrWhiteSpace(text) ? text.Split([";"], StringSplitOptions.RemoveEmptyEntries) : null;
 
 #if DEBUG
         Main.Logger.Warning($"[GetAvailableVoices] {error}");

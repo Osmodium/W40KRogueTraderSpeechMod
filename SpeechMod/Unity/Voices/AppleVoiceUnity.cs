@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
-namespace SpeechMod.Unity;
+namespace SpeechMod.Unity.Voices;
 
 public class AppleVoiceUnity : MonoBehaviour
 {

@@ -155,3 +155,7 @@ CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/HeaderContainer/Tooltip
 bracket
 Acronim
 decortext
+
+Issues:
+- When interrupting playback, the first of the next voices are skipped.
+- Button does not show up in the main dialog part, even after the button is found.
