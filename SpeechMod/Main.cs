@@ -1,17 +1,17 @@
 ﻿using HarmonyLib;
+using SpeechMod.Configuration;
+using SpeechMod.Configuration.Settings;
+using SpeechMod.Keybinds;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using SpeechMod.Keybinds;
-using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using SpeechMod.Configuration.Settings;
-using SpeechMod.Configuration;
 
 namespace SpeechMod;
 
@@ -23,7 +23,6 @@ public static class Main
     public static UnityModManager.ModEntry.ModLogger Logger;
     public static Settings Settings;
     public static bool Enabled;
-
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
     public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;

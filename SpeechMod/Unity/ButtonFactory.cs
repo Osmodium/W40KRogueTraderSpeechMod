@@ -1,11 +1,14 @@
-﻿using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
+﻿using Kingmaker.BundlesLoading;
+using Kingmaker.Code.UI.MVVM.VM.Tooltip.Templates;
 using Kingmaker.Code.UI.MVVM.VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity.Extensions;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using GameObject = UnityEngine.GameObject;
 using Object = UnityEngine.Object;
 
 namespace SpeechMod.Unity;
@@ -13,63 +16,82 @@ namespace SpeechMod.Unity;
 public static class ButtonFactory
 {
     private const string ARROW_BUTTON_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceHUD/SurfaceActionBarPCView/MainContainer/ActionBarContainer/LeftSide/BackgroundContainer/Mask/Container/SurfaceActionBarPatyWeaponsView/CurrentSet/Layout/WeaponSlotsContainer/ConvertButton";
+    private const string BACKUP_ARROW_BUTTON_PATH = "SurfaceStaticPartPCView/StaticCanvas/SurfaceHUD/SurfaceActionBarPCView/MainContainer/ActionBarContainer/LeftSide/BackgroundContainer/Mask/Container/SurfaceActionBarPatyWeaponsView/CurrentSet/Layout/WeaponSlotsContainer/ConvertButton";
     private const string ARROW_BUTTON_PREFAB_NAME = "SpeechMod_ArrowButtonPrefab";
 
     private static GameObject ArrowButton => UIHelper.TryFind(ARROW_BUTTON_PATH)?.gameObject;
 
-    private static GameObject m_ArrowButtonPrefab = null;
+    private static GameObject s_ArrowButtonPrefab;
 
-    private static void TryTakeArrowBackup()
+    private static bool EnsureArrowButtonPrefab()
     {
-        if (m_ArrowButtonPrefab != null)
-            return;
+        if (s_ArrowButtonPrefab != null)
+        {
+            return true;
+        }
 
-        m_ArrowButtonPrefab = GameObject.Find(ARROW_BUTTON_PREFAB_NAME);
+        s_ArrowButtonPrefab = GameObject.Find(ARROW_BUTTON_PREFAB_NAME);
 
-        if (m_ArrowButtonPrefab != null)
-            return;
+        if (s_ArrowButtonPrefab != null)
+        {
+            return true;
+        }
 
-        m_ArrowButtonPrefab = Object.Instantiate(ArrowButton);
-        if (m_ArrowButtonPrefab == null)
-            return;
-        Object.DontDestroyOnLoad(m_ArrowButtonPrefab);
+        if (ArrowButton != null)
+        {
+            SetupArrowPrefab(ArrowButton);
+        }
+
+        if (s_ArrowButtonPrefab == null)
+        {
+            LoadBackupArrowButtonPrefab();
+        }
+
+        return s_ArrowButtonPrefab != null;
     }
 
-    public static GameObject TryCreatePlayButton(Transform parent, UnityAction action)
+    private static void LoadBackupArrowButtonPrefab()
     {
-        return CreatePlayButton(parent, action, null, null);
+        try
+        {
+            var assetBundle = BundlesLoadService.Instance?.RequestBundle("surfacepcview.res");
+            var asset = assetBundle?.LoadAsset<GameObject>("6dda9b696601b7847996fe3926c42b50");
+
+            var arrow = asset?.transform.TryFind(BACKUP_ARROW_BUTTON_PATH)?.gameObject;
+            if (arrow != null)
+            {
+                SetupArrowPrefab(arrow);
+            }
+
+            Object.Destroy(asset);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex + ex.StackTrace);
+        }
+    }
+
+    private static void SetupArrowPrefab(GameObject arrowPrefab)
+    {
+        s_ArrowButtonPrefab = Object.Instantiate(arrowPrefab);
+        s_ArrowButtonPrefab!.name = ARROW_BUTTON_PREFAB_NAME;
+        Object.DontDestroyOnLoad(s_ArrowButtonPrefab);
     }
 
     private static GameObject CreatePlayButton(Transform parent, UnityAction action, string text, string toolTip)
     {
-        GameObject buttonGameObject = null;
-
-        if (ArrowButton == null)
+        if (!EnsureArrowButtonPrefab())
         {
-#if DEBUG
-            Debug.LogWarning("ArrowButton is null!");
-#endif
-            if (m_ArrowButtonPrefab == null)
-            {
-#if DEBUG
-                Debug.LogWarning("m_ArrowButtonPrefab is null!");
-#endif
-                return null;
-            }
-
-            buttonGameObject = Object.Instantiate(m_ArrowButtonPrefab, parent);
-        }
-        else
-        {
-            TryTakeArrowBackup();
-            buttonGameObject = Object.Instantiate(ArrowButton, parent);
+            return null;
         }
 
-        SetupButton(buttonGameObject, action, text, toolTip);
+        var buttonGameObject = Object.Instantiate(s_ArrowButtonPrefab, parent);
+
+        SetupOwlcatMultiButton(buttonGameObject, action, text, toolTip);
         return buttonGameObject;
     }
 
-    private static void SetupButton(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
+    private static void SetupOwlcatMultiButton(GameObject buttonGameObject, UnityAction action, string text, string toolTip)
     {
         if (buttonGameObject == null)
             return;
@@ -87,6 +109,11 @@ public static class ButtonFactory
             button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
 
         button.SetInteractable(true);
+    }
+
+    public static GameObject TryCreatePlayButton(Transform parent, UnityAction action)
+    {
+        return CreatePlayButton(parent, action, null, null);
     }
 
     public static GameObject TryAddButtonToTextMeshPro(this TextMeshProUGUI textMeshPro, string buttonName, Vector2? anchoredPosition = null, Vector3? scale = null, TextMeshProUGUI[] textMeshProUguis = null)

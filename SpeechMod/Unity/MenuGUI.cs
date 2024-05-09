@@ -1,6 +1,5 @@
 ﻿using SpeechMod.Voice;
 using System.Linq;
-using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
