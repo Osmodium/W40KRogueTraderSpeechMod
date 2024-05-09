@@ -28,7 +28,6 @@ Version: 0.9.4
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/WH40KRTSpeechMod/issues)*
 
 #### Limitations:
-- Keybind doesn't seem to work in loading screen. Probably no fix to this.
 - Can't playback book event choices yet.
 
 #### Todo:
@@ -170,6 +169,7 @@ Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS in the original mod, and various exploration work.
+- [microsoftenator](https://forums.nexusmods.com/profile/410331-microsoftenator/) for providing a lot of support for bundle loading.
 - Enhanced Controls mod for the keybinding and localization code.
 - Owlcat Modding Discord channel members
 - Join the [Discord](https://discord.gg/EFWq7rJFNN)
