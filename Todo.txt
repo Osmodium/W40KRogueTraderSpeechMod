@@ -91,6 +91,15 @@ Right side text
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/EncyclopediaView/SafeZone/BackgroundImage (1)/ContentGroup/EncyclopediaPageView/BodyGroup/ServiceWindowStandardScrollView/Viewport/Content/PageContent/Content/GlossaryEntryBlockView(Clone)/Description
 EncyclopediaPageBaseView
 
+✅ Loading screen description text
+LoadingScreenPCView
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
+/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
+Doesn't work on subsequent loading screen showings
+And doesn't work, in general, also does't work with the stop shortcut, as the keybinding 'ALL' doesn't include the loading screen.
+
 🔲 Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
@@ -99,6 +108,8 @@ EncyclopediaPageBaseView
 JournalQuestPCView
 JournalQuestObjectivePCView
 Outstanding -> Rumor title is propbably being raycast blocked
+
+🔲 Add keybind to toggle barks
 
 🔲 Look into contracts view
 
@@ -109,15 +120,6 @@ ExplorationSpaceEventPCView
 🔲 Look into reputation view
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/FactionsReputation/ItemsContainer/CharInfoProfitFactorItemPCView(Clone)/ActivesPanel/Viewport/Content/CharInfoColonyItemView/StatTitle
 CharInfoFactionReputationItemPCView
-
-🔲 Loading screen description text
-LoadingScreenPCView
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomTitleText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/TitlePlace/Box/TitleText
-/CommonPCView(Clone)/LoadingCanvas/LoadingScreenPCViewVariant/Window/Monitor/MainContainer/BottomTextContainerPlace/BottomDescriptionBackground/BottomDescriptionText
-Doesn't work on subsequent loading screen showings
-And doesn't work, in general, also does't work with the stop shortcut, as the keybinding 'ALL' doesn't include the loading screen.
 
 🔲 Look into SubtitleView (when cutscenes are playing, and no vo- is being played.)
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SubtitleView/Canvas/Line/Text (TMP)
