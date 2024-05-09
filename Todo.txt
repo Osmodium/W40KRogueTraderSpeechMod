@@ -100,6 +100,8 @@ LoadingScreenPCView
 Doesn't work on subsequent loading screen showings
 And doesn't work, in general, also does't work with the stop shortcut, as the keybinding 'ALL' doesn't include the loading screen.
 
+✅ Add keybind to toggle barks
+
 🔲 Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
@@ -108,8 +110,6 @@ And doesn't work, in general, also does't work with the stop shortcut, as the ke
 JournalQuestPCView
 JournalQuestObjectivePCView
 Outstanding -> Rumor title is propbably being raycast blocked
-
-🔲 Add keybind to toggle barks
 
 🔲 Look into contracts view
 
