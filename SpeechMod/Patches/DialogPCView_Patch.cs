@@ -18,7 +18,7 @@ public static class DialogPCView_Patch
 
     [HarmonyPatch(typeof(SurfaceDialogBaseView<DialogAnswerPCView>), "Initialize")]
     [HarmonyPostfix]
-    public static void AddSurfaceDialogButton()
+    public static void AddDialogButton()
     {
         if (!Main.Enabled)
             return;
@@ -28,10 +28,10 @@ public static class DialogPCView_Patch
         Debug.Log($"{nameof(SurfaceDialogBaseView<DialogAnswerPCView>)}_Initialize_Postfix @ {sceneName}");
 #endif
 
-        AddDialogSpeechButton(Game.Instance!.IsModeActive(GameModeType.StarSystem) ? SPACE_SCROLL_VIEW_PATH : SURFACE_SCROLL_VIEW_PATH);
+        AddDialogButtonByPath(Game.Instance!.IsModeActive(GameModeType.StarSystem) ? SPACE_SCROLL_VIEW_PATH : SURFACE_SCROLL_VIEW_PATH);
     }
 
-    private static void AddDialogSpeechButton(string path)
+    private static void AddDialogButtonByPath(string path)
     {
 
 #if DEBUG
@@ -65,7 +65,6 @@ public static class DialogPCView_Patch
 
         buttonGameObject.name = SPEECHMOD_DIALOGBUTTON_NAME;
         buttonGameObject.RectAlignTopLeft(new Vector2(40, 10));
-        buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 270);
 
         buttonGameObject.SetActive(true);
     }

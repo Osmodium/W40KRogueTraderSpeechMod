@@ -85,7 +85,6 @@ public class DialogAnswerBaseView_Patch
         }
 
         playButtonGameObject.name = DIALOG_ANSWER_BUTTON_NAME;
-        playButtonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 270);
         playButtonGameObject.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
         playButtonGameObject.RectAlignTopLeft(anchoredPosition);
         playButtonGameObject.SetActive(true);

@@ -13,7 +13,7 @@ public class MessageBoxPCView_Patch
     private const string MESSAGE_BOX_TEXT_PATH = "/CommonPCView(Clone)/CommonCanvas/MessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message";
     private const string INPUT_BOX_TEXT_PATH = "/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message";
 
-    public static void Postfix()
+    public static void Postfix(MessageBoxPCView __instance)
     {
         if (!Main.Enabled)
             return;
@@ -23,6 +23,9 @@ public class MessageBoxPCView_Patch
 #endif
 
         Hooks.HookUpTextToSpeechOnTransformWithPath(MESSAGE_BOX_TEXT_PATH);
-        Hooks.HookUpTextToSpeechOnTransformWithPath(INPUT_BOX_TEXT_PATH);
+        if (__instance.m_InputField.IsActive())
+        {
+            Hooks.HookUpTextToSpeechOnTransformWithPath(INPUT_BOX_TEXT_PATH);
+        }
     }
 }
