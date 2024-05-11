@@ -22,81 +22,24 @@ public static class ButtonFactory
 
     private static GameObject ArrowButton => UIHelper.TryFind(ARROW_BUTTON_PATH)?.gameObject;
 
-    private static GameObject s_ArrowButtonPrefab;
-    private static GameObject s_SpaceUITempArrowButtonPrefab;
-
-    private static bool IsArrowButtonAvailable()
+    private static GameObject CreatePlayButton(Transform parent, UnityAction action, string text, string toolTip)
     {
-        if (s_ArrowButtonPrefab != null)
-        {
-            return true;
-        }
-
-        s_ArrowButtonPrefab = GameObject.Find(ARROW_BUTTON_PREFAB_NAME);
-
-        if (s_ArrowButtonPrefab != null)
-        {
-            return true;
-        }
+        GameObject buttonGameObject;
 
         if (ArrowButton != null)
         {
-            SetupArrowPrefab(ArrowButton);
+            buttonGameObject = Object.Instantiate(ArrowButton, parent);
+            buttonGameObject!.name = ARROW_BUTTON_PREFAB_NAME;
         }
-
-        return s_ArrowButtonPrefab != null;
-    }
-
-    private static void LoadArrowButtonPrefabFromResource()
-    {
-        Debug.LogWarning("Load surface ui asset...");
-        // "6dda9b696601b7847996fe3926c42b50" is the GUID of the assets inside the "surfacepcview.res" resource file
-        var asset = ResourcesLibrary.TryGetResource<GameObject>("6dda9b696601b7847996fe3926c42b50");
-
-        var arrow = asset?.transform.TryFind(TEMP_ARROW_BUTTON_PATH)?.gameObject;
-        if (arrow != null)
+        else
         {
-            s_SpaceUITempArrowButtonPrefab = Object.Instantiate(arrow);
-            s_SpaceUITempArrowButtonPrefab!.name = TEMP_ARROW_BUTTON_PREFAB_NAME;
-            s_SpaceUITempArrowButtonPrefab.transform!.localRotation = Quaternion.Euler(0, 0, 270);
-        }
-    }
-
-    private static void SetupArrowPrefab(GameObject arrowPrefab)
-    {
-        s_ArrowButtonPrefab = Object.Instantiate(arrowPrefab);
-        s_ArrowButtonPrefab!.name = ARROW_BUTTON_PREFAB_NAME;
-        s_ArrowButtonPrefab.transform!.localRotation = Quaternion.Euler(0, 0, 270);
-        Object.DontDestroyOnLoad(s_ArrowButtonPrefab);
-    }
-
-    private static GameObject CreateTemporaryPlayButton(Transform parent)
-    {
-#if DEBUG
-        Debug.Log("Creating temporary play button...");
-#endif
-        s_SpaceUITempArrowButtonPrefab = GameObject.Find(TEMP_ARROW_BUTTON_PREFAB_NAME);
-
-        if (s_SpaceUITempArrowButtonPrefab == null)
-        {
-            LoadArrowButtonPrefabFromResource();
+            var asset = ResourcesLibrary.TryGetResource<GameObject>("6dda9b696601b7847996fe3926c42b50");
+            var button = asset?.transform.TryFind(TEMP_ARROW_BUTTON_PATH)?.gameObject;
+            buttonGameObject = Object.Instantiate(button, parent);
+            buttonGameObject!.name = TEMP_ARROW_BUTTON_PREFAB_NAME;
         }
 
-        return Object.Instantiate(s_SpaceUITempArrowButtonPrefab, parent);
-    }
-
-    private static GameObject CreatePlayButton(Transform parent, UnityAction action, string text, string toolTip)
-    {
-        if (!IsArrowButtonAvailable())
-        {
-            var temporaryPlayButton = CreateTemporaryPlayButton(parent);
-
-            SetupOwlcatMultiButton(temporaryPlayButton, action, text, toolTip);
-
-            return temporaryPlayButton;
-        }
-
-        var buttonGameObject = Object.Instantiate(s_ArrowButtonPrefab, parent);
+        buttonGameObject.transform!.localRotation = Quaternion.Euler(0, 0, 270);
 
         SetupOwlcatMultiButton(buttonGameObject, action, text, toolTip);
 

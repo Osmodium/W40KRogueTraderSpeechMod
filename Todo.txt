@@ -102,6 +102,10 @@ And doesn't work, in general, also does't work with the stop shortcut, as the ke
 
 ✅ Add keybind to toggle barks
 
+✅ Fix tutorial
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowPCView(Clone)/Window/Content/Body/ScrollView/Viewport/Content/TutorialText
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView(Clone)/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText
+
 🔲 Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
