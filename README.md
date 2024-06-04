@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
-Version: 0.9.5
+Version: 0.9.6
 
 **Disclaimer: UNDER DEVELOPMENT**
 
@@ -13,6 +13,11 @@ Version: 0.9.5
 **Works with all languages as long as you have a voice in that language installed.**
 
 [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
+
+**How to use natural voices.**
+Install this application: [NaturalVoiceSAPIAdapter﻿](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+Note: It seems to only support offline voices on Windows 11 and online voices seem to crash when they are being stopped during speech.
+Disclaimer: I do intend to support issues related to the NaturalVoicesSAPIAdapter application.
 
 ### How to install
 
