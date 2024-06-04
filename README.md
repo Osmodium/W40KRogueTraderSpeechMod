@@ -17,7 +17,7 @@ Version: 0.9.6
 **How to use natural voices.**
 Install this application: [NaturalVoiceSAPIAdapter﻿](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
 Note: It seems to only support offline voices on Windows 11 and online voices seem to crash when they are being stopped during speech.
-Disclaimer: I do intend to support issues related to the NaturalVoicesSAPIAdapter application.
+Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSAPIAdapter application.
 
 ### How to install
 
