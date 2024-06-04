@@ -74,6 +74,12 @@ public class WindowsVoiceUnity : MonoBehaviour
                 voices[i] = $"{voices[i]}#Unknown";
             else
                 voices[i] = voices[i].Replace(" - ", "#");
+
+            if (!voices[i].Contains("(Natural)"))
+                continue;
+
+            voices[i] = voices[i].Replace("(Natural)", "");
+            voices[i] = voices[i].Replace("(", "Natural (");
         }
         return voices;
     }
