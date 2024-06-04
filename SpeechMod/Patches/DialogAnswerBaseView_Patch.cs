@@ -66,10 +66,9 @@ public class DialogAnswerBaseView_Patch
             if (Main.Settings?.LogVoicedLines == true)
                 Debug.Log(text);
 
-            if (Main.Settings?.SayDialogAnswerNumber == true)
-                text = new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 <silence msec=\"500\"/> $2");
-            else
-                text = new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
+            text = Main.Settings?.SayDialogAnswerNumber == true ?
+                new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, $"$1 {Constants.BREAK_TOKEN_SHORT} $2") :
+                new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
 
             text = text.PrepareText();
 

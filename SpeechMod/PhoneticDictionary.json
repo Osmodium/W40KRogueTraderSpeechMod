@@ -1,4 +1,7 @@
 {
+  "_speechmod_break_short_": "<silence msec=\"350\"/>",
+  "_speechmod_break_medium_": "<silence msec=\"500\"/>",
+  "_speechmod_break_long_": "<silence msec=\"750\"/>",
   "servitor": "servitur",
   "servitors": "serviturs",
   "lobotomised": "lobotom-aysed",

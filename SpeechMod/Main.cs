@@ -68,7 +68,7 @@ public static class Main
         if (!SetAvailableVoices())
             return false;
 
-        SpeechExtensions.LoadDictionary();
+        PhoneticDictionary.LoadDictionary();
 
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initialized!");
         m_Loaded = true;

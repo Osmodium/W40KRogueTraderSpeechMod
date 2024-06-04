@@ -106,6 +106,8 @@ And doesn't work, in general, also does't work with the stop shortcut, as the ke
 /CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowPCView(Clone)/Window/Content/Body/ScrollView/Viewport/Content/TutorialText
 /CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView(Clone)/Window/Content/Body/Bottom/ScrollView/Viewport/Content/TutorialText
 
+/CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowPCView(Clone)/Window/Content/Header/Title
+
 🔲 Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
@@ -120,6 +122,22 @@ Outstanding -> Rumor title is propbably being raycast blocked
 🔲 Look into Space Event View
 /SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ExplorationSpaceEventPCView/Container/Body/View/Scroll View/Viewport/Content/DialogCuePCView/EventMessage
 ExplorationSpaceEventPCView
+
+🔲 Space battle conclusion screen
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SpaceCombatPCView/ExitBattlePopupPCView/CommonModalWindow/Panel/Content/ExitContainer/Exp
+Has:
+GainedExpAmount
+exp
+ExpSliderBlock/CurrentLevel
+
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SpaceCombatPCView/ExitBattlePopupPCView/CommonModalWindow/Panel/Content/ExitContainer/LootBlock/LootText
+
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SpaceCombatPCView/ExitBattlePopupPCView/CommonModalWindow/Panel/Content/ExitContainer/ScrapRewardSlotPCView
+Has:
+ScrapAmount
+
+/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SpaceCombatPCView/ExitBattlePopupPCView/CommonModalWindow/Panel/Content/ExitContainer/LootBlock/Container/ItemsContent/
+Each LootSlotPCView
 
 🔲 Look into reputation view
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/CharacterInfoPCView/CharacterScreen/RightPanel/Tablet/Content/FactionsReputation/ItemsContainer/CharInfoProfitFactorItemPCView(Clone)/ActivesPanel/Viewport/Content/CharInfoColonyItemView/StatTitle
@@ -144,6 +162,24 @@ ResourceMinersPCView or the OwlcatMultiButton on the gameobject
 🔲 Look into throphy window
 /CommonPCView(Clone)/CommonCanvas/InfoWindowPCView/Window/BodyContainer/ScrollView/ViewPort/Content/TooltipBrickNestedMessageView(Clone)/Text
 TooltipBrickNestedMessageView
+
+🔲 VendorTradePartPCView
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/VendorInfoBlock/InfoBlock/VendorName/Text (TMP)
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/VendorInfoBlock/InfoBlock/Replics/Text (TMP)
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/VendorName
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/Reputation/Text (TMP)
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/Reputation/Exp
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorTradeWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/DiscountBlock/Discount/Text (TMP)
+
+🔲 VendorReputationPartPCView
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorReputationWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/VendorName
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorReputationWindow/VendorInfoBlock/ReputationBlock/ReputationTextBlock/Reputation/Text (TMP)
+
+🔲 InventoryCargoPCView
+/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/VendorPCView(Clone)/MainContent/VendorStash/Panel/VendorReputationWindow/InventoryCargoPCView/CargoListContent/ReputationAndItemsHidingBlock/ButtonAndExpBlock/RPBlock/Text (TMP)
+
+🔲 CombatLogItemPCView
+Text
 
 🔲 Look into popups/notifications?
 

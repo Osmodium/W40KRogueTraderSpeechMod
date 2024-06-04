@@ -9,6 +9,9 @@ namespace SpeechMod.Voice;
 
 public class WindowsSpeech : ISpeech
 {
+    private static string SpeakBegin => "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\" effect=\"eq_car\">";
+    private static string SpeakEnd => "</speak>";
+
     private static string NarratorVoice => $"<voice required=\"Name={Main.NarratorVoice}\">";
     private static string NarratorPitch => $"<pitch absmiddle=\"{Main.Settings?.NarratorPitch}\"/>";
     private static string NarratorRate => $"<rate absspeed=\"{Main.Settings?.NarratorRate}\"/>";
@@ -72,6 +75,14 @@ public class WindowsSpeech : ISpeech
         return text;
     }
 
+    private void SpeakInternal(string text, float delay = 0f)
+    {
+        text = SpeakBegin + text + SpeakEnd;
+        if (Main.Settings?.LogVoicedLines == true)
+            UnityEngine.Debug.Log(text);
+        WindowsVoiceUnity.Speak(text, Length(text), delay);
+    }
+
     public bool IsSpeaking()
     {
         return WindowsVoiceUnity.IsSpeaking;
@@ -88,50 +99,43 @@ public class WindowsSpeech : ISpeech
         text = text.PrepareText();
         text = new Regex("<[^>]+>").Replace(text, "");
 
-        switch (voiceType)
+        text = voiceType switch
         {
-            case VoiceType.Narrator:
-                text = $"{CombinedNarratorVoiceStart}{text}</voice>";
-                break;
-            case VoiceType.Female:
-                text = $"{CombinedFemaleVoiceStart}{text}</voice>";
-                break;
-            case VoiceType.Male:
-                text = $"{CombinedMaleVoiceStart}{text}</voice>";
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null);
-        }
+            VoiceType.Narrator => $"{CombinedNarratorVoiceStart}{text}</voice>",
+            VoiceType.Female => $"{CombinedFemaleVoiceStart}{text}</voice>",
+            VoiceType.Male => $"{CombinedMaleVoiceStart}{text}</voice>",
+            _ => throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null)
+        };
 
-        WindowsVoiceUnity.Speak(text, Length(text));
+        SpeakInternal(text);
     }
 
     public string PrepareSpeechText(string text)
     {
-        if (Main.Settings?.LogVoicedLines == true)
-            UnityEngine.Debug.Log(text);
+        //if (Main.Settings?.LogVoicedLines == true)
+        //    UnityEngine.Debug.Log(text);
 
         text = new Regex("<[^>]+>").Replace(text, "");
         text = text.PrepareText();
         text = $"{CombinedNarratorVoiceStart}{text}</voice>";
 
-        if (Main.Settings?.LogVoicedLines == true)
-            UnityEngine.Debug.Log(text);
+        //if (Main.Settings?.LogVoicedLines == true)
+        //    UnityEngine.Debug.Log(text);
 
         return text;
     }
 
     public string PrepareDialogText(string text)
     {
-        if (Main.Settings?.LogVoicedLines == true)
-            UnityEngine.Debug.Log(text);
+        //if (Main.Settings?.LogVoicedLines == true)
+        //    UnityEngine.Debug.Log(text);
 
         text = text.PrepareText();
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = FormatGenderSpecificVoices(text);
 
-        if (Main.Settings?.LogVoicedLines == true)
-            UnityEngine.Debug.Log(text);
+        //if (Main.Settings?.LogVoicedLines == true)
+        //    UnityEngine.Debug.Log(text);
 
         return text;
     }
@@ -152,10 +156,10 @@ public class WindowsSpeech : ISpeech
 
         text = PrepareDialogText(text);
 
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        SpeakInternal(text, delay);
     }
 
-    public void SpeakAs(string text, VoiceType type, float delay = 0f)
+    public void SpeakAs(string text, VoiceType voiceType, float delay = 0f)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -163,32 +167,21 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        if (Main.Settings?.LogVoicedLines == true)
-            UnityEngine.Debug.Log(text);
-
         if (!Main.Settings!.UseGenderSpecificVoices)
         {
             Speak(text, delay);
             return;
         }
 
-        switch (type)
+        text = voiceType switch
         {
-            case VoiceType.Narrator:
-                text = $"{CombinedNarratorVoiceStart}{text}</voice>";
-                break;
-            case VoiceType.Female:
-                text = $"{CombinedFemaleVoiceStart}{text}</voice>";
-                break;
-            case VoiceType.Male:
-                text = $"{CombinedMaleVoiceStart}{text}</voice>";
-                break;
-            default:
-                Main.Logger?.Warning($"Unknown voice type: {type}");
-                return;
-        }
+            VoiceType.Narrator => $"{CombinedNarratorVoiceStart}{text}</voice>",
+            VoiceType.Female => $"{CombinedFemaleVoiceStart}{text}</voice>",
+            VoiceType.Male => $"{CombinedMaleVoiceStart}{text}</voice>",
+            _ => throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null)
+        };
 
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        SpeakInternal(text, delay);
     }
 
     public void Speak(string text, float delay = 0f)
@@ -201,7 +194,7 @@ public class WindowsSpeech : ISpeech
 
         text = PrepareSpeechText(text);
 
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        SpeakInternal(text, delay);
     }
 
     public void Stop()

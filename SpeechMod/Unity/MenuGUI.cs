@@ -165,7 +165,7 @@ public static class MenuGUI
         GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
-            SpeechExtensions.LoadDictionary();
+            PhoneticDictionary.LoadDictionary();
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
