@@ -7,5 +7,5 @@
   "AssemblyName": "W40KRTSpeechMod.dll",
   "EntryMethod": "SpeechMod.Main.Load",
   "HomePage": "https://www.nexusmods.com/warhammer40kroguetrader/mods/75",
-  "Version": "0.9.6"
+  "Version": "0.9.7"
 }

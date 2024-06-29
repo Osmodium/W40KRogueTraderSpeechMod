@@ -31,7 +31,7 @@ public class PlaybackStop : ModHotkeySettingEntry
         private static void Add(CommonPCView __instance)
         {
 #if DEBUG
-        Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix");
+            Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
             __instance?.AddDisposable(Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); }));
         }
@@ -41,7 +41,7 @@ public class PlaybackStop : ModHotkeySettingEntry
             if (!Main.Speech?.IsSpeaking() == true)
                 return;
 
-            if (instance != null && instance.m_WarningsTextView != null)
+            if (instance.m_WarningsTextView != null)
             {
                 if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out string text, false))
                     text = "SpeechMod: Playback stopped!";

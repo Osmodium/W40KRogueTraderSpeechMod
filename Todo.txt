@@ -11,6 +11,7 @@
 
 ✅ Campaign/DLC description when starting a new game
 /MainMenuPCView(Clone)/UICanvas/NewGamePCView/Device/Background (1)/Background/ContentGroup/NewGameTabGameModePCView/PaperGroup/Paper/Content/Description/ServiceWindowStandartScrollVew/Viewport/Content/Text (TMP)
+/MainMenuPCView(Clone)/UICanvas/NewGamePCView/Device/Background (1)/Background/ContentGroup/NewGameTabGameModePCView/Screen_view/ItemView (1)/Description/ServiceWindowStandartScrollVew/Viewport/Content/Text (TMP)
 
 ✅ Custom Character Creation
 /MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenPregenPhaseDetailedView/DeviceParent/Tablet/Screen_view/ItemView/InfoSection/ScrollView/ViewPort/Content/BodyContainer/TooltipBrickTextView(Clone)/Text

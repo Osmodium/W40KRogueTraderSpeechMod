@@ -1,9 +1,9 @@
 ﻿using Kingmaker;
 using Kingmaker.Blueprints.Base;
+using SpeechMod.Unity.Extensions;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
@@ -64,9 +64,9 @@ public class AppleVoiceUnity : MonoBehaviour
         text = text.Replace("\\n", "  ");
         text = text.Replace("\n", " ");
         text = text.Replace(";", "");
-        while (text.IndexOf("<color=#544709>", StringComparison.InvariantCultureIgnoreCase) != -1)
+        while (text.IndexOf($"<color=#{Constants.NARRATOR_COLOR_CODE}>", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
-            int position = text.IndexOf("<color=#544709>", StringComparison.InvariantCultureIgnoreCase);
+            int position = text.IndexOf($"<color=#{Constants.NARRATOR_COLOR_CODE}>", StringComparison.InvariantCultureIgnoreCase);
             if (position != 0)
             {
                 string argumentsPart = text.Substring(0, position);

@@ -42,10 +42,10 @@ public class CharInfoSummaryPCView_Patch
 
         __instance.m_StatusEffectsTitle.HookupTextToSpeech();
         __instance.m_NoStatusEffectsLabel.HookupTextToSpeech();
-        __instance.m_WidgetEntityView?.m_Description.HookupTextToSpeech();
+        //__instance.m_WidgetEntityView?.m_Description.HookupTextToSpeech();
         __instance.m_WidgetEntityView?.m_DisplayName.HookupTextToSpeech();
-        __instance.m_WidgetEntityView?.m_FactDescription.HookupTextToSpeech();
-        __instance.m_WidgetEntityView?.m_RankText.HookupTextToSpeech();
+        //__instance.m_WidgetEntityView?.m_FactDescription.HookupTextToSpeech();
+        //__instance.m_WidgetEntityView?.m_RankText.HookupTextToSpeech();
     }
 
     [HarmonyPatch(typeof(CharInfoProfitFactorItemPCView), "BindViewImplementation")]

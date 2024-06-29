@@ -1,14 +1,13 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.InfoWindow;
+using Kingmaker.Code.UI.MVVM.View.Tooltip.Bricks;
 using Kingmaker.Code.UI.MVVM.VM.InfoWindow;
+using Owlcat.Runtime.UI.Controls.Button;
 using Owlcat.Runtime.UI.Tooltips;
 using SpeechMod.Unity.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kingmaker.Code.UI.MVVM.View.Tooltip.Bricks;
-using Kingmaker.Utility;
-using Owlcat.Runtime.UI.Controls.Button;
 using TMPro;
 using UnityEngine;
 

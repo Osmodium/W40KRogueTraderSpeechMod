@@ -10,7 +10,6 @@ namespace SpeechMod.Patches;
 [HarmonyPatch(typeof(MessageBoxPCView), "BindViewImplementation")]
 public class MessageBoxPCView_Patch
 {
-    private const string MESSAGE_BOX_TEXT_PATH = "/CommonPCView(Clone)/CommonCanvas/MessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message";
     private const string INPUT_BOX_TEXT_PATH = "/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message";
 
     public static void Postfix(MessageBoxPCView __instance)
@@ -22,7 +21,7 @@ public class MessageBoxPCView_Patch
         Debug.Log($"{nameof(MessageBoxPCView)}_BindViewImplementation_Postfix");
 #endif
 
-        Hooks.HookUpTextToSpeechOnTransformWithPath(MESSAGE_BOX_TEXT_PATH);
+        __instance.m_MessageText.HookupTextToSpeech();
         if (__instance.m_InputField.IsActive())
         {
             Hooks.HookUpTextToSpeechOnTransformWithPath(INPUT_BOX_TEXT_PATH);

@@ -9,7 +9,7 @@ public static class OwlcatUITools
 {
     public static UISettingsGroup MakeSettingsGroup(string key, string name, params UISettingsEntityBase[] settings)
     {
-        UISettingsGroup group = ScriptableObject.CreateInstance<UISettingsGroup>();
+        var group = ScriptableObject.CreateInstance<UISettingsGroup>();
         group.name = key;
         group.Title = ModLocalizationManager.CreateString(key, name);
 

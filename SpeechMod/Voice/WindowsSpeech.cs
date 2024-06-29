@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Kingmaker;
+﻿using Kingmaker;
 using Kingmaker.Blueprints.Base;
 using SpeechMod.Unity;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SpeechMod.Voice;
 
@@ -59,7 +59,7 @@ public class WindowsSpeech : ISpeech
 
     private string FormatGenderSpecificVoices(string text)
     {
-        text = text.Replace("<i><color=#544709>", $"</voice>{CombinedNarratorVoiceStart}");
+        text = text.Replace($"<i><color=#{Constants.NARRATOR_COLOR_CODE}>", $"</voice>{CombinedNarratorVoiceStart}");
         text = text.Replace("</color></i>", $"</voice>{CombinedDialogVoiceStart}");
 
         if (text.StartsWith("</voice>"))
@@ -112,31 +112,17 @@ public class WindowsSpeech : ISpeech
 
     public string PrepareSpeechText(string text)
     {
-        //if (Main.Settings?.LogVoicedLines == true)
-        //    UnityEngine.Debug.Log(text);
-
         text = new Regex("<[^>]+>").Replace(text, "");
         text = text.PrepareText();
         text = $"{CombinedNarratorVoiceStart}{text}</voice>";
-
-        //if (Main.Settings?.LogVoicedLines == true)
-        //    UnityEngine.Debug.Log(text);
-
         return text;
     }
 
     public string PrepareDialogText(string text)
     {
-        //if (Main.Settings?.LogVoicedLines == true)
-        //    UnityEngine.Debug.Log(text);
-
         text = text.PrepareText();
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = FormatGenderSpecificVoices(text);
-
-        //if (Main.Settings?.LogVoicedLines == true)
-        //    UnityEngine.Debug.Log(text);
-
         return text;
     }
 
