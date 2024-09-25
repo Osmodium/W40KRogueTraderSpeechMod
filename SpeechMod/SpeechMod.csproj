@@ -8,7 +8,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>SpeechMod</RootNamespace>
-    <RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
+		<RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="0Harmony">
@@ -16,7 +16,7 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Code">
-			<HintPath>$(SolutionDir)lib\Code_public.dll</HintPath>
+			<HintPath>$(SolutionDir)\lib\Code_public.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Kingmaker.Localization.Enums">
@@ -36,7 +36,7 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Owlcat.Runtime.UI">
-			<HintPath>$(SolutionDir)lib\Owlcat.Runtime.UI_public.dll</HintPath>
+			<HintPath>$(SolutionDir)\lib\Owlcat.Runtime.UI_public.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Owlcat.Runtime.UniRx">
@@ -80,11 +80,11 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="RogueTrader.GameCore">
-			<HintPath>$(SolutionDir)lib\RogueTrader.GameCore_public.dll</HintPath>
+			<HintPath>$(SolutionDir)\lib\RogueTrader.GameCore_public.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="UnityModManager">
-			<HintPath>$(SolutionDir)lib\UnityModManager_public.dll</HintPath>
+			<HintPath>$(SolutionDir)\lib\UnityModManager_public.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="UnityEngine.AssetBundleModule">
@@ -109,7 +109,7 @@
 		<Copy SourceFiles="@(Files)" DestinationFiles="@(Files->'$(RogueTraderData)\UnityModManager\$(AssemblyName)\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target> -->
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Aze.Publicise.MSBuild.Task" Version="1.1.0" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
