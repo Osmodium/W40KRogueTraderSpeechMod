@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(DialogController), "SelectAnswer", typeof(BlueprintAnswer), typeof(BaseUnitEntity))]
+[HarmonyPatch(typeof(DialogController), nameof(DialogController.SelectAnswer), typeof(BlueprintAnswer), typeof(BaseUnitEntity))]
 public class DialogController_Patch
 {
     public static void Prefix(BlueprintAnswer answer)

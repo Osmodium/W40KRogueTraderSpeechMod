@@ -1,6 +1,5 @@
 ﻿using SpeechMod.Unity.Extensions;
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -12,20 +11,30 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void initSpeech(int rate, int volume);
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void destroySpeech();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void addToSpeechQueue(string s);
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void clearSpeechQueue();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getStatusMessage();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getVoicesAvailable();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordLength();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordPosition();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern WindowsVoiceStatus getSpeechState();
 
@@ -39,7 +48,6 @@ public class WindowsVoiceUnity : MonoBehaviour
     {
         initSpeech(1, 100);
     }
-
     private static bool IsVoiceInitialized()
     {
         if (m_TheVoice != null)
@@ -65,23 +73,10 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static string[] GetAvailableVoices()
     {
-        string voicesDelim = getVoicesAvailable();
-        if (string.IsNullOrWhiteSpace(voicesDelim))
-            return Array.Empty<string>();
-        string[] voices = voicesDelim.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 0; i < voices.Length; ++i)
-        {
-            if (!voices[i].Contains('-'))
-                voices[i] = $"{voices[i]}#Unknown";
-            else
-                voices[i] = voices[i].Replace(" - ", "#");
-
-            if (!voices[i].Contains("(Natural)"))
-                continue;
-
-            voices[i] = voices[i].Replace("(Natural)", "");
-            voices[i] = voices[i].Replace("(", "Natural (");
-        }
+        var voicesDelimited = getVoicesAvailable();
+        if (string.IsNullOrWhiteSpace(voicesDelimited))
+            return [];
+        var voices = voicesDelimited.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
         return voices;
     }
 
@@ -90,7 +85,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
-        if (Main.Settings!.InterruptPlaybackOnPlay && IsSpeaking)
+        if (Main.Settings.InterruptPlaybackOnPlay && IsSpeaking)
             Stop();
 
         m_CurrentWordCount = length;

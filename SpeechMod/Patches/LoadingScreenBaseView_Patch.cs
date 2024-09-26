@@ -10,7 +10,7 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public static class LoadingScreenBaseView_Patch
 {
-    [HarmonyPatch(typeof(LoadingScreenBaseView), "BindViewImplementation")]
+    [HarmonyPatch(typeof(LoadingScreenBaseView), nameof(LoadingScreenBaseView.BindViewImplementation))]
     [HarmonyPostfix]
     public static void BindViewImplementation(LoadingScreenBaseView __instance)
     {
@@ -28,7 +28,7 @@ public static class LoadingScreenBaseView_Patch
         __instance?.m_LocationName.HookupTextToSpeech();
     }
 
-    [HarmonyPatch(typeof(LoadingScreenBaseView), "Show")]
+    [HarmonyPatch(typeof(LoadingScreenBaseView), nameof(LoadingScreenBaseView.Show))]
     [HarmonyPostfix]
     public static void Show(LoadingScreenBaseView __instance)
     {

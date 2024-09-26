@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(MainMenuPCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(MainMenuPCView), nameof(MainMenuPCView.BindViewImplementation))]
 public class MainMenuPCView_Patch
 {
     private const string MAIN_MENU_WELCOME_TEXT_PATH = "/MainMenuPCView(Clone)/UICanvas/WelcomeWindowPCView/Background/ScrollContainer/ServiceWindowStandardScrollView/Viewport/Content/text";

@@ -46,13 +46,13 @@ public static class PhoneticDictionary
         Main.Logger?.Log("Loading phonetic dictionary...");
         try
         {
-            string file = Path.Combine(Constants.LOCAL_LOW_PATH!,
+            var file = Path.Combine(Constants.LOCAL_LOW_PATH!,
                 "Owlcat Games",
                 "Warhammer 40000 Rogue Trader",
                 "UnityModManager",
                 "W40KSpeechMod",
                 "PhoneticDictionary.json");
-            string json = File.ReadAllText(file, Encoding.UTF8);
+            var json = File.ReadAllText(file, Encoding.UTF8);
             s_PhoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
         catch (Exception ex)

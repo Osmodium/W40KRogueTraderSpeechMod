@@ -8,6 +8,7 @@ using Kingmaker.GameModes;
 using Kingmaker.Mechanics.Entities;
 using SpeechMod.Voice;
 using System;
+using UnityEngine;
 #if DEBUG
 using UnityEngine;
 #endif
@@ -17,9 +18,9 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public class BarkPlayer_Patch
 {
-    [HarmonyPatch(typeof(BarkPlayer), "Bark", typeof(Entity), typeof(string), typeof(float), typeof(string), typeof(BaseUnitEntity), typeof(bool))]
+    [HarmonyPatch(typeof(BarkPlayer), nameof(BarkPlayer.Bark), typeof(Entity), typeof(string), typeof(float), typeof(string), typeof(BaseUnitEntity), typeof(bool), typeof(string), typeof(Color))]
     [HarmonyPostfix]
-    public static void Bark(Entity entity, string text, float duration = -1f, string voiceOver = null, BaseUnitEntity interactUser = null, bool synced = true)
+    public static void Bark(Entity entity, string text, float duration = -1f, string voiceOver = null, BaseUnitEntity interactUser = null, bool synced = true, string overrideName = null, Color overrideNameColor = default(Color))
     {
         if (!BarkExtensions.PlayBark())
             return;
@@ -31,7 +32,7 @@ public class BarkPlayer_Patch
         BarkExtensions.DoBark(entity, text, voiceOver);
     }
 
-    [HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(float), typeof(string))]
+    [HarmonyPatch(typeof(BarkPlayer), nameof(BarkPlayer.BarkExploration), typeof(Entity), typeof(string), typeof(float), typeof(string))]
     [HarmonyPostfix]
     public static void BarkExploration_1(Entity entity, string text, float duration = -1f, string voiceOver = null)
     {
@@ -45,7 +46,7 @@ public class BarkPlayer_Patch
         BarkExtensions.DoBark(entity, text, voiceOver);
     }
 
-    [HarmonyPatch(typeof(BarkPlayer), "BarkExploration", typeof(Entity), typeof(string), typeof(string), typeof(float), typeof(string))]
+    [HarmonyPatch(typeof(BarkPlayer), nameof(BarkPlayer.BarkExploration), typeof(Entity), typeof(string), typeof(string), typeof(float), typeof(string))]
     [HarmonyPostfix]
     public static void BarkExploration_2(Entity entity, string text, string encyclopediaLink, float duration = -1f, string voiceOver = null)
     {

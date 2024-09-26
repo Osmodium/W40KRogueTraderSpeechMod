@@ -1,12 +1,12 @@
-﻿using Kingmaker.Localization;
+﻿using System.Collections.Generic;
+using System.IO;
+using Kingmaker.Localization;
 using Kingmaker.Localization.Enums;
 using Kingmaker.Localization.Shared;
 using Newtonsoft.Json;
 using SpeechMod.Configuration;
-using System.Collections.Generic;
-using System.IO;
 
-namespace ModConfiguration.Localization;
+namespace SpeechMod.Localization;
 
 internal class ModLocalizationManager
 {
@@ -56,7 +56,7 @@ internal class ModLocalizationManager
         {
             try
             {
-                using StreamReader file = File.OpenText(packFile);
+                using var file = File.OpenText(packFile);
                 using JsonReader jsonReader = new JsonTextReader(file);
                 JsonSerializer serializer = new();
                 var enLocalization = serializer.Deserialize<ModLocalizationPack>(jsonReader);

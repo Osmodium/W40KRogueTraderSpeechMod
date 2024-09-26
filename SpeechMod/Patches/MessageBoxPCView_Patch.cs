@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(MessageBoxPCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(MessageBoxPCView), nameof(MessageBoxPCView.BindViewImplementation))]
 public class MessageBoxPCView_Patch
 {
     private const string INPUT_BOX_TEXT_PATH = "/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenShipPhaseDetailedPCView/CharGenChangeNameMessageBoxPCView/CommonModalWindow/Panel/Content/Layout/Label_Message";

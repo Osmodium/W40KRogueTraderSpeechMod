@@ -16,7 +16,7 @@ public static class DialogPCView_Patch
     private const string SURFACE_SCROLL_VIEW_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView(Clone)/LeftSide/CueAndHistoryPlace/ScrollView";
     private const string SPACE_SCROLL_VIEW_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView(Clone)/LeftSide/CueAndHistoryPlace/ScrollView";
 
-    [HarmonyPatch(typeof(SurfaceDialogBaseView<DialogAnswerPCView>), "Initialize")]
+    [HarmonyPatch(typeof(SurfaceDialogBaseView<DialogAnswerPCView>), nameof(SurfaceDialogBaseView<DialogAnswerPCView>.Initialize))]
     [HarmonyPostfix]
     public static void AddDialogButton()
     {

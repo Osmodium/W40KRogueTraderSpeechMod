@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(ShipNameAndPortraitPCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(ShipNameAndPortraitPCView), nameof(ShipNameAndPortraitPCView.BindViewImplementation))]
 public static class ShipNameAndPortraitPCView_Patch
 {
     private const string SPACE_INFORMATION_LABEL_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/InventoryLeftCanvas/Background/ShipPart/InformationLabel";

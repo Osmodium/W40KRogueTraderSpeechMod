@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TutorialHintWindowPCView), "SetContent")]
+[HarmonyPatch(typeof(TutorialHintWindowPCView), nameof(TutorialHintWindowPCView.SetContent))]
 public class TutorialWindowView_Patch_Small
 {
 
@@ -28,7 +28,7 @@ public class TutorialWindowView_Patch_Small
     }
 }
 
-[HarmonyPatch(typeof(TutorialModalWindowPCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(TutorialModalWindowPCView), nameof(TutorialModalWindowPCView.BindViewImplementation))]
 public class TutorialWindowView_Patch_Big
 {
     private const string TUTORIAL_BIG_TITLE_PATH = "/CommonPCView(Clone)/CommonCanvas/TutorialPCView/BigWindowPCView(Clone)/Window/Content/Header/TitleGroup/Title";

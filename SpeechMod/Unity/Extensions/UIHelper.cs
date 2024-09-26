@@ -83,7 +83,7 @@ public static class UIHelper
 
     public static string GetGameObjectPath(this Transform transform)
     {
-        string path = transform?.name;
+        var path = transform?.name;
         while (transform?.parent != null)
         {
             transform = transform.parent;

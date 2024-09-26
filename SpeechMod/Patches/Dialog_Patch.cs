@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(DialogVM), "HandleOnCueShow")]
+[HarmonyPatch(typeof(DialogVM), nameof(DialogVM.HandleOnCueShow))]
 public static class Dialog_Patch
 {
     public static void Postfix()
@@ -28,7 +28,7 @@ public static class Dialog_Patch
             return;
         }
 
-        string key = Game.Instance?.DialogController?.CurrentCue?.Text?.Key;
+        var key = Game.Instance?.DialogController?.CurrentCue?.Text?.Key;
         if (string.IsNullOrWhiteSpace(key))
             key = Game.Instance?.DialogController?.CurrentCue?.Text?.Shared?.String?.Key;
 

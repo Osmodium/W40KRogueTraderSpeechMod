@@ -29,7 +29,7 @@ public class CharInfoSummaryPCView_Patch
         __instance.m_MovePointsLabel.HookupTextToSpeech();
     }
 
-    [HarmonyPatch(typeof(CharInfoStatusEffectsView), "RefreshView")]
+    [HarmonyPatch(typeof(CharInfoStatusEffectsView), nameof(CharInfoStatusEffectsView.RefreshView))]
     [HarmonyPostfix]
     public static void HookStatusEffects(CharInfoStatusEffectsView __instance)
     {
@@ -48,7 +48,7 @@ public class CharInfoSummaryPCView_Patch
         //__instance.m_WidgetEntityView?.m_RankText.HookupTextToSpeech();
     }
 
-    [HarmonyPatch(typeof(CharInfoProfitFactorItemPCView), "BindViewImplementation")]
+    [HarmonyPatch(typeof(CharInfoProfitFactorItemPCView), nameof(CharInfoProfitFactorItemPCView.BindViewImplementation))]
     [HarmonyPostfix]
     public static void HookFator(CharInfoProfitFactorItemPCView __instance)
     {

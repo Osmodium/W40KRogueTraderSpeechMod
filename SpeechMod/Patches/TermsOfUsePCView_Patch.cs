@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TermsOfUsePCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(TermsOfUsePCView), nameof(TermsOfUsePCView.BindViewImplementation))]
 public class TermsOfUsePCView_Patch
 {
     private const string TERMS_OF_USE_TITLE_PATH = "/MainMenuPCView(Clone)/UICanvas/TermsOfUsePCView/Body/Device/ContentGroup/TabsGroup/Title";

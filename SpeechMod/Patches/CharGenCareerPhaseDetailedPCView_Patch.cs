@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(CharGenCareerPhaseDetailedPCView), "BindViewImplementation")]
+[HarmonyPatch(typeof(CharGenCareerPhaseDetailedPCView), nameof(CharGenCareerPhaseDetailedPCView.BindViewImplementation))]
 public class CharGenCareerPhaseDetailedPCView_Patch
 {
     private const string CHARGEN_DESCRIPTION_PATH = "/MainMenuPCView(Clone)/UICanvas/CharGenContextPCView/CharGenPCView/Content/PhaseDetailedViews/CharGenCareerPhaseDetailedPCView/CharGenDescription/LevelupDescriptionView/Viewport";

@@ -16,7 +16,7 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public static class Tooltip_Patch
 {
-    [HarmonyPatch(typeof(InfoBaseView<InfoBaseVM>), "SetPart")]
+    [HarmonyPatch(typeof(InfoBaseView<InfoBaseVM>), nameof(InfoBaseView<InfoBaseVM>.SetPart))]
     [HarmonyPostfix]
     public static void SetPart(IEnumerable<TooltipBaseBrickVM> bricks, RectTransform container)
     {
@@ -33,7 +33,7 @@ public static class Tooltip_Patch
         HookBricksByContainer(container);
     }
 
-    [HarmonyPatch(typeof(TooltipBrickIconStatValueView), "BindViewImplementation")]
+    [HarmonyPatch(typeof(TooltipBrickIconStatValueView), nameof(TooltipBrickIconStatValueView.BindViewImplementation))]
     [HarmonyPostfix]
     public static void BrickIconStatValue(TooltipBrickIconStatValueView __instance)
     {

@@ -43,7 +43,7 @@ public class PlaybackStop : ModHotkeySettingEntry
 
             if (instance.m_WarningsTextView != null)
             {
-                if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out string text, false))
+                if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out var text, false))
                     text = "SpeechMod: Playback stopped!";
 
                 if (Main.Settings!.ShowNotificationOnPlaybackStop)

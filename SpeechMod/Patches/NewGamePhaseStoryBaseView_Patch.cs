@@ -12,7 +12,7 @@ namespace SpeechMod.Patches;
 public class NewGamePhaseStoryBaseView_Patch
 {
     private const string NEWGAME_STORY_FRAME_PATH = "/MainMenuPCView(Clone)/UICanvas/NewGamePCView/Device/Background (1)/Background/ContentGroup/NewGameTabGameModePCView/Screen_view/ItemView (1)/Description/ServiceWindowStandartScrollVew/Viewport/Content/Frame";
-    [HarmonyPatch(typeof(NewGamePhaseStoryBaseView), "BindViewImplementation")]
+    [HarmonyPatch(typeof(NewGamePhaseStoryBaseView), nameof(NewGamePhaseStoryBaseView.BindViewImplementation))]
     [HarmonyPostfix]
     public static void Postfix(NewGamePhaseStoryBaseView __instance)
     {

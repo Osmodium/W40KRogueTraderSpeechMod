@@ -1,9 +1,9 @@
-﻿using ModConfiguration.Localization;
-using Kingmaker;
+﻿using Kingmaker;
 using Kingmaker.Settings;
 using Kingmaker.Settings.Entities;
 using Kingmaker.UI.Models.SettingsUI.SettingAssets;
 using System;
+using SpeechMod.Localization;
 using UnityEngine;
 
 namespace SpeechMod.Configuration.Settings;

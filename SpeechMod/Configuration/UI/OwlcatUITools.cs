@@ -1,6 +1,6 @@
 ﻿using Kingmaker.UI.Models.SettingsUI;
 using Kingmaker.UI.Models.SettingsUI.SettingAssets;
-using ModConfiguration.Localization;
+using SpeechMod.Localization;
 using UnityEngine;
 
 namespace SpeechMod.Configuration.UI;
