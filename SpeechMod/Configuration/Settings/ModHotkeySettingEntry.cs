@@ -2,8 +2,8 @@
 using Kingmaker.Settings;
 using Kingmaker.Settings.Entities;
 using Kingmaker.UI.Models.SettingsUI.SettingAssets;
-using System;
 using SpeechMod.Localization;
+using System;
 using UnityEngine;
 
 namespace SpeechMod.Configuration.Settings;
@@ -15,11 +15,11 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
 
     public static bool ReSavingRequired { get; private set; } = false;
 
-    protected ModHotkeySettingEntry(string key, string title, string tooltip, string DefaultKeyPairString) : base(key, title, tooltip)
+    protected ModHotkeySettingEntry(string key, string title, string tooltip, string defaultKeyPairString) : base(key, title, tooltip)
     {
         try
         {
-            SettingEntity = new SettingsEntityKeyBindingPair(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", new(DefaultKeyPairString), false, true);
+            SettingEntity = new SettingsEntityKeyBindingPair(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", new(defaultKeyPairString), false, true);
         }
         catch (Exception ex)
         {

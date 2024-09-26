@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Kingmaker.Localization;
+﻿using Kingmaker.Localization;
 using Kingmaker.Localization.Enums;
 using Kingmaker.Localization.Shared;
 using Newtonsoft.Json;
 using SpeechMod.Configuration;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SpeechMod.Localization;
 

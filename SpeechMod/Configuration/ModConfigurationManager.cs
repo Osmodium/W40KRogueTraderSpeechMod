@@ -5,10 +5,10 @@ using Kingmaker.UI.InputSystems;
 using Kingmaker.UI.Models.SettingsUI;
 using SpeechMod.Configuration.Settings;
 using SpeechMod.Configuration.UI;
+using SpeechMod.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SpeechMod.Localization;
 using static UnityModManagerNet.UnityModManager;
 
 namespace SpeechMod.Configuration;

@@ -1,8 +1,8 @@
 ﻿using Kingmaker.Settings;
 using Kingmaker.Settings.Entities;
 using Kingmaker.UI.Models.SettingsUI.SettingAssets;
-using System;
 using SpeechMod.Localization;
+using System;
 using UnityEngine;
 
 namespace SpeechMod.Configuration.Settings;
@@ -12,8 +12,7 @@ public abstract class ModToggleSettingEntry : ModSettingEntry
     public readonly SettingsEntityBool SettingEntity;
     public UISettingsEntityBool UiSettingEntity { get; private set; }
 
-    protected ModToggleSettingEntry(string key, string title, string tooltip, bool defaultValue)
-        : base(key, title, tooltip)
+    protected ModToggleSettingEntry(string key, string title, string tooltip, bool defaultValue) : base(key, title, tooltip)
     {
         SettingEntity = new(SettingsController.Instance, $"{ModConfigurationManager.Instance?.SettingsPrefix}.newcontrols.{Key}", defaultValue, false, true);
     }

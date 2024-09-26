@@ -22,12 +22,9 @@ public class AppleSpeech : ISpeech
 
 		text = type switch
 		{
-			VoiceType.Narrator =>
-				$"-v {Main.Settings?.NarratorVoice} -r {Main.Settings?.NarratorRate} {text.Replace("\"", "")}",
-			VoiceType.Female =>
-				$"-v {Main.Settings?.FemaleVoice} -r {Main.Settings?.FemaleRate} {text.Replace("\"", "")}",
-			VoiceType.Male =>
-				$"-v {Main.Settings?.MaleVoice} -r {Main.Settings?.MaleRate} {text.Replace("\"", "")}",
+			VoiceType.Narrator => $"-v {Main.Settings?.NarratorVoice} -r {Main.Settings?.NarratorRate} {text.Replace("\"", "")}",
+			VoiceType.Female => $"-v {Main.Settings?.FemaleVoice} -r {Main.Settings?.FemaleRate} {text.Replace("\"", "")}",
+			VoiceType.Male => $"-v {Main.Settings?.MaleVoice} -r {Main.Settings?.MaleRate} {text.Replace("\"", "")}",
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
 		};
 
@@ -78,8 +75,7 @@ public class AppleSpeech : ISpeech
 
 	public string[] GetAvailableVoices()
 	{
-		var arguments =
-			"say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
+		var arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
 		var process = new Process
 		{
 			StartInfo = new ProcessStartInfo
