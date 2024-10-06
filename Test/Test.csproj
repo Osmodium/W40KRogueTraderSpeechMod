@@ -1,12 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net481</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-
 		<IsPackable>false</IsPackable>
-
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 

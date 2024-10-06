@@ -1,0 +1,12 @@
+{
+  "UniqueName": "SpeechMod",
+  "Version": "0.9.8",
+  "DisplayName": "W40K - SpeechMod",
+  "Description": "Introduces TTS in most parts of the game. Does not contain any voices, but uses the built in TTS of your OS.",
+  "Author": "Osmodium",
+  "ImageName": "Thumbnail.jpg",
+  "WorkshopId": "",
+  "Repository": "",
+  "HomePage": "",
+  "Dependencies": []
+}

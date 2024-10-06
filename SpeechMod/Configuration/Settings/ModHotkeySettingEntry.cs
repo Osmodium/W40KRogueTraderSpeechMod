@@ -115,13 +115,12 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
         var curValue = SettingEntity.GetValue();
         var defaultGroup = SettingEntity.DefaultValue.GameModesGroup;
         var defaultTrigger = SettingEntity.DefaultValue.TriggerOnHold;
-        if (curValue.GameModesGroup != defaultGroup || curValue.TriggerOnHold != defaultTrigger)
-        {
-            curValue.GameModesGroup = defaultGroup;
-            curValue.TriggerOnHold = defaultTrigger;
-            SettingEntity.SetValueAndConfirm(curValue);
-            ReSavingRequired = true;
-            ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} had outdated hotkey settings, migrated.");
-        }
+        if (curValue.GameModesGroup == defaultGroup && curValue.TriggerOnHold == defaultTrigger)
+	        return;
+        curValue.GameModesGroup = defaultGroup;
+        curValue.TriggerOnHold = defaultTrigger;
+        SettingEntity.SetValueAndConfirm(curValue);
+        ReSavingRequired = true;
+        ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} had outdated hotkey settings, migrated.");
     }
 }
