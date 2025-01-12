@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
-Version: 0.9.8
+Version: 0.9.9
 
 **Disclaimer: UNDER DEVELOPMENT**
 
