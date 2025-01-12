@@ -10,12 +10,6 @@ namespace SpeechMod.Voice;
 
 public static class PhoneticDictionary
 {
-    private static readonly Dictionary<string, string> LitteralDictionary = new()
-    {
-        { "—", Constants.BREAK_TOKEN_SHORT },
-        { "...", Constants.BREAK_TOKEN_MEDIUM },
-        { " - ", Constants.BREAK_TOKEN_LONG }
-    };
     private static Dictionary<string, string> s_PhoneticDictionary;
 
     private static string SpaceOutDate(string text)
@@ -26,19 +20,20 @@ public static class PhoneticDictionary
 
     public static string PrepareText(this string text)
     {
-        if (s_PhoneticDictionary == null)
+        if (s_PhoneticDictionary == null || !s_PhoneticDictionary.Any())
             LoadDictionary();
 
         text = text.ToLower();
         text = text.Replace("\"", "");
+        text = text.Replace("\r\n", ". ");
         text = text.Replace("\n", ". ");
-        text = text.Replace("---", "");
+        text = text.Replace("\r", ". ");
         text = text.Trim();
 
         text = SpaceOutDate(text);
 
-        text = LitteralDictionary.Aggregate(text, (current, entry) => current?.Replace(entry.Key, entry.Value));
-        return s_PhoneticDictionary.Aggregate(text, (current, entry) => Regex.Replace(current, $@"\b{entry.Key}\b", $"{entry.Value}"));
+        // Regex enabled dictionary
+        return s_PhoneticDictionary?.Aggregate(text, (current, entry) => Regex.Replace(current, entry.Key, entry.Value));
     }
 
     public static void LoadDictionary()

@@ -67,7 +67,7 @@ public class DialogAnswerBaseView_Patch
                 Debug.Log(text);
 
             text = Main.Settings?.SayDialogAnswerNumber == true ?
-                new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, $"$1 {Constants.BREAK_TOKEN_SHORT} $2") :
+                new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 - $2") :
                 new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
 
             text = text.PrepareText();
