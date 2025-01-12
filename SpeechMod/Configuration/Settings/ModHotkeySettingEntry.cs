@@ -116,7 +116,7 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
         var defaultGroup = SettingEntity.DefaultValue.GameModesGroup;
         var defaultTrigger = SettingEntity.DefaultValue.TriggerOnHold;
         if (curValue.GameModesGroup == defaultGroup && curValue.TriggerOnHold == defaultTrigger)
-	        return;
+            return;
         curValue.GameModesGroup = defaultGroup;
         curValue.TriggerOnHold = defaultTrigger;
         SettingEntity.SetValueAndConfirm(curValue);
