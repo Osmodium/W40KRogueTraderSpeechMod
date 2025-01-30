@@ -48,7 +48,7 @@ public class DialogAnswerBaseView_Patch
         {
             // 1a. Destroy the button if it exists
             if (playButtonGameObject != null)
-                Object.Destroy(playButtonGameObject.gameObject);
+                Object.Destroy(playButtonGameObject);
             return;
         }
 
@@ -120,9 +120,9 @@ public class DialogAnswerBaseView_Patch
 
                 if (hover)
                 {
-                    image0.color = hover ? color0On : color0Off;
-                    image1.color = hover ? color1On : color1Off;
-                    image2.color = hover ? color2On : color2Off;
+                    image0.color = color0On;
+                    image1.color = color1On;
+                    image2.color = color2On;
                 }
                 else
                 {

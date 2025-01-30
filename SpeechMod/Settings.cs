@@ -35,7 +35,7 @@ public class Settings : UnityModManager.ModSettings
     public float HoverColorA = 1f;
 
     public bool FontStyleOnHover = true;
-    public bool[] FontStyles = { false, false, false, true, false, false, false, false, false, false, false };
+    public bool[] FontStyles = [false, false, false, true, false, false, false, false, false, false, false];
 
     public bool InterruptPlaybackOnPlay = true;
     public bool PlaybackBarks = true;
