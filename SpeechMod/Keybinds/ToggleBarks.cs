@@ -1,27 +1,23 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.Code.UI.MVVM.View.Common.PC;
 using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
-using Owlcat.Runtime.Core;
 using SpeechMod.Configuration.Settings;
+using System;
 #if DEBUG
 using UnityEngine;
 #endif
 
-namespace SpeechMod.Keybinds;
+namespace SpeechMod.KeyBinds;
 
-public class ToggleBarks : ModHotkeySettingEntry
+public class ToggleBarks() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_VALUE)
 {
-    private const string _key = "barks.toggle";
-    private const string _title = "Toggle Barks";
-    private const string _tooltip = "Toggles playback of Barks";
-    private const string _defaultValue = "%B;;All;false";
-    private const string BIND_NAME = $"{Constants.SETTINGS_PREFIX}.newcontrols.ui.{_key}";
-
-    public ToggleBarks() : base(_key, _title, _tooltip, _defaultValue)
-    { }
+    private const string KEY = "barks.toggle";
+    private const string TITLE = "Toggle Barks";
+    private const string TOOLTIP = "Toggles playback of Barks";
+    private const string DEFAULT_VALUE = "%B;;All;false";
+    private const string BIND_NAME = $"{Constants.SETTINGS_PREFIX}.newcontrols.ui.{KEY}";
 
     public override SettingStatus TryEnable() => TryEnableAndPatch(typeof(Patches));
 
@@ -36,6 +32,7 @@ public class ToggleBarks : ModHotkeySettingEntry
         [HarmonyPostfix]
         private static void AddToggleBarksHotkey(CommonPCView __instance)
         {
+
 #if DEBUG
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
@@ -70,10 +67,11 @@ public class ToggleBarks : ModHotkeySettingEntry
 #endif
             if (instance == null || instance.m_WarningsTextView == null)
                 return;
-#if DEBUG
+
             var text = Main.Settings.PlaybackBarks ? _barksTurnedOnText : _barksTurnedOffText;
-#endif
+#if DEBUG
             Debug.Log(text);
+#endif
 
             if (Main.Settings!.ShowNotificationOnPlaybackStop)
             {

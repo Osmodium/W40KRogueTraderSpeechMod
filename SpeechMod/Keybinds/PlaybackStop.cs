@@ -5,23 +5,19 @@ using Kingmaker.Code.UI.MVVM.VM.WarningNotification;
 using Kingmaker.Localization;
 using SpeechMod.Configuration.Settings;
 using System;
-
 #if DEBUG
 using UnityEngine;
 #endif
 
-namespace SpeechMod.Keybinds;
+namespace SpeechMod.KeyBinds;
 
-public class PlaybackStop : ModHotkeySettingEntry
+public class PlaybackStop() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_VALUE)
 {
-    private const string _key = "playback.stop";
-    private const string _title = "Stop playback";
-    private const string _tooltip = "Stops playback of SpeechMod TTS.";
-    private const string _defaultValue = "%S;;All;false";
-    private const string BIND_NAME = $"{Constants.SETTINGS_PREFIX}.newcontrols.ui.{_key}";
-
-    public PlaybackStop() : base(_key, _title, _tooltip, _defaultValue)
-    { }
+    private const string KEY = "playback.stop";
+    private const string TITLE = "Stop playback";
+    private const string TOOLTIP = "Stops playback of SpeechMod TTS.";
+    private const string DEFAULT_VALUE = "%S;;All;false";
+    private const string BIND_NAME = $"{Constants.SETTINGS_PREFIX}.newcontrols.ui.{KEY}";
 
     public override SettingStatus TryEnable() => TryEnableAndPatch(typeof(Patches));
 

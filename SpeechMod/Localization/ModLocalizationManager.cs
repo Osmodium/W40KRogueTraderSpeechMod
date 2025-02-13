@@ -10,11 +10,11 @@ namespace SpeechMod.Localization;
 
 internal class ModLocalizationManager
 {
-    private static ModLocalizationPack m_EnPack;
+    private static ModLocalizationPack _enPack;
 
     public static void Init()
     {
-        m_EnPack = LoadPack(Locale.enGB);
+        _enPack = LoadPack(Locale.enGB);
 
         ApplyLocalization(LocalizationManager.Instance!.CurrentLocale);
 
@@ -25,7 +25,7 @@ internal class ModLocalizationManager
     {
         var currentPack = LocalizationManager.Instance.CurrentPack;
         if (currentPack == null) return;
-        foreach (var entry in m_EnPack.Strings)
+        foreach (var entry in _enPack.Strings)
         {
             currentPack.PutString(entry.Key, entry.Value.Text);
         }
@@ -44,7 +44,7 @@ internal class ModLocalizationManager
         using StreamWriter file = new(packFile);
         using JsonWriter jsonReader = new JsonTextWriter(file);
         JsonSerializer serializer = new();
-        serializer.Serialize(jsonReader, m_EnPack);
+        serializer.Serialize(jsonReader, _enPack);
 #endif
     }
 
@@ -76,7 +76,7 @@ internal class ModLocalizationManager
 
     public static LocalizedString CreateString(string key, string value)
     {
-        if (m_EnPack.Strings.ContainsKey(key))
+        if (_enPack.Strings.ContainsKey(key))
         {
             return new LocalizedString { m_ShouldProcess = false, m_Key = key };
         }
@@ -84,14 +84,14 @@ internal class ModLocalizationManager
         {
             ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"Missing localization string {key}");
 #if DEBUG
-            m_EnPack.Strings[key] = new() { Text = value };
+            _enPack.Strings[key] = new() { Text = value };
 #endif
             return new LocalizedString { m_ShouldProcess = false, m_Key = key };
         }
     }
 }
 
-public record class ModLocalizationPack
+public record ModLocalizationPack
 {
     [JsonProperty]
     public Dictionary<string, ModLocalizationEntry> Strings;

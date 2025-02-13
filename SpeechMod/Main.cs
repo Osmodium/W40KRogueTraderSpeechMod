@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using SpeechMod.Configuration;
 using SpeechMod.Configuration.Settings;
-using SpeechMod.Keybinds;
+using SpeechMod.KeyBinds;
 using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
