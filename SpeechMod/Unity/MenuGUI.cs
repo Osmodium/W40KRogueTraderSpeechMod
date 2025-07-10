@@ -68,7 +68,7 @@ public static class MenuGUI
             GUI.enabled = Main.Settings.AutoPlay;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Auto play ignores voiced dialog lines", GUILayout.ExpandWidth(false));
+            GUILayout.Label("Auto play ignores voiced dialog lines (set the Voice Volume to 0% in the game settings)", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
             Main.Settings.AutoPlayIgnoreVoice = GUILayout.Toggle(Main.Settings.AutoPlayIgnoreVoice, "Enabled");
             GUILayout.EndHorizontal();

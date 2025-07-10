@@ -98,12 +98,8 @@ public class AppleSpeech : ISpeech
 		process.Dispose();
 
 		return !string.IsNullOrWhiteSpace(text)
-			? text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+			? text.Split([";"], StringSplitOptions.RemoveEmptyEntries)
 			: null;
-
-#if DEBUG
-        Main.Logger.Warning($"[GetAvailableVoices] {error}");
-#endif
 	}
 
 	public string GetStatusMessage()

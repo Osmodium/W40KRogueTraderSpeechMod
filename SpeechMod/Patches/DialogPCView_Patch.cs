@@ -12,7 +12,7 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public static class DialogPCView_Patch
 {
-    private const string SPEECHMOD_DIALOGBUTTON_NAME = "SpeechMod_DialogButton";
+    private const string SPEECH_MOD_DIALOG_BUTTON_NAME = "SpeechMod_DialogButton";
     private const string SURFACE_SCROLL_VIEW_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView(Clone)/LeftSide/CueAndHistoryPlace/ScrollView";
     private const string SPACE_SCROLL_VIEW_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/SurfaceDialogPCView(Clone)/LeftSide/CueAndHistoryPlace/ScrollView";
 
@@ -47,7 +47,7 @@ public static class DialogPCView_Patch
         }
 
 
-        if (parent.TryFind(SPEECHMOD_DIALOGBUTTON_NAME) != null)
+        if (parent.TryFind(SPEECH_MOD_DIALOG_BUTTON_NAME) != null)
         {
             Debug.LogWarning("Button already exists!");
             return;
@@ -63,7 +63,7 @@ public static class DialogPCView_Patch
             return;
         }
 
-        buttonGameObject.name = SPEECHMOD_DIALOGBUTTON_NAME;
+        buttonGameObject.name = SPEECH_MOD_DIALOG_BUTTON_NAME;
         buttonGameObject.RectAlignTopLeft(new Vector2(40, 10));
 
         buttonGameObject.SetActive(true);
