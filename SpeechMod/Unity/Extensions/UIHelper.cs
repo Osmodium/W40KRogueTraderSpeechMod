@@ -91,4 +91,29 @@ public static class UIHelper
         }
         return path;
     }
+
+#nullable enable
+    public static T? GetComponentNullable<T>(this Transform transform) where T : Component
+    {
+        if (transform == null)
+            return null;
+
+        if (transform.TryGetComponent(typeof(T), out var component))
+        {
+            return (T)component;
+        }
+
+        return null;
+    }
+
+    public static void FixBlockingUi(string path)
+    {
+        var blockingUi = TryFind(path);
+        if (blockingUi != null)
+        {
+            var image = blockingUi.GetComponentNullable<Image>();
+            if (image != null)
+                image.raycastTarget = false;
+        }
+    }
 }

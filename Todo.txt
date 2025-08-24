@@ -109,6 +109,12 @@ And doesn't work, in general, also does't work with the stop shortcut, as the ke
 
 /CommonPCView(Clone)/CommonCanvas/TutorialPCView/SmallWindowPCView(Clone)/Window/Content/Header/Title
 
+🔲 Warp events
+
+🔲 Shortcut to replay the current dialog
+
+🔲 Split barks to better control
+
 🔲 Look into journal/rumors/contracts
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ContentGroup/DescriptionItem
 /SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/HeaderGroup/Title/TitleGroup/Text
@@ -185,6 +191,8 @@ Text
 🔲 Look into popups/notifications?
 
 🔲 Playback-view with stop functionality
+
+🔲 Individual character voices
 
 🔲 Update readme!
 

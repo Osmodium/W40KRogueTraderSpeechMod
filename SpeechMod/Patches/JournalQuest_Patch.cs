@@ -6,7 +6,6 @@ using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 
@@ -14,6 +13,7 @@ namespace SpeechMod.Patches;
 public static class JournalQuest_Patch
 {
     private const string BUTTON_NAME = "SpeechMod_JQButton";
+    private const string DESTINATION_BUTTON_NAME = "SpeechMod_JQDestinationButton";
     private const string SURFACE_BLOCKING_IMAGE_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView";
     private const string SPACE_BLOCKING_IMAGE_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas/ServiceWindowsPCView/JournalView/Device/ContentGroup/Screen_view/ItemView/JournalQuestPCView/BodyGroup/ContentGroup/ObjectivesGroup/ServiceWindowStandardScrollView";
 
@@ -28,10 +28,16 @@ public static class JournalQuest_Patch
         Debug.Log($"{nameof(JournalQuestPCView)}_{nameof(JournalQuestPCView.BindViewImplementation)}_Postfix");
 #endif
 
-        FixBlockingUi(SURFACE_BLOCKING_IMAGE_PATH);
-        FixBlockingUi(SPACE_BLOCKING_IMAGE_PATH);
+        UIHelper.FixBlockingUi(SURFACE_BLOCKING_IMAGE_PATH);
+        UIHelper.FixBlockingUi(SPACE_BLOCKING_IMAGE_PATH);
 
-        var headerScrambledTmp = __instance?.GetComponentsInChildren<ScrambledTMP>()?.FirstOrDefault();
+        if (__instance == null)
+        {
+            Debug.LogWarning($"[{nameof(JournalQuestPCView)}_{nameof(JournalQuestPCView.BindViewImplementation)}_Postfix] JournalQuestPCView instance is null!");
+            return;
+        }
+
+        var headerScrambledTmp = __instance.GetComponentsInChildren<ScrambledTMP>()?.FirstOrDefault();
         if (headerScrambledTmp != null)
         {
             headerScrambledTmp.m_TextComponent.HookupTextToSpeech();
@@ -42,17 +48,7 @@ public static class JournalQuest_Patch
         __instance.m_CompletionLabel.HookupTextToSpeech();
         __instance.m_ServiceMessageLabel.HookupTextToSpeech();
         __instance.m_StatusLabel.HookupTextToSpeech();
-    }
-
-    private static void FixBlockingUi(string path)
-    {
-        var blockingUi = UIHelper.TryFind(path);
-        if (blockingUi != null)
-        {
-            var image = blockingUi.GetComponent<Image>();
-            if (image != null)
-                image.raycastTarget = false;
-        }
+        __instance.m_TitleLabel.m_TextComponent.HookupTextToSpeech();
     }
 
     [HarmonyPatch(typeof(JournalQuestObjectiveBaseView), nameof(JournalQuestObjectiveBaseView.BindViewImplementation))]
@@ -67,9 +63,10 @@ public static class JournalQuest_Patch
 #endif
 
         __instance.m_Title.TryAddButtonToTextMeshPro(BUTTON_NAME, new Vector2(18f, -11f), new Vector3(0.8f, 0.8f, 1f));
+        __instance.m_Destination.TryAddButtonToTextMeshPro(DESTINATION_BUTTON_NAME, new Vector2(-40f, -4f), new Vector3(0.8f, 0.8f, 1f));
         __instance.m_Description.HookupTextToSpeech();
-        __instance.m_Destination.HookupTextToSpeech();
         __instance.m_EtudeCounter.HookupTextToSpeech();
+        __instance.m_ObjectiveNummer.HookupTextToSpeech();
     }
 
     [HarmonyPatch(typeof(JournalQuestObjectiveAddendumBaseView), nameof(JournalQuestObjectiveAddendumBaseView.BindViewImplementation))]

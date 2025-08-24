@@ -89,10 +89,10 @@ public static class Hooks
             return;
         }
 
-        var defaultValues = textMeshProTransform.GetComponent<TextMeshProValues>();
+        var defaultValues = textMeshProTransform.GetComponentNullable<TextMeshProValues>();
         if (defaultValues == null)
         {
-            defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
+            defaultValues = textMeshProTransform.gameObject.AddComponent<TextMeshProValues>();
         }
         else
         {
@@ -105,7 +105,14 @@ public static class Hooks
         textMeshPro.OnPointerEnterAsObservable().Subscribe(
             _ =>
             {
-                defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
+                // Ensure we have default values for the text
+                if (defaultValues == null)
+                {
+                    defaultValues = textMeshProTransform.GetComponentNullable<TextMeshProValues>();
+                    if (defaultValues == null)
+                        defaultValues = textMeshProTransform.gameObject.AddComponent<TextMeshProValues>();
+                }
+
                 defaultValues!.FontStyles = textMeshPro.fontStyle;
                 defaultValues.Color = textMeshPro.color;
                 defaultValues.ExtraPadding = textMeshPro.extraPadding;

@@ -33,6 +33,7 @@ public static class ButtonFactory
         }
         else
         {
+            // Asset ID that contains the arrow button
             var asset = ResourcesLibrary.TryGetResource<GameObject>("6dda9b696601b7847996fe3926c42b50");
             var button = asset?.transform.TryFind(TEMP_ARROW_BUTTON_PATH)?.gameObject;
             buttonGameObject = Object.Instantiate(button, parent);
