@@ -2,10 +2,10 @@
     "Id": "SpeechMod",
     "DisplayName": "W40K - SpeechMod",
     "Author": "Osmodium",
-    "ManagerVersion": "0.25.0",
+    "ManagerVersion": "0.31.1",
     "Requirements": [],
     "AssemblyName": "W40KRTSpeechMod.dll",
     "EntryMethod": "SpeechMod.Main.Load",
     "HomePage": "https://www.nexusmods.com/warhammer40kroguetrader/mods/75",
-    "Version": "1.0.1"
+    "Version": "1.3.0"
 }
