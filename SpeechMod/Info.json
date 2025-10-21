@@ -2,7 +2,7 @@
     "Id": "SpeechMod",
     "DisplayName": "W40K - SpeechMod",
     "Author": "Osmodium",
-    "ManagerVersion": "0.31.1",
+    "ManagerVersion": "0.25.0",
     "Requirements": [],
     "AssemblyName": "W40KRTSpeechMod.dll",
     "EntryMethod": "SpeechMod.Main.Load",
