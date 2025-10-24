@@ -9,6 +9,7 @@ public static class MenuGUI
     private static string m_NarratorPreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Narrator voice speech test";
     private static string m_FemalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Female voice speech test";
     private static string m_MalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Male voice speech test";
+    private static string m_ProtagonistPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Protagonist voice speech test";
 
     public static void OnGui()
     {
@@ -23,10 +24,25 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
 #endif
+        AddHeader("Playback voices");
 
         AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
-        GUILayout.BeginVertical("Playback voices", GUI.skin.box);
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Use specific voice for protagonist", GUILayout.ExpandWidth(false));
+        Main.Settings.UseProtagonistSpecificVoice = GUILayout.Toggle(Main.Settings.UseProtagonistSpecificVoice, "Enabled");
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+
+        if (Main.Settings.UseProtagonistSpecificVoice)
+        {
+            AddVoiceSelector("Protagonist - See nationality below", ref Main.Settings.ProtagonistVoice, ref m_ProtagonistPreviewText, ref Main.Settings.ProtagonistRate, ref Main.Settings.ProtagonistVolume, ref Main.Settings.ProtagonistPitch, VoiceType.Protagonist);
+        }
+
+        GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
@@ -40,6 +56,8 @@ public static class MenuGUI
             AddVoiceSelector("Female Voice - See nationality below", ref Main.Settings.FemaleVoice, ref m_FemalePreviewText, ref Main.Settings.FemaleRate, ref Main.Settings.FemaleVolume, ref Main.Settings.FemalePitch, VoiceType.Female);
             AddVoiceSelector("Male Voice - See nationality below", ref Main.Settings.MaleVoice, ref m_MalePreviewText, ref Main.Settings.MaleRate, ref Main.Settings.MaleVolume, ref Main.Settings.MalePitch, VoiceType.Male);
         }
+
+        AddHeader("Playback Settings");
 
         GUILayout.BeginVertical("", GUI.skin.box);
 
@@ -271,6 +289,15 @@ public static class MenuGUI
             GUILayout.Box(GetColorPreview(ref r, ref g, ref b, ref a), GUILayout.Width(20));
             GUILayout.EndHorizontal();
         }
+        GUILayout.EndVertical();
+    }
+
+    private static void AddHeader(string text)
+    {
+        GUILayout.BeginVertical(text, GUI.skin.box);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("", GUILayout.ExpandWidth(true));
+        GUILayout.EndHorizontal();
         GUILayout.EndVertical();
     }
 
