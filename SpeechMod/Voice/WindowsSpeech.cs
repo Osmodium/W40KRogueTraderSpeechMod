@@ -27,9 +27,15 @@ public class WindowsSpeech : ISpeech
     private static string MalePitch => $"<pitch absmiddle=\"{Main.Settings?.MalePitch}\"/>";
     private static string MaleRate => $"<rate absspeed=\"{Main.Settings?.MaleRate}\"/>";
 
+    private static string ProtagonistVoice => $"<voice required=\"Name={Main.ProtagonistVoice}\">";
+    private static string ProtagonistVolume => $"<volume level=\"{Main.Settings?.ProtagonistVolume}\"/>";
+    private static string ProtagonistPitch => $"<pitch absmiddle=\"{Main.Settings?.ProtagonistPitch}\"/>";
+    private static string ProtagonistRate => $"<rate absspeed=\"{Main.Settings?.ProtagonistRate}\"/>";
+
     public string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
     public string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
     public string CombinedMaleVoiceStart => $"{MaleVoice}{MalePitch}{MaleRate}{MaleVolume}";
+    public string CombinedProtagonistVoiceStart => $"{ProtagonistVoice}{ProtagonistPitch}{ProtagonistRate}{ProtagonistVolume}";
 
     public virtual string CombinedDialogVoiceStart
     {
@@ -38,7 +44,10 @@ public class WindowsSpeech : ISpeech
             if (Game.Instance?.DialogController?.CurrentSpeaker == null)
                 return CombinedNarratorVoiceStart;
 
-            return Game.Instance.DialogController.CurrentSpeaker.Gender switch
+            if (Game.Instance?.DialogController?.CurrentSpeaker.IsMainCharacter == true)
+                return CombinedProtagonistVoiceStart;
+
+            return Game.Instance?.DialogController?.CurrentSpeaker.Gender switch
             {
                 Gender.Female => CombinedFemaleVoiceStart,
                 Gender.Male => CombinedMaleVoiceStart,
@@ -75,7 +84,7 @@ public class WindowsSpeech : ISpeech
         return text;
     }
 
-    private void SpeakInternal(string text, float delay = 0f)
+    private static void SpeakInternal(string text, float delay = 0f)
     {
         text = SpeakBegin + text + SpeakEnd;
         if (Main.Settings?.LogVoicedLines == true)
@@ -104,6 +113,7 @@ public class WindowsSpeech : ISpeech
             VoiceType.Narrator => $"{CombinedNarratorVoiceStart}{text}</voice>",
             VoiceType.Female => $"{CombinedFemaleVoiceStart}{text}</voice>",
             VoiceType.Male => $"{CombinedMaleVoiceStart}{text}</voice>",
+            VoiceType.Protagonist => $"{CombinedProtagonistVoiceStart}{text}</voice>",
             _ => throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null)
         };
 
@@ -150,6 +160,13 @@ public class WindowsSpeech : ISpeech
         if (string.IsNullOrEmpty(text))
         {
             Main.Logger?.Warning("No text to speak!");
+            return;
+        }
+
+        if (Main.Settings!.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist)
+        {
+            text = $"{CombinedProtagonistVoiceStart}{text}</voice>";
+            SpeakInternal(text, delay);
             return;
         }
 

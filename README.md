@@ -2,12 +2,11 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
-Version: 1.3.0
+Version: 1.2.0
 
 **Disclaimer: UNDER DEVELOPMENT**
 
 - Windows: Should work with the features implemented.
-
 - OSX: Not tested, let me know if it works.
 
 **Works with all languages as long as you have a voice in that language installed.**
@@ -23,7 +22,6 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
 
  1. Download the W40KSpeechMod mod file and unzip.
  2. Please note that the game comes with its own built in Unity Mod Manager so you do not need to install another one.
-
  3. Navigate to *%userprofile%\AppData\LocalLow\Owlcat Games\Warhammer 40000 Rogue Trader\UnityModManager\\*
  4. Copy the *W40KSpeechMod* folder into the *UnityModManager* folder
  5. Launch Warhammer 40K: Rogue Trader, you may need to hit **ctrl+F10** to see the mod manager window.
@@ -33,6 +31,7 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/WH40KRTSpeechMod/issues)*
 
 #### Limitations:
+- No controller support (and probably never will have)
 - Can't playback book event choices yet.
 
 #### Todo:
@@ -140,6 +139,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 		- **Speech volume**: The volume of the voice from 0 to 100.
 		- **Speech pitch**: The pitch of the voice from -10 to 10.
 	-**Preview Voice**: Used to preview the settings of the voice.
+- **Use protagonist specific voice**: Specify a voice to be used for every time the protagonist speaks.
 - **Use gender specific voices**: Specify voices for female and male dialog parts. Each of the voices can be adjusted with rate, volume and pitch where available.
 - Windows Only:
 	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
@@ -157,7 +157,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](https://dashvoid.com/speechmod/w40krt/0_Settings_0_9_0.png)
+![Settings for SpeechMod v.0.9.0](https://dashvoid.com/speechmod/w40krt/0_Settings_0_9_0.png)
 
 ### Motivation
 *Why did I create this mod?*

@@ -72,7 +72,16 @@ public class DialogAnswerBaseView_Patch
 
             text = text.PrepareText();
 
-            Main.Speech?.SpeakAs(text, Game.Instance?.Player?.MainCharacterEntity?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male);
+            var voiceType = VoiceType.Narrator;
+            if (Game.Instance.DialogController.FirstSpeaker != null) // If we are speaking to a character
+            {
+                if (Main.Settings?.UseProtagonistSpecificVoice == true)
+                    voiceType = VoiceType.Protagonist;
+                else if (Main.Settings?.UseGenderSpecificVoices == true)
+                    voiceType = Game.Instance.Player.MainCharacterEntity?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male;
+            }
+
+            Main.Speech?.SpeakAs(text, voiceType);
         });
 
         if (playButtonGameObject == null || playButtonGameObject.transform == null)

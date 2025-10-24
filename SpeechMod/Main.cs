@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using SpeechMod.Configuration;
-using SpeechMod.Configuration.Settings;
 using SpeechMod.KeyBinds;
 using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
@@ -28,6 +27,7 @@ public static class Main
     public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
     public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
     public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
+    public static string ProtagonistVoice => VoicesDict?.ElementAtOrDefault(Settings.ProtagonistVoice).Key;
 
     public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
     {
