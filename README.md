@@ -4,29 +4,31 @@ By [Osmodium](https://github.com/Osmodium)
 ## This mod is made for Warhammer 40K: Rogue Trader and introduces TTS (TextToSpeech) in most places.
 Version: 1.2.0
 
-**Disclaimer: UNDER DEVELOPMENT**
+🛠️**Disclaimer: UNDER DEVELOPMENT**
 
-- Windows: Should work with the features implemented.
-- OSX: Not tested, let me know if it works.
-- Linux: Not supported (this includes Steam Deck)
+- **Windows**: ✅ Should work with the features implemented.
+- **OSX**: ⚠️ Might work, let me know if there are any issues.
+- **Linux**: ⛔ Not supported (this includes Steam Deck).
 
-## <span style="color:red">This mod contains no voices and no pre-baked voice files!</span>
-The mod utilizes the internal Text-To-Speech functionality in Windows, or the `say` command on OSX.
+---
 
-**Works with all languages as long as you have a voice in that language installed.**
+### 🚨 This mod contains no AI and no pre-baked voice files!🚨
+The mod utilizes the internal Text-To-Speech (`SAPI`) functionality in **Windows**, or the `say` command on **OSX**.
+
+**📢Works with all languages as long as you have a voice in that language installed.**
 
 ---
 
 [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 
 **How to use natural voices.**
-Install this application: [NaturalVoiceSAPIAdapter﻿](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+Install this application: [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
 Note: It seems to only support offline voices on Windows 11 and online voices seem to crash when they are being stopped during speech.
 Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSAPIAdapter application.
 
 ---
 
-### How to install
+### How to install 📝
 
  1. Download the W40KSpeechMod mod file and unzip.
  2. Please note that the game comes with its own built in Unity Mod Manager so you do not need to install another one.
@@ -36,7 +38,7 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
 
 ---
 
-### Known issues / limitations
+### Known issues / limitations❗
 
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/WH40KRTSpeechMod/issues)*
 
@@ -47,7 +49,7 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
 #### Todo:
 - Still some work to do, see https://github.com/Osmodium/W40KRogueTraderSpeechMod/blob/main/Todo.txt for more info.
 
-## How to use
+## How to use❓
 
 #### 1) Dialog
 When in dialog you can press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
@@ -169,7 +171,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 
 ![Settings for SpeechMod v.0.9.0](https://dashvoid.com/speechmod/w40krt/0_Settings_0_9_0.png)
 
-### Motivation
+### Motivation 💪
 *Why did I create this mod?*
 After having created the "same" mod for [Pathfinder: Wrath of the Righteous](https://www.nexusmods.com/pathfinderwrathoftherighteous/mods/241), I got requests of doing it for this game too, and since I also wanted to play it, I gratefully obliged :).
 
@@ -177,11 +179,11 @@ I have come to realize that I spend a lot of my energy through the day on variou
 
 After I started creating this mod, I have thought to myself that if I struggle with this issue, imagine what people with genuine disabilities must go through and possibly miss out on, which motivated me even more to get this mod working and release it. I really hope that it will help and encourage more people to get as much out of the game as possible.
 
-### Contribute
+### Contribute 👷
 If you find a name in the game which is pronounced funny by the voice, you can add it to the PhoneticDictionary.json in the mod folder (don't uninstall the mod as this will be deleted). I don't have a great way of submitting changes to this besides through GitHub pull requests, which is not super user friendly. But let's see if we can build a good pronunciation database for the voice together.
 Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 
-### Acknowledgments
+### Acknowledgments 🎖️
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS in the original mod, and various exploration work.
 - Enhanced Controls mod for the keybinding and localization code.
