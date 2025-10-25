@@ -6,6 +6,7 @@ Version: 1.2.0
 
 🛠️**Disclaimer: UNDER DEVELOPMENT**
 
+As of now this is the support on each platform:
 - **Windows**: ✅ Should work with the features implemented.
 - **OSX**: ⚠️ Might work, let me know if there are any issues.
 - **Linux**: ⛔ Not supported (this includes Steam Deck).
