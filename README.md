@@ -133,9 +133,11 @@ In the main menu view, a welcome message is shown, this can be played back by ho
 #### 16) 🔳 Space battle(?) Results text
 **NOT IMPLEMENTED YET**
 
-### Settings
+---
 
-New keybind setting in the game menu under "Sound" to stop playback.
+### Settings ⚙️
+
+Keybind setting in the game menu under "Sound" to stop playback.
 ![Assign keybind(s) to stopping of playback](https://dashvoid.com/speechmod/w40krt/4_Keybinding.png)
 
 If enabled in the mod-settings, a notification will be shown when stopping the playback through use of the keybind.
