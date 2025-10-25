@@ -8,8 +8,14 @@ Version: 1.2.0
 
 - Windows: Should work with the features implemented.
 - OSX: Not tested, let me know if it works.
+- Linux: Not supported (this includes Steam Deck)
+
+## <span style="color:red">This mod contains no voices and no pre-baked voice files!</span>
+The mod utilizes the internal Text-To-Speech functionality in Windows, or the `say` command on OSX.
 
 **Works with all languages as long as you have a voice in that language installed.**
+
+---
 
 [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 
@@ -18,6 +24,8 @@ Install this application: [NaturalVoiceSAPIAdapter﻿](https://github.com/gexgd0
 Note: It seems to only support offline voices on Windows 11 and online voices seem to crash when they are being stopped during speech.
 Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSAPIAdapter application.
 
+---
+
 ### How to install
 
  1. Download the W40KSpeechMod mod file and unzip.
@@ -25,6 +33,8 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
  3. Navigate to *%userprofile%\AppData\LocalLow\Owlcat Games\Warhammer 40000 Rogue Trader\UnityModManager\\*
  4. Copy the *W40KSpeechMod* folder into the *UnityModManager* folder
  5. Launch Warhammer 40K: Rogue Trader, you may need to hit **ctrl+F10** to see the mod manager window.
+
+---
 
 ### Known issues / limitations
 
@@ -37,7 +47,7 @@ Disclaimer: I do **NOT** intend to support issues related to the NaturalVoicesSA
 #### Todo:
 - Still some work to do, see https://github.com/Osmodium/W40KRogueTraderSpeechMod/blob/main/Todo.txt for more info.
 
-### How to use
+## How to use
 
 #### 1) Dialog
 When in dialog you can press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
