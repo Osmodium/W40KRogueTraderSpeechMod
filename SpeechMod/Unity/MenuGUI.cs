@@ -9,7 +9,7 @@ public static class MenuGUI
     private static string m_NarratorPreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Narrator voice speech test";
     private static string m_FemalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Female voice speech test";
     private static string m_MalePreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Male voice speech test";
-    private static string m_ProtagonistPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Protagonist voice speech test";
+    private static string m_ProtagonistPreviewText = "Speech Mod for Warhammer 40K: Rogue Trader - Protagonist voice speech test";
 
     public static void OnGui()
     {
@@ -238,7 +238,7 @@ public static class MenuGUI
         }
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
+        GUILayout.Label("Preview voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         previewString = GUILayout.TextField(previewString, GUILayout.Width(700f));
         if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
@@ -301,17 +301,33 @@ public static class MenuGUI
         GUILayout.EndVertical();
     }
 
+    private static Texture2D s_ColorPreviewTexture;
+    private static float s_LastR = -1f, s_LastG = -1f, s_LastB = -1f, s_LastA = -1f;
+
     private static Texture2D GetColorPreview(ref float r, ref float g, ref float b, ref float a)
     {
-        var texture = new Texture2D(20, 20);
-        for (var y = 0; y < texture.height; y++)
+        // ReSharper disable CompareOfFloatsByEqualityOperator
+        if (s_ColorPreviewTexture != null && s_LastR == r && s_LastG == g && s_LastB == b && s_LastA == a)
+            return s_ColorPreviewTexture;
+        // ReSharper restore CompareOfFloatsByEqualityOperator
+
+        s_LastR = r;
+        s_LastG = g;
+        s_LastB = b;
+        s_LastA = a;
+
+        if (s_ColorPreviewTexture == null)
+            s_ColorPreviewTexture = new Texture2D(20, 20);
+
+        var color = new Color(r, g, b, a);
+        for (var y = 0; y < s_ColorPreviewTexture.height; y++)
         {
-            for (var x = 0; x < texture.width; x++)
+            for (var x = 0; x < s_ColorPreviewTexture.width; x++)
             {
-                texture.SetPixel(x, y, new Color(r, g, b, a));
+                s_ColorPreviewTexture.SetPixel(x, y, color);
             }
         }
-        texture.Apply();
-        return texture;
+        s_ColorPreviewTexture.Apply();
+        return s_ColorPreviewTexture;
     }
 }

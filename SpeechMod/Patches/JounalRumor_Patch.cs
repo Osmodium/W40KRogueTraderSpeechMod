@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.Code.UI.MVVM.View.ServiceWindows.Journal;
 using SpeechMod.Unity.Extensions;
-using UnityEngine.UI;
 #if DEBUG
 using UnityEngine;
 #endif
@@ -25,24 +24,13 @@ public class JounalRumor_Patch
         Debug.Log($"{nameof(JournalRumourPCView)}_{nameof(JournalRumourPCView.BindViewImplementation)}_Postfix");
 #endif
 
-        UnblockImage(BLOCKING_IMAGE_PATH);
-        UnblockImage(BLOCKING_BACKGROUND_PATH);
+        UIHelper.FixBlockingUi(BLOCKING_IMAGE_PATH);
+        UIHelper.FixBlockingUi(BLOCKING_BACKGROUND_PATH);
 
         __instance.m_TitleLabel.m_TextComponent.HookupTextToSpeech();
         __instance.m_CompletionLabel.HookupTextToSpeech();
         __instance.m_NoDataText.HookupTextToSpeech();
         __instance.m_DescriptionLabel.HookupTextToSpeech();
         __instance.m_StatusLabel.HookupTextToSpeech();
-    }
-
-    private static void UnblockImage(string path)
-    {
-        var blockingUi = UIHelper.TryFind(path);
-        if (blockingUi == null)
-            return;
-
-        var image = blockingUi.GetComponent<Image>();
-        if (image != null)
-            image.raycastTarget = false;
     }
 }
