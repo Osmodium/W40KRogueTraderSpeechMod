@@ -198,9 +198,12 @@ public static class MenuGUI
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        voice = GUILayout.SelectionGrid(voice, Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray(),
-            Main.Speech is WindowsSpeech ? 4 : 5
-        );
+        var voicesArray = Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray();
+        voice = GUILayout.SelectionGrid(voice, voicesArray, Main.Speech is WindowsSpeech ? 4 : 5);
+
+        if (voice < 0 || voice >= Main.VoicesDict.Count)
+            voice = 0;
+
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
