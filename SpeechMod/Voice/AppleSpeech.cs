@@ -25,6 +25,7 @@ public class AppleSpeech : ISpeech
 			VoiceType.Narrator => $"-v {Main.Settings?.NarratorVoice} -r {Main.Settings?.NarratorRate} {text.Replace("\"", "")}",
 			VoiceType.Female => $"-v {Main.Settings?.FemaleVoice} -r {Main.Settings?.FemaleRate} {text.Replace("\"", "")}",
 			VoiceType.Male => $"-v {Main.Settings?.MaleVoice} -r {Main.Settings?.MaleRate} {text.Replace("\"", "")}",
+			VoiceType.Protagonist => $"-v {Main.Settings?.ProtagonistVoice} -r {Main.Settings?.ProtagonistRate} {text.Replace("\"", "")}",
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
 		};
 
@@ -51,7 +52,35 @@ public class AppleSpeech : ISpeech
 
 	public void SpeakAs(string text, VoiceType type, float delay = 0)
 	{
-		throw new NotImplementedException();
+		if (string.IsNullOrEmpty(text))
+		{
+			Main.Logger?.Warning("No text to speak!");
+			return;
+		}
+
+		text = text.PrepareText();
+		text = new Regex("<[^>]+>").Replace(text, "");
+
+		var voice = type switch
+		{
+			VoiceType.Narrator => Main.NarratorVoice,
+			VoiceType.Female => Main.FemaleVoice,
+			VoiceType.Male => Main.MaleVoice,
+			VoiceType.Protagonist => Main.ProtagonistVoice ?? Main.NarratorVoice,
+			_ => Main.NarratorVoice
+		};
+
+		var rate = type switch
+		{
+			VoiceType.Narrator => Main.Settings!.NarratorRate,
+			VoiceType.Female => Main.Settings!.FemaleRate,
+			VoiceType.Male => Main.Settings!.MaleRate,
+			VoiceType.Protagonist => Main.Settings!.ProtagonistRate,
+			_ => Main.Settings!.NarratorRate
+		};
+
+		text = $"-v {voice} -r {rate} {text.Replace("\"", "")}";
+		AppleVoiceUnity.Speak(text, delay);
 	}
 
 	public void Speak(string text, float delay)

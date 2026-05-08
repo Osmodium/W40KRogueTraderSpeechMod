@@ -105,8 +105,8 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareText();
         text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.PrepareText();
 
         text = voiceType switch
         {
@@ -181,6 +181,7 @@ public class WindowsSpeech : ISpeech
             VoiceType.Narrator => $"{CombinedNarratorVoiceStart}{text}</voice>",
             VoiceType.Female => $"{CombinedFemaleVoiceStart}{text}</voice>",
             VoiceType.Male => $"{CombinedMaleVoiceStart}{text}</voice>",
+            VoiceType.Protagonist => $"{CombinedProtagonistVoiceStart}{text}</voice>",
             _ => throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null)
         };
 

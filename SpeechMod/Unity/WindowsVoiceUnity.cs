@@ -108,7 +108,10 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static float GetNormalizedProgress()
     {
-        return 1-(float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
+        if (m_CurrentWordCount <= 0)
+            return 0f;
+
+        return 1 - (float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
     }
 
     public static void Stop()

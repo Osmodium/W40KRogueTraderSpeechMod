@@ -11,6 +11,7 @@ namespace SpeechMod.Voice;
 public static class PhoneticDictionary
 {
     private static Dictionary<string, string> s_PhoneticDictionary;
+    private static List<(Regex Pattern, string Replacement)> s_CompiledPatterns;
 
     private static string SpaceOutDate(string text)
     {
@@ -32,8 +33,16 @@ public static class PhoneticDictionary
 
         text = SpaceOutDate(text);
 
-        // Regex enabled dictionary
-        return s_PhoneticDictionary?.Aggregate(text, (current, entry) => Regex.Replace(current, entry.Key, entry.Value));
+        // Apply pre-compiled regex patterns from dictionary
+        if (s_CompiledPatterns != null)
+        {
+            foreach (var (pattern, replacement) in s_CompiledPatterns)
+            {
+                text = pattern.Replace(text, replacement);
+            }
+        }
+
+        return text;
     }
 
     public static void LoadDictionary()
@@ -57,12 +66,21 @@ public static class PhoneticDictionary
             LoadBackupDictionary();
         }
 
+        CompilePatterns();
+
 #if DEBUG
         foreach (var entry in s_PhoneticDictionary)
         {
             Main.Logger?.Log($"{entry.Key}={entry.Value}");
         }
 #endif
+    }
+
+    private static void CompilePatterns()
+    {
+        s_CompiledPatterns = s_PhoneticDictionary?
+            .Select(e => (new Regex(e.Key, RegexOptions.Compiled), e.Value))
+            .ToList();
     }
 
     private static void LoadBackupDictionary()
