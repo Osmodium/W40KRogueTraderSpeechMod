@@ -13,15 +13,16 @@ public static class PhoneticDictionary
     private static Dictionary<string, string> s_PhoneticDictionary;
     private static List<(Regex Pattern, string Replacement)> s_CompiledPatterns;
 
+    private static readonly Regex s_DatePattern = new(@"([0-9]{2})\/([0-9]{2})\/([0-9]{4})", RegexOptions.Compiled);
+
     private static string SpaceOutDate(string text)
     {
-        var pattern = @"([0-9]{2})\/([0-9]{2})\/([0-9]{4})";
-        return Regex.Replace(text, pattern, "$1 / $2 / $3");
+        return s_DatePattern.Replace(text, "$1 / $2 / $3");
     }
 
     public static string PrepareText(this string text)
     {
-        if (s_PhoneticDictionary == null || !s_PhoneticDictionary.Any())
+        if (s_PhoneticDictionary == null)
             LoadDictionary();
 
         text = text.ToLower();
@@ -45,6 +46,15 @@ public static class PhoneticDictionary
         return text;
     }
 
+    /// <summary>
+    /// Load a dictionary directly (useful for testing).
+    /// </summary>
+    public static void LoadDictionary(Dictionary<string, string> dictionary)
+    {
+        s_PhoneticDictionary = dictionary ?? new Dictionary<string, string>();
+        CompilePatterns();
+    }
+
     public static void LoadDictionary()
     {
         Main.Logger?.Log("Loading phonetic dictionary...");
@@ -66,6 +76,12 @@ public static class PhoneticDictionary
             LoadBackupDictionary();
         }
 
+        if (s_PhoneticDictionary == null || s_PhoneticDictionary.Count == 0)
+        {
+            Main.Logger?.Warning("Dictionary was empty, loading backup!");
+            LoadBackupDictionary();
+        }
+
         CompilePatterns();
 
 #if DEBUG
@@ -78,9 +94,24 @@ public static class PhoneticDictionary
 
     private static void CompilePatterns()
     {
-        s_CompiledPatterns = s_PhoneticDictionary?
-            .Select(e => (new Regex(e.Key, RegexOptions.Compiled), e.Value))
-            .ToList();
+        if (s_PhoneticDictionary == null)
+        {
+            s_CompiledPatterns = null;
+            return;
+        }
+
+        s_CompiledPatterns = new List<(Regex, string)>();
+        foreach (var entry in s_PhoneticDictionary)
+        {
+            try
+            {
+                s_CompiledPatterns.Add((new Regex(entry.Key, RegexOptions.Compiled), entry.Value));
+            }
+            catch (ArgumentException ex)
+            {
+                Main.Logger?.Warning($"Invalid regex pattern '{entry.Key}' in phonetic dictionary, skipping. Error: {ex.Message}");
+            }
+        }
     }
 
     private static void LoadBackupDictionary()
