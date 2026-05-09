@@ -198,7 +198,15 @@ public static class MenuGUI
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
-        var voicesArray = Main.VoicesDict.Select(v => new GUIContent(v.Key, v.Value)).ToArray();
+        var voicesArray = Main.VoicesDict?.Select(v => new GUIContent(v.Key, v.Value)).ToArray();
+        if (voicesArray == null || voicesArray.Length == 0)
+        {
+            GUILayout.Label("No voices available!", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+            return;
+        }
+
         voice = GUILayout.SelectionGrid(voice, voicesArray, Main.Speech is WindowsSpeech ? 4 : 5);
 
         if (voice < 0 || voice >= voicesArray.Length)

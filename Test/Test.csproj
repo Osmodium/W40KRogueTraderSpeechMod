@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
+
 	<PropertyGroup>
 		<TargetFramework>net481</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<IsPackable>false</IsPackable>
 		<OutputType>Library</OutputType>
+		<RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,6 +23,22 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<!-- Runtime-only: needed so CLR can resolve types from the game assemblies -->
+	<ItemGroup>
+		<Reference Include="UnityModManager">
+			<HintPath>$(RogueTraderData)\UnityModManager\UnityModManager.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
