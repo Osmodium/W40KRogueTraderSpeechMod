@@ -4,6 +4,7 @@ using SpeechMod.Unity;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace SpeechMod.Voice;
 
@@ -44,6 +45,11 @@ public class WindowsSpeech : ISpeech
             if (Game.Instance?.DialogController?.CurrentSpeaker == null)
                 return CombinedNarratorVoiceStart;
 
+            // Check per-character voice settings first
+            var characterVoiceStart = TryGetCharacterVoiceStart(Game.Instance.DialogController.CurrentSpeaker);
+            if (characterVoiceStart != null)
+                return characterVoiceStart;
+
             if (Game.Instance?.DialogController?.CurrentSpeaker.IsMainCharacter == true)
                 return CombinedProtagonistVoiceStart;
 
@@ -54,6 +60,28 @@ public class WindowsSpeech : ISpeech
                 _ => CombinedNarratorVoiceStart
             };
         }
+    }
+
+    private static string TryGetCharacterVoiceStart(Kingmaker.EntitySystem.Entities.BaseUnitEntity speaker)
+    {
+        if (speaker == null || Main.Settings?.CharacterVoices == null || Main.Settings.CharacterVoices.Count == 0)
+            return null;
+
+        var characterId = speaker.Blueprint?.AssetGuid?.ToString();
+        if (string.IsNullOrWhiteSpace(characterId))
+            characterId = speaker.CharacterName?.GetHashCode().ToString("X8");
+
+        if (string.IsNullOrWhiteSpace(characterId))
+            return null;
+
+        if (!Main.Settings.CharacterVoices.TryGetValue(characterId, out var charVoice))
+            return null;
+
+        var voiceKey = Main.VoicesDict?.ElementAt(charVoice.VoiceIndex >= 0 && charVoice.VoiceIndex < (Main.VoicesDict?.Count ?? 0) ? charVoice.VoiceIndex : 0).Key;
+        if (string.IsNullOrWhiteSpace(voiceKey))
+            return null;
+
+        return $"<voice required=\"Name={voiceKey}\"><pitch absmiddle=\"{charVoice.Pitch}\"/><rate absspeed=\"{charVoice.Rate}\"/><volume level=\"{charVoice.Volume}\"/>";
     }
 
     public static int Length(string text)

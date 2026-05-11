@@ -1,10 +1,14 @@
-﻿using UnityModManagerNet;
+﻿using SpeechMod.Voice;
+using System.Collections.Generic;
+using UnityModManagerNet;
 
 namespace SpeechMod;
 
 public class Settings : UnityModManager.ModSettings
 {
     public bool LogVoicedLines = false;
+
+    public Dictionary<string, CharacterVoiceSettings> CharacterVoices = new();
 
     public string[] AvailableVoices;
 

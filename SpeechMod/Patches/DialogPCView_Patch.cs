@@ -55,7 +55,7 @@ public static class DialogPCView_Patch
 
         var buttonGameObject = ButtonFactory.TryCreatePlayButton(parent, () =>
         {
-            Main.Speech?.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+            Main.Speech?.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.LocalizedStringText.Text);
         });
 
         if (buttonGameObject == null)

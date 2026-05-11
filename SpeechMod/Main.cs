@@ -29,6 +29,18 @@ public static class Main
     public static string MaleVoice => GetVoiceKey(Settings?.MaleVoice ?? 0);
     public static string ProtagonistVoice => GetVoiceKey(Settings?.ProtagonistVoice ?? 0);
 
+    /// <summary>
+    /// Get voice key for a specific character by blueprint ID, or null if no per-character voice set.
+    /// </summary>
+    public static string GetCharacterVoiceKey(string characterId)
+    {
+        if (string.IsNullOrWhiteSpace(characterId) || Settings?.CharacterVoices == null)
+            return null;
+        if (!Settings.CharacterVoices.TryGetValue(characterId, out var charVoice))
+            return null;
+        return GetVoiceKey(charVoice.VoiceIndex);
+    }
+
     private static Dictionary<string, string> _cachedVoicesDict;
     private static string[] _cachedVoicesSource;
 
