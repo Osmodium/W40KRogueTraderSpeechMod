@@ -144,6 +144,11 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
+        if (Main.Settings?.LogVoicedLines == true)
+        {
+            Debug.Log(text);
+        }
+        
         if (!Main.Settings.UseGenderSpecificVoices)
         {
             Speak(text, delay);
