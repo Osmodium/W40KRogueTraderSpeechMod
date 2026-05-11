@@ -11,15 +11,16 @@ using Object = UnityEngine.Object;
 namespace SpeechMod.Unity;
 
 /// <summary>
-/// Builds a voice picker panel using the game's native Owlcat UI elements.
+/// Builds a voice picker panel using the game's UI elements.
 /// Shown when right-clicking a character portrait in dialog.
+/// Uses a full-screen dimmed overlay so nothing behind can be interacted with.
+/// Press Escape or click outside panel to close.
 /// </summary>
 public static class CharacterVoicePickerPanel
 {
-    private const string PANEL_NAME = "SpeechMod_CharacterVoicePickerPanel";
-    private const string CANVAS_PATH = "/SurfacePCView(Clone)/SurfaceStaticPartPCView/StaticCanvas";
-    private const string SPACE_CANVAS_PATH = "/SpacePCView(Clone)/SpaceStaticPartPCView/StaticCanvas";
+    private const string OVERLAY_NAME = "SpeechMod_VoicePickerOverlay";
 
+    private static GameObject _overlayInstance;
     private static GameObject _panelInstance;
     private static string _currentCharacterId;
     private static string _currentCharacterName;
@@ -36,7 +37,7 @@ public static class CharacterVoicePickerPanel
     private static TextMeshProUGUI _voiceNameLabel;
     private static TextMeshProUGUI _nationalityLabel;
 
-    public static bool IsOpen => _panelInstance != null && _panelInstance.activeSelf;
+    public static bool IsOpen => _overlayInstance != null && _overlayInstance.activeSelf;
 
     public static void Open(string characterId, string characterName)
     {
@@ -62,21 +63,21 @@ public static class CharacterVoicePickerPanel
             _currentPitch = Main.Settings.NarratorPitch;
         }
 
-        if (_panelInstance != null)
+        if (_overlayInstance != null)
         {
             UpdatePanel();
-            _panelInstance.SetActive(true);
+            _overlayInstance.SetActive(true);
             return;
         }
 
-        BuildPanel();
+        BuildOverlayAndPanel();
     }
 
     public static void Close()
     {
-        if (_panelInstance != null)
+        if (_overlayInstance != null)
         {
-            _panelInstance.SetActive(false);
+            _overlayInstance.SetActive(false);
         }
     }
 
@@ -119,28 +120,54 @@ public static class CharacterVoicePickerPanel
 #endif
     }
 
-    private static Transform FindCanvasParent()
+    private static void BuildOverlayAndPanel()
     {
-        var canvas = UIHelper.TryFind(CANVAS_PATH);
-        if (canvas == null)
-            canvas = UIHelper.TryFind(SPACE_CANVAS_PATH);
-        return canvas;
+        // --- Full-screen overlay root with its own Canvas ---
+        _overlayInstance = new GameObject(OVERLAY_NAME);
+
+        var overlayCanvas = _overlayInstance.AddComponent<Canvas>();
+        overlayCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        overlayCanvas.sortingOrder = 30000;
+
+        var scaler = _overlayInstance.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight = 0.5f;
+
+        _overlayInstance.AddComponent<GraphicRaycaster>();
+
+        // Escape key handler
+        _overlayInstance.AddComponent<VoicePickerEscapeHandler>();
+
+        // --- Dim background (full-screen, blocks all input behind) ---
+        var dimGo = new GameObject("DimBackground");
+        dimGo.transform.SetParent(_overlayInstance.transform, false);
+        var dimRt = dimGo.AddComponent<RectTransform>();
+        dimRt.anchorMin = Vector2.zero;
+        dimRt.anchorMax = Vector2.one;
+        dimRt.sizeDelta = Vector2.zero;
+        dimRt.offsetMin = Vector2.zero;
+        dimRt.offsetMax = Vector2.zero;
+
+        var dimImage = dimGo.AddComponent<Image>();
+        dimImage.color = new Color(0, 0, 0, 0.6f);
+        dimImage.raycastTarget = true;
+
+        // Click on dim background = close
+        var dimBtn = dimGo.AddComponent<Button>();
+        dimBtn.onClick.AddListener(Close);
+
+        // --- Actual panel ---
+        BuildPanel(_overlayInstance.transform);
+
+        _overlayInstance.SetActive(true);
     }
 
-    private static void BuildPanel()
+    private static void BuildPanel(Transform overlayParent)
     {
-        var canvasParent = FindCanvasParent();
-        if (canvasParent == null)
-        {
-            Debug.LogWarning("[SpeechMod] Cannot find canvas for voice picker panel!");
-            return;
-        }
+        _panelInstance = new GameObject("Panel");
+        _panelInstance.transform.SetParent(overlayParent, false);
 
-        // Create root panel GameObject
-        _panelInstance = new GameObject(PANEL_NAME);
-        _panelInstance.transform.SetParent(canvasParent, false);
-
-        // Add RectTransform - center of screen
         var rt = _panelInstance.AddComponent<RectTransform>();
         rt.anchorMin = new Vector2(0.5f, 0.5f);
         rt.anchorMax = new Vector2(0.5f, 0.5f);
@@ -148,17 +175,10 @@ public static class CharacterVoicePickerPanel
         rt.sizeDelta = new Vector2(520, 560);
         rt.anchoredPosition = Vector2.zero;
 
-        // Background image
         var bgImage = _panelInstance.AddComponent<Image>();
-        bgImage.color = new Color(0.08f, 0.06f, 0.04f, 0.96f);
+        bgImage.color = new Color(0.08f, 0.06f, 0.04f, 0.97f);
         bgImage.raycastTarget = true;
 
-        // Add Canvas group for blocking input behind
-        var canvasGroup = _panelInstance.AddComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
-
-        // Add vertical layout
         var vlg = _panelInstance.AddComponent<VerticalLayoutGroup>();
         vlg.padding = new RectOffset(16, 16, 12, 12);
         vlg.spacing = 6;
@@ -170,12 +190,9 @@ public static class CharacterVoicePickerPanel
         // Title row
         var titleRow = CreateRow(_panelInstance.transform, 36);
         _titleLabel = CreateLabel(titleRow.transform, $"Voice: {_currentCharacterName}", 18, TextAlignmentOptions.MidlineLeft);
-
-        // Close button
-        var closeBtn = CreateTextButton(titleRow.transform, "✕", () => Close(), 30, 30);
+        var closeBtn = CreateTextButton(titleRow.transform, "✕", Close, 30, 30);
         closeBtn.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 30);
 
-        // Separator
         CreateSeparator(_panelInstance.transform);
 
         // Voice info row
@@ -183,17 +200,16 @@ public static class CharacterVoicePickerPanel
         _voiceNameLabel = CreateLabel(infoRow.transform, GetVoiceDisplayName(_selectedVoiceIndex), 14, TextAlignmentOptions.MidlineLeft);
         _nationalityLabel = CreateLabel(infoRow.transform, GetVoiceNationality(_selectedVoiceIndex), 12, TextAlignmentOptions.MidlineRight);
 
-        // Voice list area (scrollable)
+        // Voice list
         var voiceListContainer = CreateVoiceListArea(_panelInstance.transform);
 
-        // Separator
         CreateSeparator(_panelInstance.transform);
 
         // Sliders
         CreateSliderRow(_panelInstance.transform, "Rate:", ref _currentRate, -10, 10, val =>
         {
             _currentRate = val;
-            _rateLabel.text = $"Rate: {_currentRate}";
+            if (_rateLabel != null) _rateLabel.text = $"Rate: {_currentRate}";
             SaveSettings();
         }, out _rateLabel);
 
@@ -202,36 +218,34 @@ public static class CharacterVoicePickerPanel
             CreateSliderRow(_panelInstance.transform, "Volume:", ref _currentVolume, 0, 100, val =>
             {
                 _currentVolume = val;
-                _volumeLabel.text = $"Volume: {_currentVolume}";
+                if (_volumeLabel != null) _volumeLabel.text = $"Volume: {_currentVolume}";
                 SaveSettings();
             }, out _volumeLabel);
 
             CreateSliderRow(_panelInstance.transform, "Pitch:", ref _currentPitch, -10, 10, val =>
             {
                 _currentPitch = val;
-                _pitchLabel.text = $"Pitch: {_currentPitch}";
+                if (_pitchLabel != null) _pitchLabel.text = $"Pitch: {_currentPitch}";
                 SaveSettings();
             }, out _pitchLabel);
         }
 
-        // Separator
         CreateSeparator(_panelInstance.transform);
 
-        // Preview + Reset buttons row
+        // Preview + Reset buttons
         var buttonRow = CreateRow(_panelInstance.transform, 32);
         CreateTextButton(buttonRow.transform, "▶ Preview", () =>
         {
             var voiceKey = GetVoiceKey(_selectedVoiceIndex);
             if (voiceKey != null)
             {
-                // Build SSML and speak
                 var text = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\"><voice required=\"Name={voiceKey}\"><pitch absmiddle=\"{_currentPitch}\"/><rate absspeed=\"{_currentRate}\"/><volume level=\"{_currentVolume}\"/>This is {_currentCharacterName} speaking with the selected voice.</voice></speak>";
                 if (Main.Speech is WindowsSpeech)
-                    WindowsVoiceUnity.Speak(text, 80, 0f);
+                    WindowsVoiceUnity.Speak(text, 80);
             }
         });
 
-        CreateTextButton(buttonRow.transform, "■ Stop", () => { Main.Speech?.Stop(); });
+        CreateTextButton(buttonRow.transform, "■ Stop", () => Main.Speech?.Stop());
 
         CreateTextButton(buttonRow.transform, "Reset", () =>
         {
@@ -244,7 +258,6 @@ public static class CharacterVoicePickerPanel
         });
 
         PopulateVoiceList(voiceListContainer);
-        _panelInstance.SetActive(true);
     }
 
     private static void UpdatePanel()
@@ -274,13 +287,11 @@ public static class CharacterVoicePickerPanel
         le.preferredHeight = 280;
         le.flexibleHeight = 1;
 
-        // Scroll rect
         var scrollRect = scrollArea.AddComponent<ScrollRect>();
         scrollRect.horizontal = false;
         scrollRect.vertical = true;
         scrollRect.scrollSensitivity = 30;
 
-        // Viewport with mask
         var viewport = new GameObject("Viewport");
         viewport.transform.SetParent(scrollArea.transform, false);
         var viewportRt = viewport.AddComponent<RectTransform>();
@@ -294,7 +305,6 @@ public static class CharacterVoicePickerPanel
         var viewportImg = viewport.AddComponent<Image>();
         viewportImg.color = new Color(0.05f, 0.04f, 0.03f, 0.8f);
 
-        // Content container
         var content = new GameObject("Content");
         content.transform.SetParent(viewport.transform, false);
         var contentRt = content.AddComponent<RectTransform>();
@@ -330,8 +340,6 @@ public static class CharacterVoicePickerPanel
         {
             var index = i;
             var kvp = voices.ElementAt(i);
-            var voiceName = kvp.Key;
-            var nationality = kvp.Value;
 
             var row = new GameObject($"VoiceRow_{i}");
             row.transform.SetParent(contentContainer.transform, false);
@@ -340,14 +348,12 @@ public static class CharacterVoicePickerPanel
             rowLe.preferredHeight = 26;
             rowLe.minHeight = 26;
 
-            // Row background (highlight-able)
             var rowBg = row.AddComponent<Image>();
             rowBg.color = index == _selectedVoiceIndex
                 ? new Color(0.3f, 0.25f, 0.1f, 0.8f)
                 : new Color(0.1f, 0.08f, 0.06f, 0.5f);
             rowBg.raycastTarget = true;
 
-            // HLG for row content
             var hlg = row.AddComponent<HorizontalLayoutGroup>();
             hlg.padding = new RectOffset(8, 8, 2, 2);
             hlg.spacing = 8;
@@ -355,16 +361,13 @@ public static class CharacterVoicePickerPanel
             hlg.childForceExpandHeight = true;
             hlg.childControlWidth = true;
 
-            // Voice name label
-            var nameLabel = CreateLabel(row.transform, voiceName, 12, TextAlignmentOptions.MidlineLeft, flexWidth: 1f);
+            var nameLabel = CreateLabel(row.transform, kvp.Key, 12, TextAlignmentOptions.MidlineLeft, flexWidth: 1f);
             if (index == _selectedVoiceIndex)
                 nameLabel.color = new Color(0.9f, 0.75f, 0.3f, 1f);
 
-            // Nationality label
-            var natLabel = CreateLabel(row.transform, nationality, 11, TextAlignmentOptions.MidlineRight, flexWidth: 0.4f);
+            var natLabel = CreateLabel(row.transform, kvp.Value, 11, TextAlignmentOptions.MidlineRight, flexWidth: 0.4f);
             natLabel.color = new Color(0.6f, 0.6f, 0.6f, 1f);
 
-            // Make clickable via OwlcatMultiButton or a simple button
             var btn = row.AddComponent<Button>();
             btn.onClick.AddListener(() => SelectVoice(index));
 
@@ -377,7 +380,6 @@ public static class CharacterVoicePickerPanel
         _selectedVoiceIndex = index;
         SaveSettings();
         UpdatePanel();
-        RefreshVoiceListHighlight();
     }
 
     private static void RefreshVoiceListHighlight()
@@ -489,12 +491,10 @@ public static class CharacterVoicePickerPanel
             if (height > 0) le.preferredHeight = height;
         }
 
-        // Background
         var bg = btnGo.AddComponent<Image>();
         bg.color = new Color(0.2f, 0.18f, 0.12f, 0.9f);
         bg.raycastTarget = true;
 
-        // Text
         var textGo = new GameObject("Text");
         textGo.transform.SetParent(btnGo.transform, false);
         var textRt = textGo.AddComponent<RectTransform>();
@@ -536,14 +536,12 @@ public static class CharacterVoicePickerPanel
         var row = CreateRow(parent, 28);
         valueLabel = CreateLabel(row.transform, $"{label} {value}", 13, TextAlignmentOptions.MidlineLeft, flexWidth: 0.4f);
 
-        // Slider container
         var sliderGo = new GameObject("Slider");
         sliderGo.transform.SetParent(row.transform, false);
         sliderGo.AddComponent<RectTransform>();
         var sliderLe = sliderGo.AddComponent<LayoutElement>();
         sliderLe.flexibleWidth = 1;
 
-        // Background
         var bgGo = new GameObject("Background");
         bgGo.transform.SetParent(sliderGo.transform, false);
         var bgRt = bgGo.AddComponent<RectTransform>();
@@ -555,7 +553,6 @@ public static class CharacterVoicePickerPanel
         var bgImg = bgGo.AddComponent<Image>();
         bgImg.color = new Color(0.15f, 0.12f, 0.08f, 1f);
 
-        // Fill Area
         var fillArea = new GameObject("Fill Area");
         fillArea.transform.SetParent(sliderGo.transform, false);
         var fillAreaRt = fillArea.AddComponent<RectTransform>();
@@ -573,7 +570,6 @@ public static class CharacterVoicePickerPanel
         var fillImg = fill.AddComponent<Image>();
         fillImg.color = new Color(0.6f, 0.5f, 0.2f, 0.8f);
 
-        // Handle area
         var handleArea = new GameObject("Handle Slide Area");
         handleArea.transform.SetParent(sliderGo.transform, false);
         var handleAreaRt = handleArea.AddComponent<RectTransform>();
@@ -589,7 +585,6 @@ public static class CharacterVoicePickerPanel
         var handleImg = handle.AddComponent<Image>();
         handleImg.color = new Color(0.85f, 0.7f, 0.3f, 1f);
 
-        // Slider component
         var slider = sliderGo.AddComponent<Slider>();
         slider.direction = Slider.Direction.LeftToRight;
         slider.minValue = min;
@@ -610,15 +605,29 @@ public static class CharacterVoicePickerPanel
 
     public static void DestroyPanel()
     {
-        if (_panelInstance != null)
+        if (_overlayInstance != null)
         {
-            Object.Destroy(_panelInstance);
+            Object.Destroy(_overlayInstance);
+            _overlayInstance = null;
             _panelInstance = null;
         }
         _voiceButtons.Clear();
     }
 }
 
+/// <summary>
+/// MonoBehaviour on the overlay to close the voice picker on Escape.
+/// </summary>
+public class VoicePickerEscapeHandler : MonoBehaviour
+{
+    private void Update()
+    {
+        if (!CharacterVoicePickerPanel.IsOpen)
+            return;
 
-
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CharacterVoicePickerPanel.Close();
+        }
+    }
+}
