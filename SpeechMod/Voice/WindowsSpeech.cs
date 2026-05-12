@@ -84,6 +84,59 @@ public class WindowsSpeech : ISpeech
         return $"<voice required=\"Name={voiceKey}\"><pitch absmiddle=\"{charVoice.Pitch}\"/><rate absspeed=\"{charVoice.Rate}\"/><volume level=\"{charVoice.Volume}\"/>";
     }
 
+    /// <summary>
+    /// Try to get character voice SSML start tag for the current dialog speaker.
+    /// Returns null if no per-character voice is configured.
+    /// </summary>
+    private static string TryGetCharacterVoiceStartFromCurrentSpeaker()
+    {
+        var speaker = Game.Instance?.DialogController?.CurrentSpeaker;
+        if (speaker == null)
+            return null;
+        return TryGetCharacterVoiceStart(speaker);
+    }
+
+    /// <summary>
+    /// Try to get character voice SSML start tag for SpeakAs calls (protagonist answers).
+    /// Returns null if no per-character voice is configured.
+    /// </summary>
+    private static string TryGetCharacterVoiceStartForSpeakAs(VoiceType voiceType)
+    {
+        if (voiceType == VoiceType.Protagonist || voiceType == VoiceType.Female || voiceType == VoiceType.Male)
+        {
+            var protagonist = Game.Instance?.Player?.MainCharacterEntity;
+            if (protagonist != null)
+                return TryGetCharacterVoiceStart(protagonist);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Prepare dialog text using a per-character voice, handling narrator color sections.
+    /// </summary>
+    private string PrepareDialogTextWithCharacterVoice(string text, string characterVoiceStart)
+    {
+        text = text.PrepareText();
+        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
+
+        // Replace narrator-colored sections with narrator voice, the rest with character voice
+        text = text.Replace($"<i><color=#{Constants.NARRATOR_COLOR_CODE}>", $"</voice>{CombinedNarratorVoiceStart}");
+        text = text.Replace("</color></i>", $"</voice>{characterVoiceStart}");
+
+        if (text.StartsWith("</voice>"))
+            text = text.Remove(0, 8);
+        else
+            text = characterVoiceStart + text;
+
+        if (text.EndsWith(characterVoiceStart!))
+            text = text.Remove(text.Length - characterVoiceStart.Length, characterVoiceStart.Length);
+
+        if (!text.EndsWith("</voice>"))
+            text += "</voice>";
+
+        return text;
+    }
+
     public static int Length(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -176,7 +229,16 @@ public class WindowsSpeech : ISpeech
         {
             Debug.Log(text);
         }
-        
+
+        // Always check per-character voice first
+        var charVoice = TryGetCharacterVoiceStartFromCurrentSpeaker();
+        if (charVoice != null)
+        {
+            text = PrepareDialogTextWithCharacterVoice(text, charVoice);
+            SpeakInternal(text, delay);
+            return;
+        }
+
         if (!Main.Settings.UseGenderSpecificVoices)
         {
             Speak(text, delay);
@@ -193,6 +255,15 @@ public class WindowsSpeech : ISpeech
         if (string.IsNullOrEmpty(text))
         {
             Main.Logger?.Warning("No text to speak!");
+            return;
+        }
+
+        // Check per-character voice for the relevant speaker
+        var charVoice = TryGetCharacterVoiceStartForSpeakAs(voiceType);
+        if (charVoice != null)
+        {
+            text = $"{charVoice}{text}</voice>";
+            SpeakInternal(text, delay);
             return;
         }
 

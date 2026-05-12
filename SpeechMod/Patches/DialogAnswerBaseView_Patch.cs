@@ -75,7 +75,18 @@ public class DialogAnswerBaseView_Patch
             var voiceType = VoiceType.Narrator;
             if (Game.Instance.DialogController.FirstSpeaker != null) // If we are speaking to a character
             {
-                if (Main.Settings?.UseProtagonistSpecificVoice == true)
+                // Check per-character voice for protagonist first
+                var protagonist = Game.Instance.Player?.MainCharacterEntity;
+                var protagonistId = protagonist?.Blueprint?.AssetGuid?.ToString();
+                if (string.IsNullOrWhiteSpace(protagonistId))
+                    protagonistId = protagonist?.CharacterName?.GetHashCode().ToString("X8");
+
+                if (!string.IsNullOrWhiteSpace(protagonistId) && Main.Settings?.CharacterVoices?.ContainsKey(protagonistId) == true)
+                {
+                    // Per-character voice is set for protagonist — SpeakAs will handle it
+                    voiceType = VoiceType.Protagonist;
+                }
+                else if (Main.Settings?.UseProtagonistSpecificVoice == true)
                     voiceType = VoiceType.Protagonist;
                 else if (Main.Settings?.UseGenderSpecificVoices == true)
                     voiceType = Game.Instance.Player.MainCharacterEntity?.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male;

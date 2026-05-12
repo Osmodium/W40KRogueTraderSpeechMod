@@ -1,5 +1,4 @@
-﻿using SpeechMod.Unity.Extensions;
-using SpeechMod.Voice;
+﻿using SpeechMod.Voice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +38,7 @@ public static class CharacterVoicePickerPanel
 
     public static bool IsOpen => _overlayInstance != null && _overlayInstance.activeSelf;
 
-    public static void Open(string characterId, string characterName)
+    private static void Open(string characterId, string characterName)
     {
         if (string.IsNullOrWhiteSpace(characterId))
             return;
@@ -103,6 +102,7 @@ public static class CharacterVoicePickerPanel
         };
 
         Main.Settings.CharacterVoices[_currentCharacterId] = settings;
+        Main.SaveSettings();
 
 #if DEBUG
         Debug.Log($"[SpeechMod] Saved voice settings for {_currentCharacterName} ({_currentCharacterId}): Voice={_selectedVoiceIndex}, Rate={_currentRate}, Vol={_currentVolume}, Pitch={_currentPitch}");
@@ -115,6 +115,7 @@ public static class CharacterVoicePickerPanel
             return;
 
         Main.Settings.CharacterVoices.Remove(_currentCharacterId);
+        Main.SaveSettings();
 #if DEBUG
         Debug.Log($"[SpeechMod] Removed voice settings for {_currentCharacterName} ({_currentCharacterId})");
 #endif
@@ -626,8 +627,6 @@ public class VoicePickerEscapeHandler : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
             CharacterVoicePickerPanel.Close();
-        }
     }
 }

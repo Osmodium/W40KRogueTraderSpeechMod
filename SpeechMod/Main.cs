@@ -83,6 +83,17 @@ public static class Main
     public static ISpeech Speech;
     private static bool m_Loaded = false;
 
+    /// <summary>
+    /// Persist current settings to disk.  Can be called from anywhere (e.g. voice picker).
+    /// </summary>
+    public static void SaveSettings()
+    {
+        var modEntry = ModConfigurationManager.Instance?.ModEntry;
+        if (modEntry == null || Settings == null)
+            return;
+        Settings.Save(modEntry);
+    }
+
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initializing...");
