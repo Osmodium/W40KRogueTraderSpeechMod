@@ -122,13 +122,12 @@ public class AppleSpeech : ISpeech
 		var error = process.StandardError.ReadToEnd();
 		if (!string.IsNullOrWhiteSpace(error))
 			Main.Logger.Error(error);
+		
 		var text = process.StandardOutput.ReadToEnd();
 		process.WaitForExit();
 		process.Dispose();
 
-		return !string.IsNullOrWhiteSpace(text)
-			? text.Split([";"], StringSplitOptions.RemoveEmptyEntries)
-			: null;
+		return !string.IsNullOrWhiteSpace(text) ? text.Split([";"], StringSplitOptions.RemoveEmptyEntries) : [];
 	}
 
 	public string GetStatusMessage()

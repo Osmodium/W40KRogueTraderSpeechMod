@@ -15,10 +15,10 @@ namespace SpeechMod.Configuration;
 
 public class ModConfigurationManager
 {
-    public Dictionary<string, List<ModSettingEntry>> GroupedSettings = new();
-    public Harmony HarmonyInstance { get; protected set; }
-    public ModEntry ModEntry { get; protected set; }
-    public string SettingsPrefix = Guid.NewGuid().ToString();
+    public Dictionary<string, List<ModSettingEntry>> GroupedSettings { get; } = new();
+    public Harmony HarmonyInstance { get; private set; }
+    public ModEntry ModEntry { get; private set; }
+    public string SettingsPrefix { get; private set; } = Guid.NewGuid().ToString();
 
     private ModConfigurationManager() { }
 
@@ -30,12 +30,12 @@ public class ModConfigurationManager
         ModLocalizationManager.Init();
     }
 
-    private bool Initialized = false;
+    private bool _initialized;
 
     public void Initialize()
     {
-        if (Initialized) return;
-        Initialized = true;
+        if (_initialized) return;
+        _initialized = true;
 
         foreach (var setting in GroupedSettings.SelectMany(settings => settings.Value))
         {
@@ -43,11 +43,11 @@ public class ModConfigurationManager
             setting.TryEnable();
         }
 
-        if (ModHotkeySettingEntry.ReSavingRequired)
-        {
-            SettingsController.Instance.SaveAll();
-            Instance.ModEntry.Logger.Log("Hotkey settings were migrated");
-        }
+        if (!ModHotkeySettingEntry.ReSavingRequired)
+            return;
+        
+        SettingsController.Instance.SaveAll();
+        Instance.ModEntry.Logger.Log("Hotkey settings were migrated");
     }
 
     public static ModConfigurationManager Instance { get; } = new();
@@ -67,7 +67,7 @@ public static class SettingsUIPatches
 
         ModConfigurationManager.Instance?.Initialize();
 
-        foreach (var settings in ModConfigurationManager.Instance.GroupedSettings)
+        foreach (var settings in ModConfigurationManager.Instance!.GroupedSettings)
         {
             Game.Instance.UISettingsManager.m_SoundSettingsList?.Add(
                 OwlcatUITools.MakeSettingsGroup($"{ModConfigurationManager.Instance.SettingsPrefix}.group.{settings.Key}", "Speech Mod",

@@ -8,11 +8,11 @@ namespace SpeechMod.Unity.Extensions;
 
 public static class Hooks
 {
-    private static Color m_HoverColor = Color.blue;
+    private static Color s_HoverColor = Color.blue;
 
     public static void UpdateHoverColor()
     {
-        m_HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
+        s_HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
     }
 
     public static void HookUpTextToSpeechOnTransformWithPath(string path, bool force = false)
@@ -131,7 +131,7 @@ public static class Hooks
 
                 if (Main.Settings.ColorOnHover)
                 {
-                    textMeshPro.color = m_HoverColor;
+                    textMeshPro.color = s_HoverColor;
                 }
             }
         );

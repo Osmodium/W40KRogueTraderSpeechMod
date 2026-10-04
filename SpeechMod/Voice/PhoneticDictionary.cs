@@ -34,12 +34,12 @@ public static class PhoneticDictionary
         text = SpaceOutDate(text);
 
         // Apply pre-compiled regex patterns from dictionary
-        if (s_CompiledPatterns != null)
+        if (s_CompiledPatterns == null)
+            return text;
+        
+        foreach (var (pattern, replacement) in s_CompiledPatterns)
         {
-            foreach (var (pattern, replacement) in s_CompiledPatterns)
-            {
-                text = pattern.Replace(text, replacement);
-            }
+            text = pattern.Replace(text, replacement);
         }
 
         return text;
@@ -59,7 +59,7 @@ public static class PhoneticDictionary
         Main.Logger?.Log("Loading phonetic dictionary...");
         try
         {
-            var file = Path.Combine(Constants.LOCAL_LOW_PATH!,
+            var file = Path.Combine(Constants.LOCAL_LOW_PATH,
                 "Owlcat Games",
                 "Warhammer 40000 Rogue Trader",
                 "UnityModManager",

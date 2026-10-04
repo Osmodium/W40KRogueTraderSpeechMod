@@ -10,14 +10,14 @@ namespace SpeechMod.Unity;
 
 public class AppleVoiceUnity : MonoBehaviour
 {
-    private static AppleVoiceUnity m_TheVoice;
+    private static AppleVoiceUnity s_TheVoice;
 
     private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
     private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings!.FemaleRate : Main.Settings!.MaleRate;
 
     private static bool IsVoiceInitialized()
     {
-        if (m_TheVoice != null)
+        if (s_TheVoice)
             return true;
 
         Main.Logger.Critical("No voice initialized!");
@@ -26,10 +26,10 @@ public class AppleVoiceUnity : MonoBehaviour
 
     void Start()
     {
-        if (m_TheVoice != null)
+        if (s_TheVoice != null)
             Destroy(gameObject);
         else
-            m_TheVoice = this;
+            s_TheVoice = this;
     }
 
     public static void Speak(string text, float delay = 0f)
@@ -39,7 +39,7 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => Speak(text));
+            s_TheVoice.ExecuteLater(delay, () => Speak(text));
             return;
         }
 
@@ -55,7 +55,7 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
+            s_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
             return;
         }
 

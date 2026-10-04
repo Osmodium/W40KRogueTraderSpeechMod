@@ -57,7 +57,7 @@ public class WindowsSpeech : ISpeech
         }
     }
 
-    public static int Length(string text)
+    private static int Length(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
             return 0;
@@ -77,7 +77,7 @@ public class WindowsSpeech : ISpeech
         else
             text = CombinedDialogVoiceStart + text;
 
-        if (text.EndsWith(CombinedDialogVoiceStart!))
+        if (text.EndsWith(CombinedDialogVoiceStart))
             text = text.Remove(text.Length - CombinedDialogVoiceStart.Length, CombinedDialogVoiceStart.Length);
 
         if (!text.EndsWith("</voice>"))
@@ -121,7 +121,7 @@ public class WindowsSpeech : ISpeech
         SpeakInternal(text);
     }
 
-    public string PrepareSpeechText(string text)
+    private string PrepareSpeechText(string text)
     {
         text = new Regex("<[^>]+>").Replace(text, "");
         text = text.PrepareText();
@@ -150,7 +150,7 @@ public class WindowsSpeech : ISpeech
             Debug.Log(text);
         }
         
-        if (!Main.Settings.UseGenderSpecificVoices)
+        if (Main.Settings is not { UseGenderSpecificVoices: true })
         {
             Speak(text, delay);
             return;
@@ -169,14 +169,14 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        if (Main.Settings!.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist)
+        if (Main.Settings.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist)
         {
             text = $"{CombinedProtagonistVoiceStart}{text}</voice>";
             SpeakInternal(text, delay);
             return;
         }
 
-        if (!Main.Settings!.UseGenderSpecificVoices)
+        if (!Main.Settings.UseGenderSpecificVoices)
         {
             Speak(text, delay);
             return;

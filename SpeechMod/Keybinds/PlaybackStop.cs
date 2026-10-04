@@ -24,8 +24,8 @@ public class PlaybackStop() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT
     [HarmonyPatch]
     private static class Patches
     {
-        private static string _playbackStoppedText = "SpeechMod: Playback stopped!";
-        private static IDisposable _disposableBinding;
+        private static string s_PlaybackStoppedText = "SpeechMod: Playback stopped!";
+        private static IDisposable s_DisposableBinding;
 
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
         [HarmonyPostfix]
@@ -35,18 +35,18 @@ public class PlaybackStop() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
             if (!LocalizationManager.Instance!.CurrentPack!.TryGetText("osmodium.speechmod.feature.playback.stop.notification", out var text, false))
-                _playbackStoppedText = text;
+                s_PlaybackStoppedText = text;
 
             if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))
             {
 #if DEBUG
                 Debug.Log($"Binding {BIND_NAME} already exists! Disposing of binding...");
 #endif
-                _disposableBinding.Dispose();
+                s_DisposableBinding.Dispose();
             }
 
-            _disposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, () => StopPlayback(__instance));
-            __instance?.AddDisposable(_disposableBinding);
+            s_DisposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, () => StopPlayback(__instance));
+            __instance?.AddDisposable(s_DisposableBinding);
         }
 
         private static void StopPlayback(CommonPCView instance)
@@ -57,7 +57,7 @@ public class PlaybackStop() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT
             if (instance.m_WarningsTextView != null)
             {
                 if (Main.Settings!.ShowNotificationOnPlaybackStop)
-                    instance.m_WarningsTextView?.Show(_playbackStoppedText, WarningNotificationFormat.Common);
+                    instance.m_WarningsTextView?.Show(s_PlaybackStoppedText, WarningNotificationFormat.Common);
             }
 
             Main.Speech?.Stop();

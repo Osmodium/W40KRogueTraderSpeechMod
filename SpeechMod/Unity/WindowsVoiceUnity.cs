@@ -38,8 +38,8 @@ public class WindowsVoiceUnity : MonoBehaviour
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern WindowsVoiceStatus getSpeechState();
 
-    private static WindowsVoiceUnity m_TheVoice;
-    private static int m_CurrentWordCount;
+    private static WindowsVoiceUnity s_TheVoice;
+    private static int s_CurrentWordCount;
 
     public static bool IsSpeaking => getSpeechState() == WindowsVoiceStatus.Speaking;
     public static WindowsVoiceStatus VoiceStatus => getSpeechState();
@@ -50,7 +50,7 @@ public class WindowsVoiceUnity : MonoBehaviour
     }
     private static bool IsVoiceInitialized()
     {
-        if (m_TheVoice != null)
+        if (s_TheVoice != null)
             return true;
 
         Main.Logger.Critical("No voice initialized!");
@@ -59,14 +59,14 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     void Start()
     {
-        m_CurrentWordCount = 0;
-        if (m_TheVoice != null)
+        s_CurrentWordCount = 0;
+        if (s_TheVoice != null)
         {
             Destroy(gameObject);
         }
         else
         {
-            m_TheVoice = this;
+            s_TheVoice = this;
             Init();
         }
     }
@@ -88,11 +88,11 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (Main.Settings.InterruptPlaybackOnPlay && IsSpeaking)
             Stop();
 
-        m_CurrentWordCount = length;
+        s_CurrentWordCount = length;
         if (delay <= 0f)
             addToSpeechQueue(text);
         else
-            m_TheVoice.ExecuteLater(delay, () => Speak(text, length));
+            s_TheVoice.ExecuteLater(delay, () => Speak(text, length));
     }
 
     public static string GetStatusMessage()
@@ -102,16 +102,16 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static int WordPosition => getWordPosition();
 
-    public static int WordCount => m_CurrentWordCount;
+    public static int WordCount => s_CurrentWordCount;
 
     public static int WordLength => getWordLength();
 
     public static float GetNormalizedProgress()
     {
-        if (m_CurrentWordCount <= 0)
+        if (s_CurrentWordCount <= 0)
             return 0f;
 
-        return 1 - (float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
+        return 1 - (float)(s_CurrentWordCount - getWordPosition()) / s_CurrentWordCount;
     }
 
     public static void Stop()
@@ -133,12 +133,12 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     void OnDestroy()
     {
-        if (m_TheVoice != this)
+        if (s_TheVoice != this)
             return;
 
         Debug.Log("Destroying speech");
         destroySpeech();
         Debug.Log("Speech destroyed");
-        m_TheVoice = null;
+        s_TheVoice = null;
     }
 }
