@@ -21,8 +21,9 @@
 namespace WindowsVoice {
 	extern "C" {
 		DLL_API void __cdecl initSpeech(int rate, int volume);
-		DLL_API void __cdecl addToSpeechQueue(const char* text);
+		DLL_API void __cdecl addToSpeechQueue(const wchar_t* text);
 		DLL_API void __cdecl clearSpeechQueue();
+		DLL_API void __cdecl stopSpeech();
 		DLL_API void __cdecl destroySpeech();
 		DLL_API BSTR __cdecl getStatusMessage();
 		DLL_API BSTR __cdecl getVoicesAvailable();
