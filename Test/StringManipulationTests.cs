@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using SpeechMod;
 using SpeechMod.Voice;
 using System.Collections.Generic;

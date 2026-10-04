@@ -70,9 +70,8 @@ public static class SettingsUIPatches
         foreach (var settings in ModConfigurationManager.Instance!.GroupedSettings)
         {
             Game.Instance.UISettingsManager.m_SoundSettingsList?.Add(
-                OwlcatUITools.MakeSettingsGroup($"{ModConfigurationManager.Instance.SettingsPrefix}.group.{settings.Key}", "Speech Mod",
-                    settings.Value?.Select(x => x.GetUISettings()).ToArray()
-                ));
+                OwlcatUITools.MakeSettingsGroup($"{ModConfigurationManager.Instance.SettingsPrefix}.group.{settings.Key}", "Speech Mod", settings.Value?.Select(x => x.GetUISettings()).ToArray())
+            );
         }
     }
 

@@ -144,5 +144,3 @@ public class PhoneticDictionaryTests
         Assert.Equal("charlie team", "Alpha team".PrepareText());
     }
 }
-
-
