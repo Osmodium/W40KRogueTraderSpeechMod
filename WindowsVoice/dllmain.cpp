@@ -1,118 +1,137 @@
 ﻿#include "pch.h"
 #include "WindowsVoice.h"
 
+using namespace std;
+
 namespace WindowsVoice
 {
+	mutex theMutex; // guards theSpeechQueue
+	list<wstring> theSpeechQueue;
+	mutex theStatusMutex; // guards theStatusMessage
+	wstring theStatusMessage;
+	thread* theSpeechThread = nullptr;
+	atomic<bool> shouldTerminate{ false };
+	atomic<ULONG> wordLength{ 0 };
+	atomic<ULONG> wordPosition{ 0 };
+	atomic<speech_state_enum> speechState{ speech_state_enum::uninitialized };
+
+	void setStatusMessage(const wstring& message)
+	{
+		lock_guard<mutex> lock(theStatusMutex);
+		theStatusMessage = message;
+	}
+
+	wstring formatError(const wchar_t* message, const HRESULT hr)
+	{
+		wchar_t buffer[128];
+		swprintf_s(buffer, _countof(buffer), L"Error: %s (HRESULT 0x%08X)", message, static_cast<unsigned int>(hr));
+		return buffer;
+	}
+
 	void speechThreadFunc(const int rate, const int volume)
 	{
-		if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
+		HRESULT hr = ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		if (FAILED(hr))
 		{
-			theStatusMessage = L"Error: Failed to initialize COM for Voice.";
+			setStatusMessage(formatError(L"Failed to initialize COM for Voice.", hr));
 			speechState = speech_state_enum::error;
 			return;
 		}
 
 		ISpVoice* pVoice = nullptr;
 
-		const HRESULT hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
-		if (!SUCCEEDED(hr))
+		hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
+		if (FAILED(hr))
 		{
-			const LPSTR pText = 0;
-
-			::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
-			LocalFree(pText);
-			theStatusMessage = L"Error: Failed to create Voice instance.";
+			setStatusMessage(formatError(L"Failed to create Voice instance.", hr));
 			speechState = speech_state_enum::error;
+			CoUninitialize();
 			return;
 		}
 
-		theStatusMessage = L"Speech ready.";
+		setStatusMessage(L"Speech ready.");
 		speechState = speech_state_enum::ready;
 
 		pVoice->SetRate(rate);
 		pVoice->SetVolume(volume);
 
 		SPVOICESTATUS voiceStatus;
-		const wchar_t* priorText = nullptr;
+		wstring priorText;
 		while (!shouldTerminate)
 		{
-			pVoice->GetStatus(&voiceStatus, 0);
+			pVoice->GetStatus(&voiceStatus, nullptr);
 			if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
 			{
-				if (priorText == nullptr)
+				if (priorText.empty())
 				{
-					theStatusMessage = L"Error: SPRS_IS_SPEAKING but text is NULL";
+					setStatusMessage(L"Error: SPRS_IS_SPEAKING but text is empty");
 					speechState = speech_state_enum::error;
 				}
 				else
 				{
-					theStatusMessage = L"Speaking: ";
-					theStatusMessage.append(priorText);
+					setStatusMessage(L"Speaking: " + priorText);
 					speechState = speech_state_enum::speaking;
 					wordLength = voiceStatus.ulInputWordLen;
 					wordPosition = voiceStatus.ulInputWordPos;
-					if (!theSpeechQueue.empty())
+					// Drop the same line if it was queued again while playing.
+					lock_guard<mutex> lock(theMutex);
+					if (!theSpeechQueue.empty() && theSpeechQueue.front() == priorText)
 					{
-						theMutex.lock();
-						if (lstrcmpW(theSpeechQueue.front(), priorText) == 0)
-						{
-							delete[] theSpeechQueue.front();
-							theSpeechQueue.pop_front();
-						}
-						theMutex.unlock();
+						theSpeechQueue.pop_front();
 					}
 				}
 			}
 			else
 			{
-				theStatusMessage = L"Waiting";
+				setStatusMessage(L"Waiting");
 				speechState = speech_state_enum::ready;
-				if (priorText != nullptr)
+				priorText.clear();
 				{
-					delete[] priorText;
-					priorText = nullptr;
+					lock_guard<mutex> lock(theMutex);
+					if (!theSpeechQueue.empty())
+					{
+						priorText = move(theSpeechQueue.front());
+						theSpeechQueue.pop_front();
+					}
 				}
-				if (!theSpeechQueue.empty())
+				if (!priorText.empty())
 				{
-					theMutex.lock();
-					priorText = theSpeechQueue.front();
-					theSpeechQueue.pop_front();
-					theMutex.unlock();
 					// Rebind to the current default output device in case it changed since the last line.
 					pVoice->SetOutput(nullptr, TRUE);
-					pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, nullptr);
+					pVoice->Speak(priorText.c_str(), SPF_IS_XML | SPF_ASYNC, nullptr);
 				}
 			}
 			Sleep(50);
 		}
 		pVoice->Pause();
 		pVoice->Release();
+		CoUninitialize();
 
-		theStatusMessage = L"Speech thread terminated.";
+		setStatusMessage(L"Speech thread terminated.");
 		speechState = speech_state_enum::terminated;
 	}
 
 	void addToSpeechQueue(const char* text)
 	{
-		if (text)
-		{
-			const int len = strlen(text) + 1;
-			const auto wText = new wchar_t[len];
+		if (text == nullptr)
+			return;
 
-			memset(wText, 0, len);
-			::MultiByteToWideChar(CP_UTF8, NULL, text, -1, wText, len);
+		const int byteCount = static_cast<int>(strlen(text));
+		const int charCount = ::MultiByteToWideChar(CP_UTF8, 0, text, byteCount, nullptr, 0);
+		if (charCount <= 0)
+			return;
 
-			theMutex.lock();
-			theSpeechQueue.push_back(wText);
-			theMutex.unlock();
-		}
+		wstring wText(charCount, L'\0');
+		::MultiByteToWideChar(CP_UTF8, 0, text, byteCount, &wText[0], charCount);
+
+		lock_guard<mutex> lock(theMutex);
+		theSpeechQueue.push_back(move(wText));
 	}
 
 	void clearSpeechQueue()
 	{
-		theMutex.lock();
+		lock_guard<mutex> lock(theMutex);
 		theSpeechQueue.clear();
-		theMutex.unlock();
 	}
 
 	void initSpeech(int rate, int volume)
@@ -120,10 +139,10 @@ namespace WindowsVoice
 		shouldTerminate = false;
 		if (theSpeechThread != nullptr)
 		{
-			theStatusMessage = L"Windows Voice thread already started.";
+			setStatusMessage(L"Windows Voice thread already started.");
 			return;
 		}
-		theStatusMessage = L"Starting Windows Voice.";
+		setStatusMessage(L"Starting Windows Voice.");
 		theSpeechThread = new thread(speechThreadFunc, rate, volume);
 	}
 
@@ -131,24 +150,24 @@ namespace WindowsVoice
 	{
 		if (theSpeechThread == nullptr)
 		{
-			theStatusMessage = L"Warning: Speach thread already destroyed or not started.";
+			setStatusMessage(L"Warning: Speech thread already destroyed or not started.");
 			return;
 		}
-		theStatusMessage = L"Destroying speech.";
+		setStatusMessage(L"Destroying speech.");
 		wordLength = 0;
 		wordPosition = 0;
 		shouldTerminate = true;
 		theSpeechThread->join();
-		theSpeechQueue.clear();
+		clearSpeechQueue();
 		delete theSpeechThread;
 		theSpeechThread = nullptr;
-		CoUninitialize();
-		theStatusMessage = L"Speech destroyed.";
+		setStatusMessage(L"Speech destroyed.");
 		speechState = speech_state_enum::uninitialized;
 	}
 
 	BSTR getStatusMessage()
 	{
+		lock_guard<mutex> lock(theStatusMutex);
 		if (theStatusMessage.empty())
 		{
 			theStatusMessage = L"WindowsVoice not yet initialized!";
@@ -158,7 +177,7 @@ namespace WindowsVoice
 
 	UINT32 getSpeechState()
 	{
-		return static_cast<UINT32>(speechState);
+		return static_cast<UINT32>(speechState.load());
 	}
 
 	BSTR getVoicesAvailable()
@@ -171,12 +190,13 @@ namespace WindowsVoice
 			CComPtr<IEnumSpObjectTokens> cpSpEnumTokens;
 			if (SUCCEEDED(hr = cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens)))
 			{
-				ULONG vCount;
+				ULONG vCount = 0;
 				cpSpEnumTokens->GetCount(&vCount);
 				CComPtr<ISpObjectToken> pSpTok;
-				for (int i = 0; i < vCount; ++i)
+				for (ULONG i = 0; i < vCount; ++i)
 				{
-					cpSpEnumTokens->Next(1, &pSpTok, nullptr);
+					if (cpSpEnumTokens->Next(1, &pSpTok, nullptr) != S_OK)
+						break;
 					// try to get the Name attribute first; if failed, get the description
 					CSpDynamicString voiceName;
 					CComPtr<ISpDataKey> pAttribs;
@@ -206,8 +226,7 @@ namespace WindowsVoice
 							delete[] localeNameBuf;
 							// if the voice has attribute "NaturalVoiceType", consider it "natural"
 							CSpDynamicString naturalVoiceType;
-							hr = pAttribs->GetStringValue(L"NaturalVoiceType", &naturalVoiceType);
-							if (SUCCEEDED(hr))
+							if (pAttribs != nullptr && SUCCEEDED(pAttribs->GetStringValue(L"NaturalVoiceType", &naturalVoiceType)))
 							{
 								// inserts "Natural" before '('
 								size_t pos = localeName.find(L'(');
