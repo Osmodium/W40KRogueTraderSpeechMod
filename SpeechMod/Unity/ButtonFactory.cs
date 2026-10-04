@@ -58,7 +58,7 @@ public static class ButtonFactory
             button = buttonGameObject.AddComponent<OwlcatMultiButton>();
         }
 
-        button!.OnLeftClick!.RemoveAllListeners();
+        button.OnLeftClick.RemoveAllListeners();
         button.OnLeftClick.AddListener(action);
 
         if (!string.IsNullOrWhiteSpace(text))

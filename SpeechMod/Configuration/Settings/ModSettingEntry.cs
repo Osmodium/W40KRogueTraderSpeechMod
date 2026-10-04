@@ -5,11 +5,11 @@ namespace SpeechMod.Configuration.Settings;
 
 public abstract class ModSettingEntry
 {
-    public readonly string Key;
-    public readonly string Title;
-    public readonly string Tooltip;
+    protected readonly string Key;
+    protected readonly string Title;
+    protected readonly string Tooltip;
 
-    public SettingStatus Status { get; private set; } = SettingStatus.NOT_APPLIED;
+    protected SettingStatus Status { get; private set; } = SettingStatus.NOT_APPLIED;
 
     protected ModSettingEntry(string key, string title, string tooltip)
     {

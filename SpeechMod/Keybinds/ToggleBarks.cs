@@ -24,9 +24,9 @@ public class ToggleBarks() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_
     [HarmonyPatch]
     private static class Patches
     {
-        private static string _barksTurnedOnText = "SpeechMod: Barks turned ON!";
-        private static string _barksTurnedOffText = "SpeechMod: Barks turned OFF!";
-        private static IDisposable _disposableBinding;
+        private static string s_BarksTurnedOnText = "SpeechMod: Barks turned ON!";
+        private static string s_BarksTurnedOffText = "SpeechMod: Barks turned OFF!";
+        private static IDisposable s_DisposableBinding;
 
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
         [HarmonyPostfix]
@@ -39,12 +39,12 @@ public class ToggleBarks() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_
 
             if (LocalizationManager.Instance.CurrentPack?.TryGetText("osmodium.speechmod.feature.barks.toggle.on.notification", out var onText, false) == true)
             {
-                _barksTurnedOnText = onText;
+                s_BarksTurnedOnText = onText;
             }
 
             if (LocalizationManager.Instance.CurrentPack?.TryGetText("osmodium.speechmod.feature.barks.toggle.off.notification", out var offText, false) == true)
             {
-                _barksTurnedOffText = offText;
+                s_BarksTurnedOffText = offText;
             }
 
             if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))
@@ -52,11 +52,11 @@ public class ToggleBarks() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_
 #if DEBUG
                 Debug.Log($"Binding {BIND_NAME} already exists! Disposing of binding...");
 #endif
-                _disposableBinding.Dispose();
+                s_DisposableBinding.Dispose();
             }
 
-            _disposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, () => ToggleBarks(__instance));
-            __instance?.AddDisposable(_disposableBinding);
+            s_DisposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, () => ToggleBarks(__instance));
+            __instance?.AddDisposable(s_DisposableBinding);
         }
 
         private static void ToggleBarks(CommonPCView instance)
@@ -68,7 +68,7 @@ public class ToggleBarks() : ModHotkeySettingEntry(KEY, TITLE, TOOLTIP, DEFAULT_
             if (instance == null || instance.m_WarningsTextView == null)
                 return;
 
-            var text = Main.Settings.PlaybackBarks ? _barksTurnedOnText : _barksTurnedOffText;
+            var text = Main.Settings.PlaybackBarks ? s_BarksTurnedOnText : s_BarksTurnedOffText;
 #if DEBUG
             Debug.Log(text);
 #endif
