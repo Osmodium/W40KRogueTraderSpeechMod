@@ -5,8 +5,9 @@ using namespace std;
 
 namespace WindowsVoice
 {
-	mutex theMutex; // guards theSpeechQueue
+	mutex theMutex; // guards theSpeechQueue and stopRequested
 	list<wstring> theSpeechQueue;
+	bool stopRequested = false;
 	mutex theStatusMutex; // guards theStatusMessage
 	wstring theStatusMessage;
 	thread* theSpeechThread = nullptr;
@@ -59,6 +60,23 @@ namespace WindowsVoice
 		wstring priorText;
 		while (!shouldTerminate)
 		{
+			bool stop;
+			{
+				lock_guard<mutex> lock(theMutex);
+				stop = stopRequested;
+				stopRequested = false;
+			}
+			if (stop)
+			{
+				pVoice->Speak(nullptr, SPF_PURGEBEFORESPEAK, nullptr);
+				pVoice->WaitUntilDone(100);
+				priorText.clear();
+				wordLength = 0;
+				wordPosition = 0;
+				setStatusMessage(L"Speech stopped.");
+				speechState = speech_state_enum::ready;
+			}
+
 			pVoice->GetStatus(&voiceStatus, nullptr);
 			if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
 			{
@@ -74,8 +92,9 @@ namespace WindowsVoice
 					wordLength = voiceStatus.ulInputWordLen;
 					wordPosition = voiceStatus.ulInputWordPos;
 					// Drop the same line if it was queued again while playing.
+					// Skipped when a stop is pending: anything queued after the stop must play.
 					lock_guard<mutex> lock(theMutex);
-					if (!theSpeechQueue.empty() && theSpeechQueue.front() == priorText)
+					if (!stopRequested && !theSpeechQueue.empty() && theSpeechQueue.front() == priorText)
 					{
 						theSpeechQueue.pop_front();
 					}
@@ -88,7 +107,8 @@ namespace WindowsVoice
 				priorText.clear();
 				{
 					lock_guard<mutex> lock(theMutex);
-					if (!theSpeechQueue.empty())
+					// Wait for the pending stop to purge first, or it would cut off this line.
+					if (!stopRequested && !theSpeechQueue.empty())
 					{
 						priorText = move(theSpeechQueue.front());
 						theSpeechQueue.pop_front();
@@ -111,27 +131,26 @@ namespace WindowsVoice
 		speechState = speech_state_enum::terminated;
 	}
 
-	void addToSpeechQueue(const char* text)
+	void addToSpeechQueue(const wchar_t* text)
 	{
-		if (text == nullptr)
+		if (text == nullptr || *text == L'\0')
 			return;
-
-		const int byteCount = static_cast<int>(strlen(text));
-		const int charCount = ::MultiByteToWideChar(CP_UTF8, 0, text, byteCount, nullptr, 0);
-		if (charCount <= 0)
-			return;
-
-		wstring wText(charCount, L'\0');
-		::MultiByteToWideChar(CP_UTF8, 0, text, byteCount, &wText[0], charCount);
 
 		lock_guard<mutex> lock(theMutex);
-		theSpeechQueue.push_back(move(wText));
+		theSpeechQueue.emplace_back(text);
 	}
 
 	void clearSpeechQueue()
 	{
 		lock_guard<mutex> lock(theMutex);
 		theSpeechQueue.clear();
+	}
+
+	void stopSpeech()
+	{
+		lock_guard<mutex> lock(theMutex);
+		theSpeechQueue.clear();
+		stopRequested = true;
 	}
 
 	void initSpeech(int rate, int volume)
@@ -141,6 +160,10 @@ namespace WindowsVoice
 		{
 			setStatusMessage(L"Windows Voice thread already started.");
 			return;
+		}
+		{
+			lock_guard<mutex> lock(theMutex);
+			stopRequested = false;
 		}
 		setStatusMessage(L"Starting Windows Voice.");
 		theSpeechThread = new thread(speechThreadFunc, rate, volume);
