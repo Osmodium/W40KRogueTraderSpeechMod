@@ -16,10 +16,13 @@ public class WindowsVoiceUnity : MonoBehaviour
     private static extern void destroySpeech();
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
-    private static extern void addToSpeechQueue(string s);
+    private static extern void addToSpeechQueue([MarshalAs(UnmanagedType.LPWStr)] string s);
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void clearSpeechQueue();
+
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    private static extern void stopSpeech();
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
@@ -41,8 +44,8 @@ public class WindowsVoiceUnity : MonoBehaviour
     private static WindowsVoiceUnity s_TheVoice;
     private static int s_CurrentWordCount;
 
-    public static bool IsSpeaking => getSpeechState() == WindowsVoiceStatus.Speaking;
     public static WindowsVoiceStatus VoiceStatus => getSpeechState();
+    public static bool IsSpeaking => VoiceStatus == WindowsVoiceStatus.Speaking;
 
     private static void Init()
     {
@@ -119,11 +122,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
-        if (!IsSpeaking)
-            return;
-
-        destroySpeech();
-        Init();
+        stopSpeech();
     }
 
     public static void ClearQueue()
