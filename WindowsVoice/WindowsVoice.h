@@ -6,12 +6,6 @@
 #define DLL_API __declspec(dllimport)
 #endif
 
-#include <atomic>
-#include <cwchar>
-#include <mutex>
-#include <list>
-#include <string>
-#include <thread>
 #include <sapi.h>
 #include <atlbase.h>
 #pragma warning(disable:4996)

@@ -44,8 +44,8 @@ public class WindowsVoiceUnity : MonoBehaviour
     private static WindowsVoiceUnity s_TheVoice;
     private static int s_CurrentWordCount;
 
-    public static bool IsSpeaking => getSpeechState() == WindowsVoiceStatus.Speaking;
     public static WindowsVoiceStatus VoiceStatus => getSpeechState();
+    public static bool IsSpeaking => VoiceStatus == WindowsVoiceStatus.Speaking;
 
     private static void Init()
     {
