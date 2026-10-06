@@ -1,6 +1,13 @@
 ﻿#include "pch.h"
 #include "WindowsVoice.h"
 
+#include <sapi.h>
+#include <atlbase.h>
+#pragma warning(push)
+#pragma warning(disable:4996)
+#include <sphelper.h>
+#pragma warning(pop)
+
 #include <atomic>
 #include <cwchar>
 #include <list>
@@ -12,76 +19,132 @@ using namespace std;
 
 namespace WindowsVoice
 {
-	mutex theMutex; // guards theSpeechQueue and stopRequested
-	list<wstring> theSpeechQueue;
-	bool stopRequested = false;
-	mutex theStatusMutex; // guards theStatusMessage
-	wstring theStatusMessage;
-	thread* theSpeechThread = nullptr; // never destroyed while joinable, which would call terminate()
-	atomic<bool> shouldTerminate{ false };
-	atomic<ULONG> wordLength{ 0 };
-	atomic<ULONG> wordPosition{ 0 };
-	atomic<speech_state_enum> speechState{ speech_state_enum::uninitialized };
-
 	// --- Status reporting ---
 
-	void setStatusMessage(const wstring& message)
+	// What the speech thread reports back to the caller.
+	class SpeechStatus
 	{
-		lock_guard<mutex> lock(theStatusMutex);
-		theStatusMessage = message;
-	}
+	public:
+		wstring getMessage() const
+		{
+			lock_guard<mutex> lock(messageMutex);
+			return message;
+		}
 
-	void setState(const speech_state_enum state, const wstring& message)
+		void setMessage(const wstring& text)
+		{
+			lock_guard<mutex> lock(messageMutex);
+			message = text;
+		}
+
+		speech_state_enum getState() const { return state; }
+
+		void set(const speech_state_enum newState, const wstring& text)
+		{
+			setMessage(text);
+			state = newState;
+		}
+
+		void setError(const wchar_t* text, const HRESULT hr)
+		{
+			wchar_t code[11]; // "0x" + 8 hex digits + null
+			swprintf_s(code, _countof(code), L"0x%08X", static_cast<unsigned int>(hr));
+			set(speech_state_enum::error, wstring(L"Error: ") + text + L" (HRESULT " + code + L")");
+		}
+
+		ULONG getWordLength() const { return wordLength; }
+		ULONG getWordPosition() const { return wordPosition; }
+
+		void setWordProgress(const ULONG length, const ULONG position)
+		{
+			wordLength = length;
+			wordPosition = position;
+		}
+
+		void resetWordProgress() { setWordProgress(0, 0); }
+
+	private:
+		mutable mutex messageMutex; // guards message
+		wstring message{ L"WindowsVoice not yet initialized!" };
+		atomic<speech_state_enum> state{ speech_state_enum::uninitialized };
+		atomic<ULONG> wordLength{ 0 };
+		atomic<ULONG> wordPosition{ 0 };
+	};
+
+	// --- Speech queue ---
+
+	// Lines waiting to be spoken, shared between the caller's thread and the speech thread.
+	class SpeechQueue
 	{
-		setStatusMessage(message);
-		speechState = state;
-	}
+	public:
+		void add(const wchar_t* text)
+		{
+			// Empty lines are rejected so dequeue() can use an empty string to mean "none".
+			if (text == nullptr || *text == L'\0')
+				return;
 
-	void setError(const wchar_t* message, const HRESULT hr)
-	{
-		wchar_t buffer[128];
-		swprintf_s(buffer, _countof(buffer), L"Error: %s (HRESULT 0x%08X)", message, static_cast<unsigned int>(hr));
-		setState(speech_state_enum::error, buffer);
-	}
+			lock_guard<mutex> lock(queueMutex);
+			lines.emplace_back(text);
+		}
 
-	void resetWordProgress()
-	{
-		wordLength = 0;
-		wordPosition = 0;
-	}
+		void clear()
+		{
+			lock_guard<mutex> lock(queueMutex);
+			lines.clear();
+		}
 
-	// --- Speech queue (shared with the caller's thread) ---
+		// Drops the queued lines and asks the speech thread to cut off the current one.
+		void stop()
+		{
+			lock_guard<mutex> lock(queueMutex);
+			lines.clear();
+			stopRequested = true;
+		}
 
-	// Returns whether a stop was requested, and clears the request.
-	bool takeStopRequest()
-	{
-		lock_guard<mutex> lock(theMutex);
-		const bool stop = stopRequested;
-		stopRequested = false;
-		return stop;
-	}
+		// Drops the queued lines and any pending stop request.
+		void reset()
+		{
+			lock_guard<mutex> lock(queueMutex);
+			lines.clear();
+			stopRequested = false;
+		}
 
-	// Pops the next line to speak, or returns an empty string if there is none.
-	wstring dequeueLine()
-	{
-		lock_guard<mutex> lock(theMutex);
-		// Wait for the pending stop to purge first, or it would cut off this line.
-		if (stopRequested || theSpeechQueue.empty())
-			return wstring();
+		// Returns whether a stop was requested, and clears the request.
+		bool takeStopRequest()
+		{
+			lock_guard<mutex> lock(queueMutex);
+			const bool stop = stopRequested;
+			stopRequested = false;
+			return stop;
+		}
 
-		wstring line = move(theSpeechQueue.front());
-		theSpeechQueue.pop_front();
-		return line;
-	}
+		// Pops the next line to speak, or returns an empty string if there is none.
+		wstring dequeue()
+		{
+			lock_guard<mutex> lock(queueMutex);
+			// Wait for the pending stop to purge first, or it would cut off this line.
+			if (stopRequested || lines.empty())
+				return wstring();
 
-	// Drops the line if it was queued again while playing.
-	void dropRequeuedLine(const wstring& line)
-	{
-		lock_guard<mutex> lock(theMutex);
-		// Skipped when a stop is pending: anything queued after the stop must play.
-		if (!stopRequested && !theSpeechQueue.empty() && theSpeechQueue.front() == line)
-			theSpeechQueue.pop_front();
-	}
+			wstring line = move(lines.front());
+			lines.pop_front();
+			return line;
+		}
+
+		// Drops the line if it was queued again while playing.
+		void dropRequeued(const wstring& line)
+		{
+			lock_guard<mutex> lock(queueMutex);
+			// Skipped when a stop is pending: anything queued after the stop must play.
+			if (!stopRequested && !lines.empty() && lines.front() == line)
+				lines.pop_front();
+		}
+
+	private:
+		mutex queueMutex; // guards lines and stopRequested
+		list<wstring> lines;
+		bool stopRequested = false;
+	};
 
 	// --- Speech thread ---
 
@@ -101,13 +164,14 @@ namespace WindowsVoice
 	class SpeechPlayer
 	{
 	public:
-		explicit SpeechPlayer(ISpVoice* voice) : voice(voice) {}
+		SpeechPlayer(ISpVoice* voice, SpeechQueue& queue, SpeechStatus& status)
+			: voice(voice), queue(queue), status(status) {}
 
-		void run()
+		void run(const atomic<bool>& shouldTerminate)
 		{
 			while (!shouldTerminate)
 			{
-				if (takeStopRequest())
+				if (queue.takeStopRequest())
 					purge();
 
 				// Busy until SAPI has finished everything queued. Checking for SPRS_IS_SPEAKING instead
@@ -124,6 +188,8 @@ namespace WindowsVoice
 
 	private:
 		ISpVoice* voice;
+		SpeechQueue& queue;
+		SpeechStatus& status;
 		wstring currentLine;
 
 		void purge()
@@ -131,45 +197,48 @@ namespace WindowsVoice
 			voice->Speak(nullptr, SPF_PURGEBEFORESPEAK, nullptr);
 			voice->WaitUntilDone(100);
 			currentLine.clear();
-			resetWordProgress();
-			setState(speech_state_enum::ready, L"Speech stopped.");
+			status.resetWordProgress();
 		}
 
 		void onSpeaking()
 		{
-			setState(speech_state_enum::speaking, L"Speaking: " + currentLine);
-
 			SPVOICESTATUS voiceStatus;
 			if (SUCCEEDED(voice->GetStatus(&voiceStatus, nullptr)))
-			{
-				wordLength = voiceStatus.ulInputWordLen;
-				wordPosition = voiceStatus.ulInputWordPos;
-			}
+				status.setWordProgress(voiceStatus.ulInputWordLen, voiceStatus.ulInputWordPos);
 
 			// Empty while a purge is still finishing; nothing to compare against then.
 			if (!currentLine.empty())
-				dropRequeuedLine(currentLine);
+				queue.dropRequeued(currentLine);
 		}
 
 		void onIdle()
 		{
-			setState(speech_state_enum::ready, L"Waiting");
-			currentLine = dequeueLine();
+			currentLine = queue.dequeue();
 			if (currentLine.empty())
+			{
+				status.set(speech_state_enum::ready, L"Waiting");
 				return;
+			}
 
 			// Rebind to the current default output device in case it changed since the last line.
 			voice->SetOutput(nullptr, TRUE);
 			voice->Speak(currentLine.c_str(), SPF_IS_XML | SPF_ASYNC, nullptr);
+			// Reported now rather than on the next tick, so callers never see the new line as idle.
+			status.set(speech_state_enum::speaking, L"Speaking: " + currentLine);
 		}
 	};
+
+	SpeechQueue theQueue;
+	SpeechStatus theStatus;
+	thread* theSpeechThread = nullptr; // never destroyed while joinable, which would call terminate()
+	atomic<bool> shouldTerminate{ false };
 
 	void speechThreadFunc(const int rate, const int volume)
 	{
 		const ComScope com;
 		if (FAILED(com.hr))
 		{
-			setError(L"Failed to initialize COM for Voice.", com.hr);
+			theStatus.setError(L"Failed to initialize COM for Voice.", com.hr);
 			return;
 		}
 
@@ -179,57 +248,46 @@ namespace WindowsVoice
 			const HRESULT hr = voice.CoCreateInstance(CLSID_SpVoice);
 			if (FAILED(hr))
 			{
-				setError(L"Failed to create Voice instance.", hr);
+				theStatus.setError(L"Failed to create Voice instance.", hr);
 				return;
 			}
 
 			voice->SetRate(rate);
 			voice->SetVolume(volume);
-			setState(speech_state_enum::ready, L"Speech ready.");
+			theStatus.set(speech_state_enum::ready, L"Speech ready.");
 
-			SpeechPlayer(voice).run();
+			SpeechPlayer(voice, theQueue, theStatus).run(shouldTerminate);
 		}
 
-		setState(speech_state_enum::terminated, L"Speech thread terminated.");
+		theStatus.set(speech_state_enum::terminated, L"Speech thread terminated.");
 	}
 
 	// --- Exported API ---
 
 	void addToSpeechQueue(const wchar_t* text)
 	{
-		if (text == nullptr || *text == L'\0')
-			return;
-
-		lock_guard<mutex> lock(theMutex);
-		theSpeechQueue.emplace_back(text);
+		theQueue.add(text);
 	}
 
 	void clearSpeechQueue()
 	{
-		lock_guard<mutex> lock(theMutex);
-		theSpeechQueue.clear();
+		theQueue.clear();
 	}
 
 	void stopSpeech()
 	{
-		lock_guard<mutex> lock(theMutex);
-		theSpeechQueue.clear();
-		stopRequested = true;
+		theQueue.stop();
 	}
 
 	void initSpeech(int rate, int volume)
 	{
 		if (theSpeechThread != nullptr)
 		{
-			setStatusMessage(L"Windows Voice thread already started.");
+			theStatus.setMessage(L"Windows Voice thread already started.");
 			return;
 		}
-		{
-			lock_guard<mutex> lock(theMutex);
-			stopRequested = false;
-		}
 		shouldTerminate = false;
-		setStatusMessage(L"Starting Windows Voice.");
+		theStatus.setMessage(L"Starting Windows Voice.");
 		theSpeechThread = new thread(speechThreadFunc, rate, volume);
 	}
 
@@ -237,32 +295,27 @@ namespace WindowsVoice
 	{
 		if (theSpeechThread == nullptr)
 		{
-			setStatusMessage(L"Warning: Speech thread already destroyed or not started.");
+			theStatus.setMessage(L"Warning: Speech thread already destroyed or not started.");
 			return;
 		}
-		setStatusMessage(L"Destroying speech.");
+		theStatus.setMessage(L"Destroying speech.");
 		shouldTerminate = true;
 		theSpeechThread->join();
 		delete theSpeechThread;
 		theSpeechThread = nullptr;
-		clearSpeechQueue();
-		resetWordProgress();
-		setState(speech_state_enum::uninitialized, L"Speech destroyed.");
+		theQueue.reset();
+		theStatus.resetWordProgress();
+		theStatus.set(speech_state_enum::uninitialized, L"Speech destroyed.");
 	}
 
 	BSTR getStatusMessage()
 	{
-		lock_guard<mutex> lock(theStatusMutex);
-		if (theStatusMessage.empty())
-		{
-			theStatusMessage = L"WindowsVoice not yet initialized!";
-		}
-		return SysAllocString(theStatusMessage.c_str());
+		return SysAllocString(theStatus.getMessage().c_str());
 	}
 
 	UINT32 getSpeechState()
 	{
-		return static_cast<UINT32>(speechState.load());
+		return static_cast<UINT32>(theStatus.getState());
 	}
 
 	// --- Voice enumeration ---
@@ -346,25 +399,16 @@ namespace WindowsVoice
 
 	UINT32 getWordLength()
 	{
-		return wordLength;
+		return theStatus.getWordLength();
 	}
 
 	UINT32 getWordPosition()
 	{
-		return wordPosition;
+		return theStatus.getWordPosition();
 	}
 }
 
-BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
+BOOL APIENTRY DllMain(HMODULE, DWORD, LPVOID)
 {
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
-		break;
-	}
-
 	return TRUE;
 }

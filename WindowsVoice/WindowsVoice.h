@@ -6,11 +6,8 @@
 #define DLL_API __declspec(dllimport)
 #endif
 
-#include <sapi.h>
-#include <atlbase.h>
-#pragma warning(disable:4996)
-#include <sphelper.h>
-#pragma warning(default: 4996)
+#include <windows.h>
+#include <oleauto.h>
 
 namespace WindowsVoice {
 	extern "C" {
@@ -26,5 +23,6 @@ namespace WindowsVoice {
 		DLL_API UINT32 __cdecl getSpeechState();
 	}
 
+	// Values must match WindowsVoiceUnity.WindowsVoiceStatus in SpeechMod/Unity/WindowsVoiceUnity.cs.
 	enum class speech_state_enum { uninitialized, ready, speaking, terminated, error };
 }
