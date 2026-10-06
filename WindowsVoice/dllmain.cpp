@@ -78,6 +78,8 @@ namespace WindowsVoice
 					priorText = theSpeechQueue.front();
 					theSpeechQueue.pop_front();
 					theMutex.unlock();
+					// Rebind to the current default output device in case it changed since the last line.
+					pVoice->SetOutput(nullptr, TRUE);
 					pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, nullptr);
 				}
 			}

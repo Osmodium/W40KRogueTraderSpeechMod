@@ -123,7 +123,6 @@ public static class BarkExtensions
         Debug.LogFormat("SpeakBark as {0}", gender.HasValue ? gender : "Narrator");
 #endif
 
-        text = text.PrepareText();
         switch (gender)
         {
             case Gender.Male:

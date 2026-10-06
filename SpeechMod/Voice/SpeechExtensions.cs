@@ -10,7 +10,7 @@ public static class SpeechExtensions
         GameObject voiceGameObject = null;
         try
         {
-            voiceGameObject = Object.FindObjectOfType<T>()?.gameObject;
+            voiceGameObject = Object.FindFirstObjectByType<T>()?.gameObject;
         }
         catch
         {

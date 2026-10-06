@@ -70,8 +70,6 @@ public class DialogAnswerBaseView_Patch
                 new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 - $2") :
                 new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
 
-            text = text.PrepareText();
-
             var voiceType = VoiceType.Narrator;
             if (Game.Instance.DialogController.FirstSpeaker != null) // If we are speaking to a character
             {

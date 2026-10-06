@@ -21,21 +21,53 @@ public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
     public static Settings Settings;
+    public static string ModPath;
     public static bool Enabled;
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
-    public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
-    public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
-    public static string ProtagonistVoice => VoicesDict?.ElementAtOrDefault(Settings.ProtagonistVoice).Key;
+    public static string NarratorVoice => GetVoiceKey(Settings?.NarratorVoice ?? 0);
+    public static string FemaleVoice => GetVoiceKey(Settings?.FemaleVoice ?? 0);
+    public static string MaleVoice => GetVoiceKey(Settings?.MaleVoice ?? 0);
+    public static string ProtagonistVoice => GetVoiceKey(Settings?.ProtagonistVoice ?? 0);
 
-    public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
+    private static Dictionary<string, string> _cachedVoicesDict;
+    private static string[] _cachedVoicesSource;
+
+    public static Dictionary<string, string> VoicesDict
     {
-        var splitV = v?.Split('#');
-        return splitV?.Length != 2
-            ? new { Key = v, Value = "Unknown" }
-            : new { Key = splitV[0], Value = splitV[1] };
-    }).ToDictionary(p => p.Key, p => p.Value);
+        get
+        {
+            var voices = Settings?.AvailableVoices;
+            if (voices == null)
+                return null;
+
+            if (_cachedVoicesDict != null && ReferenceEquals(_cachedVoicesSource, voices))
+                return _cachedVoicesDict;
+
+            _cachedVoicesSource = voices;
+            _cachedVoicesDict = voices.Select(v =>
+            {
+                var splitV = v?.Split('#');
+                return splitV?.Length != 2
+                    ? new { Key = v, Value = "Unknown" }
+                    : new { Key = splitV[0], Value = splitV[1] };
+            }).ToDictionary(p => p.Key, p => p.Value);
+
+            return _cachedVoicesDict;
+        }
+    }
+
+    private static string GetVoiceKey(int index)
+    {
+        var dict = VoicesDict;
+        if (dict == null || dict.Count == 0)
+            return null;
+
+        if (index < 0 || index >= dict.Count)
+            index = 0;
+
+        return dict.ElementAt(index).Key;
+    }
 
     public static ISpeech Speech;
     private static bool m_Loaded = false;
@@ -45,6 +77,7 @@ public static class Main
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initializing...");
 
         Logger = modEntry?.Logger;
+        ModPath = modEntry?.Path;
 
         if (!SetSpeech())
             return false;
@@ -108,27 +141,25 @@ public static class Main
         }
 
         // Ensure that the selected voice index falls within the available voices range
-        if (Settings?.NarratorVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.NarratorVoice)} was out of range, resetting to first voice available.");
-            Settings.NarratorVoice = 0;
-        }
-
-        if (Settings?.FemaleVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.FemaleVoice)} was out of range, resetting to first voice available.");
-            Settings.FemaleVoice = 0;
-        }
-
-        if (Settings?.MaleVoice >= availableVoices.Length)
-        {
-            Logger?.Log($"{nameof(Settings.MaleVoice)} was out of range, resetting to first voice available.");
-            Settings.MaleVoice = 0;
-        }
+        ClampVoiceIndex(ref Settings.NarratorVoice, availableVoices.Length, nameof(Settings.NarratorVoice));
+        ClampVoiceIndex(ref Settings.FemaleVoice, availableVoices.Length, nameof(Settings.FemaleVoice));
+        ClampVoiceIndex(ref Settings.MaleVoice, availableVoices.Length, nameof(Settings.MaleVoice));
+        ClampVoiceIndex(ref Settings.ProtagonistVoice, availableVoices.Length, nameof(Settings.ProtagonistVoice));
 
         Settings!.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
+        _cachedVoicesDict = null;
+        _cachedVoicesSource = null;
 
         return true;
+    }
+
+    private static void ClampVoiceIndex(ref int voiceIndex, int voiceCount, string settingName)
+    {
+        if (voiceIndex >= 0 && voiceIndex < voiceCount)
+            return;
+
+        Logger?.Log($"{settingName} was out of range ({voiceIndex}), resetting to first voice available.");
+        voiceIndex = 0;
     }
 
     private static bool SetSpeech()
