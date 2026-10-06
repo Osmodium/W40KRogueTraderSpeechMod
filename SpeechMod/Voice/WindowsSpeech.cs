@@ -169,16 +169,21 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        if (Main.Settings.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist)
+        var useProtagonistVoice = Main.Settings.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist;
+
+        if (!useProtagonistVoice && !Main.Settings.UseGenderSpecificVoices)
         {
-            text = $"{CombinedProtagonistVoiceStart}{text}</voice>";
-            SpeakInternal(text, delay);
+            Speak(text, delay);
             return;
         }
 
-        if (!Main.Settings.UseGenderSpecificVoices)
+        text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.PrepareText();
+
+        if (useProtagonistVoice)
         {
-            Speak(text, delay);
+            text = $"{CombinedProtagonistVoiceStart}{text}</voice>";
+            SpeakInternal(text, delay);
             return;
         }
 

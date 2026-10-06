@@ -58,8 +58,8 @@ public class AppleSpeech : ISpeech
 			return;
 		}
 
-		text = text.PrepareText();
 		text = new Regex("<[^>]+>").Replace(text, "");
+		text = text.PrepareText();
 
 		var voice = type switch
 		{
@@ -91,8 +91,8 @@ public class AppleSpeech : ISpeech
 			return;
 		}
 
-		text = text.PrepareText();
 		text = new Regex("<[^>]+>").Replace(text, "");
+		text = text.PrepareText();
 		text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
 		AppleVoiceUnity.Speak(text, delay);
 	}

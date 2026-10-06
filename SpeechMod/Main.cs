@@ -21,6 +21,7 @@ public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
     public static Settings Settings;
+    public static string ModPath;
     public static bool Enabled;
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
@@ -76,6 +77,7 @@ public static class Main
         Debug.Log("Warhammer 40K: Rogue Trader Speech Mod Initializing...");
 
         Logger = modEntry?.Logger;
+        ModPath = modEntry?.Path;
 
         if (!SetSpeech())
             return false;

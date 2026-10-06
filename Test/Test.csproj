@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
+	<Import Project="$(MSBuildThisFileDirectory)..\GamePath.props" Condition="Exists('$(MSBuildThisFileDirectory)..\GamePath.props')" />
 
 	<PropertyGroup>
 		<TargetFramework>net481</TargetFramework>

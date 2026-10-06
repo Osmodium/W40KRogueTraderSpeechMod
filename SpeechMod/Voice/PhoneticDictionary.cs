@@ -21,6 +21,9 @@ public static class PhoneticDictionary
 
     public static string PrepareText(this string text)
     {
+        if (string.IsNullOrWhiteSpace(text))
+            return text;
+
         if (s_PhoneticDictionary == null)
             LoadDictionary();
 
@@ -59,14 +62,10 @@ public static class PhoneticDictionary
         Main.Logger?.Log("Loading phonetic dictionary...");
         try
         {
-            var file = Path.Combine(Constants.LOCAL_LOW_PATH,
-                "Owlcat Games",
-                "Warhammer 40000 Rogue Trader",
-                "UnityModManager",
-                "W40KSpeechMod",
-                "PhoneticDictionary.json");
+            var file = Path.Combine(Main.ModPath, "PhoneticDictionary.json");
             var json = File.ReadAllText(file, Encoding.UTF8);
             s_PhoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            Main.Logger?.Log($"Phonetic dictionary loaded successfully from: {file}");
         }
         catch (Exception ex)
         {
