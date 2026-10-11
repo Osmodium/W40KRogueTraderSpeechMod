@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutionfiles", "Solutionfi
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		Todo.txt = Todo.txt
+		Repository.json = Repository.json
 	EndProjectSection
 EndProject
 Global
