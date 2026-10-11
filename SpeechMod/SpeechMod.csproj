@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="GenerateCustomPropsFile">
     <Import Project="$(MSBuildThisFileDirectory)..\GamePath.props" Condition="Exists('$(MSBuildThisFileDirectory)..\GamePath.props')" />
+    <!-- Optional, gitignored. Set VoxBridgeDll there to use a local VoxBridge build instead of the release. -->
+    <Import Project="$(MSBuildThisFileDirectory)..\VoxBridge.local.props" Condition="Exists('$(MSBuildThisFileDirectory)..\VoxBridge.local.props')" />
 
     <PropertyGroup>
         <TargetFramework>net481</TargetFramework>
@@ -35,6 +37,47 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <!-- VoxBridge.dll comes from https://github.com/Osmodium/VoxBridge. The pinned release is downloaded once into .native\ and checked against its SHA256. -->
+    <PropertyGroup>
+        <VoxBridgeVersion>1.0.0</VoxBridgeVersion>
+        <VoxBridgeSha256>D28CD4A171E268CC0F2C70BAA17BC7EE0F0B420151A3D2B1A72C85937A2FE7F3</VoxBridgeSha256>
+        <VoxBridgeUrl>https://github.com/Osmodium/VoxBridge/releases/download/v$(VoxBridgeVersion)/VoxBridge.dll</VoxBridgeUrl>
+        <VoxBridgeCacheDir>$(MSBuildThisFileDirectory)..\.native\VoxBridge\$(VoxBridgeVersion)\</VoxBridgeCacheDir>
+        <VoxBridgeUseLocal Condition="'$(VoxBridgeDll)' != ''">true</VoxBridgeUseLocal>
+        <VoxBridgeDll Condition="'$(VoxBridgeDll)' == ''">$(VoxBridgeCacheDir)VoxBridge.dll</VoxBridgeDll>
+    </PropertyGroup>
+    <Target Name="FetchVoxBridge" BeforeTargets="AssignTargetPaths">
+        <DownloadFile Condition="'$(VoxBridgeUseLocal)' != 'true' and !Exists('$(VoxBridgeDll)')" SourceUrl="$(VoxBridgeUrl)" DestinationFolder="$(VoxBridgeCacheDir)" DestinationFileName="VoxBridge.dll" />
+        <VerifyFileHash Condition="'$(VoxBridgeUseLocal)' != 'true'" File="$(VoxBridgeDll)" Hash="$(VoxBridgeSha256)" Algorithm="SHA256" />
+        <Error Condition="!Exists('$(VoxBridgeDll)')" Text="VoxBridge.dll not found at '$(VoxBridgeDll)'." />
+        <ItemGroup>
+            <None Include="$(VoxBridgeDll)" Link="VoxBridge.dll" CopyToOutputDirectory="PreserveNewest" />
+        </ItemGroup>
+    </Target>
+
+    <!-- Release builds zip the output into bin\W40KSpeechMod-<version>.zip. Version comes from Info.json and must match Repository.json. -->
+    <PropertyGroup>
+        <ModFolderName>W40KSpeechMod</ModFolderName>
+        <ModVersionRegex>"Version"\s*:\s*"([^"]+)"</ModVersionRegex>
+    </PropertyGroup>
+    <Target Name="PackageMod" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <PropertyGroup>
+            <ModVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Info.json')), $(ModVersionRegex)).Groups[1].Value)</ModVersion>
+            <RepositoryVersion>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)..\Repository.json')), $(ModVersionRegex)).Groups[1].Value)</RepositoryVersion>
+            <ModPackageRoot>$(MSBuildProjectDirectory)\bin\package\</ModPackageRoot>
+            <ModPackageZip>$(MSBuildProjectDirectory)\bin\$(ModFolderName)-$(ModVersion).zip</ModPackageZip>
+        </PropertyGroup>
+        <Error Condition="'$(ModVersion)' == ''" Text="Could not read Version from Info.json." />
+        <Error Condition="'$(ModVersion)' != '$(RepositoryVersion)'" Text="Version mismatch: Info.json has '$(ModVersion)', Repository.json has '$(RepositoryVersion)'. Make them equal." />
+        <ItemGroup>
+            <_ModPackageFiles Include="$(OutDir)**\*" Exclude="$(OutDir)**\*.pdb" />
+        </ItemGroup>
+        <RemoveDir Directories="$(ModPackageRoot)" />
+        <Copy SourceFiles="@(_ModPackageFiles)" DestinationFiles="@(_ModPackageFiles->'$(ModPackageRoot)$(ModFolderName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+        <ZipDirectory SourceDirectory="$(ModPackageRoot)" DestinationFile="$(ModPackageZip)" Overwrite="true" />
+        <Message Importance="high" Text="Mod package: $(ModPackageZip)" />
+    </Target>
     <!--<Target Name="Deploy" AfterTargets="Build">
         <ItemGroup>
             <Files Include="$(TargetDir)\**\*.*" />

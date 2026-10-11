@@ -5,47 +5,50 @@ using UnityEngine;
 
 namespace SpeechMod.Unity;
 
-public class WindowsVoiceUnity : MonoBehaviour
+public class VoxBridgeUnity : MonoBehaviour
 {
-    public enum WindowsVoiceStatus { Uninitialized, Ready, Speaking, Terminated, Error }
+    public enum VoxBridgeStatus { Uninitialized, Ready, Speaking, Terminated, Error }
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern void initSpeech(int rate, int volume);
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern void destroySpeech();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern void addToSpeechQueue([MarshalAs(UnmanagedType.LPWStr)] string s);
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern void clearSpeechQueue();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern void stopSpeech();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getStatusMessage();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getVoicesAvailable();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern int getWordLength();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [DllImport(Constants.VOXBRIDGE_DLL)]
     private static extern int getWordPosition();
 
-    [DllImport(Constants.WINDOWS_VOICE_DLL)]
-    private static extern WindowsVoiceStatus getSpeechState();
+    [DllImport(Constants.VOXBRIDGE_DLL)]
+    private static extern VoxBridgeStatus getSpeechState();
 
-    private static WindowsVoiceUnity s_TheVoice;
+    [DllImport(Constants.VOXBRIDGE_DLL)]
+    private static extern uint getApiVersion();
+
+    private static VoxBridgeUnity s_TheVoice;
     private static int s_CurrentWordCount;
 
-    public static WindowsVoiceStatus VoiceStatus => getSpeechState();
-    public static bool IsSpeaking => VoiceStatus == WindowsVoiceStatus.Speaking;
+    public static VoxBridgeStatus VoiceStatus => getSpeechState();
+    public static bool IsSpeaking => VoiceStatus == VoxBridgeStatus.Speaking;
 
     private static void Init()
     {
@@ -72,6 +75,31 @@ public class WindowsVoiceUnity : MonoBehaviour
             s_TheVoice = this;
             Init();
         }
+    }
+
+    public static bool IsNativeLibraryUsable()
+    {
+        uint apiVersion;
+        try
+        {
+            apiVersion = getApiVersion();
+        }
+        catch (Exception ex) when (ex is DllNotFoundException || ex is BadImageFormatException)
+        {
+            Main.Logger?.Critical($"{Constants.VOXBRIDGE_DLL}.dll could not be loaded ({ex.GetType().Name}). Reinstall the mod: {Constants.VOXBRIDGE_DLL}.dll must be in the mod folder.");
+            return false;
+        }
+        catch (EntryPointNotFoundException)
+        {
+            Main.Logger?.Critical($"{Constants.VOXBRIDGE_DLL}.dll is too old: it has no API version. Expected API version {Constants.VOXBRIDGE_API_VERSION}.");
+            return false;
+        }
+
+        if (apiVersion == Constants.VOXBRIDGE_API_VERSION)
+            return true;
+
+        Main.Logger?.Critical($"{Constants.VOXBRIDGE_DLL}.dll has API version {apiVersion}, expected {Constants.VOXBRIDGE_API_VERSION}.");
+        return false;
     }
 
     public static string[] GetAvailableVoices()

@@ -83,6 +83,27 @@ public class PhoneticDictionaryTests
     }
 
     [Fact]
+    public void PrepareText_CollapsesBlankLineAfterPunctuation()
+    {
+        var result = "From within.\n\nA new story".PrepareText();
+        Assert.Equal("from within. a new story", result);
+    }
+
+    [Fact]
+    public void PrepareText_ReplacesLineBreakTags()
+    {
+        var result = "Line one<br>Line two<br/>Line three".PrepareText();
+        Assert.Equal("line one. line two. line three", result);
+    }
+
+    [Fact]
+    public void StripTags_KeepsLineBreakTagsAsSentenceBreaks()
+    {
+        var result = "From <b>within</b>.<br><br>A new story".StripTags().PrepareText();
+        Assert.Equal("from within. a new story", result);
+    }
+
+    [Fact]
     public void PrepareText_SpacesOutDates()
     {
         var result = "On 15/03/2024 something happened".PrepareText();

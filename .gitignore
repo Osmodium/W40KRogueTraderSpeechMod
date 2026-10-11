@@ -12,6 +12,8 @@
 [Ll]ib/
 [Ww]eb[Rr]esources/
 GamePath.props
+.native/
+VoxBridge.local.props
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

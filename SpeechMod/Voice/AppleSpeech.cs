@@ -1,7 +1,6 @@
 ﻿using SpeechMod.Unity;
 using System;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace SpeechMod.Voice;
 
@@ -58,7 +57,7 @@ public class AppleSpeech : ISpeech
 			return;
 		}
 
-		text = new Regex("<[^>]+>").Replace(text, "");
+		text = text.StripTags();
 		text = text.PrepareText();
 
 		var voice = type switch
@@ -91,7 +90,7 @@ public class AppleSpeech : ISpeech
 			return;
 		}
 
-		text = new Regex("<[^>]+>").Replace(text, "");
+		text = text.StripTags();
 		text = text.PrepareText();
 		text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
 		AppleVoiceUnity.Speak(text, delay);

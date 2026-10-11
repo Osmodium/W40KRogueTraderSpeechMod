@@ -90,12 +90,12 @@ public class WindowsSpeech : ISpeech
         text = SpeakBegin + text + SpeakEnd;
         if (Main.Settings?.LogVoicedLines == true)
             UnityEngine.Debug.Log(text);
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        VoxBridgeUnity.Speak(text, Length(text), delay);
     }
 
     public bool IsSpeaking()
     {
-        return WindowsVoiceUnity.IsSpeaking;
+        return VoxBridgeUnity.IsSpeaking;
     }
 
     public void SpeakPreview(string text, VoiceType voiceType)
@@ -106,7 +106,7 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.StripTags();
         text = text.PrepareText();
 
         text = voiceType switch
@@ -123,7 +123,7 @@ public class WindowsSpeech : ISpeech
 
     private string PrepareSpeechText(string text)
     {
-        text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.StripTags();
         text = text.PrepareText();
         text = $"{CombinedNarratorVoiceStart}{text}</voice>";
         return text;
@@ -177,7 +177,7 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.StripTags();
         text = text.PrepareText();
 
         if (useProtagonistVoice)
@@ -214,16 +214,16 @@ public class WindowsSpeech : ISpeech
 
     public void Stop()
     {
-        WindowsVoiceUnity.Stop();
+        VoxBridgeUnity.Stop();
     }
 
     public string[] GetAvailableVoices()
     {
-        return WindowsVoiceUnity.GetAvailableVoices();
+        return VoxBridgeUnity.GetAvailableVoices();
     }
 
     public string GetStatusMessage()
     {
-        return WindowsVoiceUnity.GetStatusMessage();
+        return VoxBridgeUnity.GetStatusMessage();
     }
 }

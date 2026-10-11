@@ -13,10 +13,26 @@ public static class PhoneticDictionary
     private static List<(Regex Pattern, string Replacement)> s_CompiledPatterns;
 
     private static readonly Regex s_DatePattern = new(@"([0-9]{2})\/([0-9]{2})\/([0-9]{4})", RegexOptions.Compiled);
+    private static readonly Regex s_LineBreakTagPattern = new(@"<br\s*/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex s_TagPattern = new("<[^>]+>", RegexOptions.Compiled);
+    // A run of line breaks becomes one sentence break. Keeps punctuation already in front of it, so "within.\n\na" becomes "within. a".
+    private static readonly Regex s_LineBreakPattern = new(@"([.!?:;,])?[ \t]*[\r\n]+\s*", RegexOptions.Compiled);
 
     private static string SpaceOutDate(string text)
     {
         return s_DatePattern.Replace(text, "$1 / $2 / $3");
+    }
+
+    /// <summary>
+    /// Removes rich text tags. &lt;br&gt; becomes a line break, so the text on each side does not run together.
+    /// </summary>
+    public static string StripTags(this string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        text = s_LineBreakTagPattern.Replace(text, "\n");
+        return s_TagPattern.Replace(text, "");
     }
 
     public static string PrepareText(this string text)
@@ -29,9 +45,8 @@ public static class PhoneticDictionary
 
         text = text.ToLower();
         text = text.Replace("\"", "");
-        text = text.Replace("\r\n", ". ");
-        text = text.Replace("\n", ". ");
-        text = text.Replace("\r", ". ");
+        text = s_LineBreakTagPattern.Replace(text, "\n");
+        text = s_LineBreakPattern.Replace(text, m => m.Groups[1].Success ? m.Groups[1].Value + " " : ". ");
         text = text.Trim();
 
         text = SpaceOutDate(text);

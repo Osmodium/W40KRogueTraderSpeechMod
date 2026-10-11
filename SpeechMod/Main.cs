@@ -171,8 +171,10 @@ public static class Main
                 SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
             case RuntimePlatform.WindowsPlayer:
+                if (!VoxBridgeUnity.IsNativeLibraryUsable())
+                    return false;
                 Speech = new WindowsSpeech();
-                SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
+                SpeechExtensions.AddUiElements<VoxBridgeUnity>(Constants.VOXBRIDGE_NAME);
                 break;
             default:
                 Logger?.Critical($"Warhammer 40K: Rogue Trader SpeechMod is not supported on {Application.platform}!");
