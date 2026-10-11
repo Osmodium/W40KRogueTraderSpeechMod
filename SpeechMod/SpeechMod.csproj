@@ -14,6 +14,8 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <RestoreAdditionalProjectSources>https://api.nuget.org/v3/index.json</RestoreAdditionalProjectSources>
         <RogueTraderData>$(LocalAppData)Low\Owlcat Games\Warhammer 40000 Rogue Trader</RogueTraderData>
+        <AssemblyVersion>1.3.1</AssemblyVersion>
+        <FileVersion>1.3.1</FileVersion>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\0Harmony.dll*" Private="false" />
